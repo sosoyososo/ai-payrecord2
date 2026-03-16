@@ -103,6 +103,7 @@
 | id | INTEGER | 主键 |
 | user_id | INTEGER | 所属用户（预置为 NULL） |
 | name | VARCHAR(20) | 标签名称 |
+| color | VARCHAR(20) | 颜色值 |
 | is_system | BOOLEAN | 是否系统预置 |
 | created_at | DATETIME | 创建时间 |
 
@@ -287,10 +288,71 @@
 | GET | /api/v1/stats/by-category | 按分类统计 |
 | GET | /api/v1/stats/by-tag | 按标签统计 |
 | GET | /api/v1/stats/monthly | 月度趋势 |
+| GET | /api/v1/stats/daily | 日度汇总（列表页使用） |
+| GET | /api/v1/stats/monthly-detail | 月度详情（浮层使用） |
 
 **通用参数**：
 - `ledger_id`（可选）：指定账本 ID，不传则使用当前活跃账本
 - `year`（可选）：指定年份，不传则使用全部数据
+- `month`（可选）：指定月份，配合 monthly-detail 使用
+
+#### 响应示例
+
+**GET /api/v1/stats/summary**（首页顶部12月汇总）
+```json
+{
+  "data": [
+    {"month": "2025-03", "expense_count": 25, "expense_amount": 3500.00, "income_count": 2, "income_amount": 15000.00},
+    {"month": "2025-02", "expense_count": 30, "expense_amount": 4200.00, "income_count": 2, "income_amount": 15000.00}
+  ]
+}
+```
+
+**GET /api/v1/stats/daily**（列表页日度汇总）
+```json
+{
+  "data": [
+    {"date": "2025-03-15", "expense_count": 5, "expense_amount": 280.00, "income_count": 0, "income_amount": 0.00},
+    {"date": "2025-03-14", "expense_count": 3, "expense_amount": 150.00, "income_count": 1, "income_amount": 5000.00}
+  ]
+}
+```
+
+**GET /api/v1/stats/by-category**（饼图数据）
+```json
+{
+  "data": [
+    {"category_id": 1, "category_name": "餐饮", "category_icon": "🍜", "category_color": "#FF6B6B", "amount": 1500.00, "count": 30, "percentage": 30.0},
+    {"category_id": 2, "category_name": "交通", "category_icon": "🚗", "category_color": "#4ECDC4", "amount": 800.00, "count": 20, "percentage": 16.0}
+  ]
+}
+```
+
+**GET /api/v1/stats/monthly**（折线图数据）
+```json
+{
+  "data": [
+    {"month": "01", "expense_amount": 3500.00, "income_amount": 15000.00},
+    {"month": "02", "expense_amount": 4200.00, "income_amount": 15000.00},
+    {"month": "03", "expense_amount": 2800.00, "income_amount": 5000.00}
+  ]
+}
+```
+
+**GET /api/v1/stats/monthly-detail**（月度浮层详情）
+```json
+{
+  "data": {
+    "month": "2025-03",
+    "expense_total": 2800.00,
+    "expense_count": 45,
+    "income_total": 5000.00,
+    "income_count": 3,
+    "by_category": [...],
+    "by_tag": [...]
+  }
+}
+```
 
 ### 4.9 通用响应格式
 

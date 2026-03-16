@@ -73,6 +73,7 @@
 | id | INTEGER | 主键 |
 | username | VARCHAR(50) | 用户名，唯一 |
 | password_hash | VARCHAR(255) | 密码哈希 |
+| current_ledger_id | INTEGER | 当前活跃账本 ID |
 | created_at | DATETIME | 创建时间 |
 | updated_at | DATETIME | 更新时间 |
 
@@ -152,16 +153,18 @@
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | GET | /api/v1/ledgers | 获取账本列表 |
+| GET | /api/v1/ledgers/current | 获取当前活跃账本 |
 | POST | /api/v1/ledgers | 创建账本 |
 | PUT | /api/v1/ledgers/:id | 更新账本 |
 | DELETE | /api/v1/ledgers/:id | 删除账本 |
-| GET | /api/v1/ledgers/:id/switch | 切换当前账本 |
+| POST | /api/v1/ledgers/:id/switch | 切换当前账本 |
 
 ### 4.4 分类接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | GET | /api/v1/categories | 获取分类列表 |
 | POST | /api/v1/categories | 创建分类 |
+| PUT | /api/v1/categories/:id | 更新分类（仅限用户自定义） |
 | DELETE | /api/v1/categories/:id | 删除分类 |
 
 ### 4.5 标签接口
@@ -169,6 +172,7 @@
 |------|------|------|
 | GET | /api/v1/tags | 获取标签列表 |
 | POST | /api/v1/tags | 创建标签 |
+| PUT | /api/v1/tags/:id | 更新标签（仅限用户自定义） |
 | DELETE | /api/v1/tags/:id | 删除标签 |
 
 ### 4.6 记录接口
@@ -361,6 +365,8 @@
 ---
 
 ## 7. 预置数据
+
+预置数据在**用户首次注册时自动创建**（每用户独立副本），用户可删除但不影响系统预置数据本身。
 
 ### 7.1 预置分类（14个）
 | 名称 | 图标 | 颜色 | 类型 |

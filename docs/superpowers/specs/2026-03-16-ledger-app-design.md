@@ -94,6 +94,7 @@
 | name | VARCHAR(50) | 分类名称 |
 | icon | VARCHAR(10) | Emoji 图标 |
 | color | VARCHAR(20) | 颜色值 |
+| type | TINYINT | 类型：1=支出，2=收入 |
 | is_system | BOOLEAN | 是否系统预置 |
 | created_at | DATETIME | 创建时间 |
 
@@ -216,6 +217,7 @@
 ### 4.7 LLM 接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
+| GET | /api/v1/llm/categories | 获取分类列表（供 LLM 解析时匹配） |
 | POST | /api/v1/llm/parse | 解析自然语言，生成记录预览 |
 | POST | /api/v1/llm/records | 确认创建记录 |
 

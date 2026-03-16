@@ -172,16 +172,119 @@
 ### 4.6 记录接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET | /api/v1/records | 获取记录列表（分页） |
+| GET | /api/v1/records | 获取记录列表（分页，无限滚动） |
 | POST | /api/v1/records | 创建记录 |
 | PUT | /api/v1/records/:id | 更新记录 |
 | DELETE | /api/v1/records/:id | 删除记录 |
 
+#### 分页参数
+- `cursor`：游标分页，传入上页返回的最后一条记录的 ID
+- `limit`：每页返回记录数，默认 20 条
+
+#### GET /api/v1/records 响应示例
+```json
+{
+  "data": [
+    {
+      "id": 100,
+      "category_id": 1,
+      "category_name": "餐饮",
+      "category_icon": "🍜",
+      "category_color": "#FF6B6B",
+      "amount": 25.00,
+      "type": 1,
+      "tags": [{"id": 1, "name": "重要"}],
+      "remark": "午餐",
+      "created_at": "2025-03-15T12:30:00Z"
+    }
+  ],
+  "pagination": {
+    "next_cursor": 75,
+    "has_more": true
+  }
+}
+```
+
 ### 4.7 LLM 接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| POST | /api/v1/llm/parse | 解析自然语言，生成记录 |
+| POST | /api/v1/llm/parse | 解析自然语言，生成记录预览 |
 | POST | /api/v1/llm/records | 确认创建记录 |
+
+#### POST /api/v1/llm/parse
+请求：
+```json
+{
+  "text": "今天中午吃了碗牛肉面花了25元"
+}
+```
+
+响应：
+```json
+{
+  "data": {
+    "amount": 25.00,
+    "type": 1,
+    "category": {
+      "name": "餐饮",
+      "icon": "🍜",
+      "color": "#FF6B6B",
+      "is_new": false
+    },
+    "tags": [],
+    "remark": "牛肉面"
+  },
+  "needs_category_confirm": false
+}
+```
+
+当 `needs_category_confirm: true` 时，前端弹窗询问用户是否创建新分类。
+
+#### POST /api/v1/llm/records
+当用户确认后，调用此接口创建记录：
+```json
+{
+  "amount": 25.00,
+  "type": 1,
+  "category_id": 1,
+  "category_name": "餐饮",
+  "category_icon": "🍜",
+  "category_color": "#FF6B6B",
+  "tag_ids": [],
+  "remark": "牛肉面"
+}
+```
+
+#### LLM 错误处理
+- API 调用失败：返回错误信息，提示用户手动添加
+- 解析失败：提示无法识别，请手动输入
+
+### 4.9 通用响应格式
+
+#### 成功响应
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": { ... }
+}
+```
+
+#### 错误响应
+```json
+{
+  "code": 400,
+  "message": "错误描述信息"
+}
+```
+
+#### HTTP 状态码
+- 200：成功
+- 400：请求参数错误
+- 401：未认证
+- 403：无权限
+- 404：资源不存在
+- 500：服务器内部错误
 
 ### 4.8 统计接口
 | 方法 | 路径 | 说明 |
@@ -227,9 +330,16 @@
 - 所有数据操作验证 user_id
 - API 层面检查资源所有权
 
+### 6.3 边界情况处理
+- **删除分类**：如果该分类下有记录，提示用户先转移或删除记录
+- **删除标签**：直接从关联表中移除，不影响记录
+- **删除账本**：同时删除该账本下所有记录，提示用户确认
+- **分页大小**：每页默认 20 条，无限滚动加载
+- **LLM 解析失败**：返回友好错误信息，引导用户手动添加
+
 ---
 
-## 7. 预置数据
+## 7. 配置项
 
 ### 7.1 预置分类（14个）
 | 名称 | 图标 | 颜色 |
@@ -256,11 +366,31 @@
 - 人情（粉色标记）
 - 刚需（橙色标记）
 
----
+### 7.1 LLM 配置
+- **API Key**：通过环境变量 `LLM_API_KEY` 配置
+- **API Base URL**：通过环境变量 `LLM_API_BASE` 配置（默认为 OpenAI 兼容地址）
+- **模型名称**：通过环境变量 `LLM_MODEL` 配置
+- **温度**：0.3（确保输出确定性）
+- **最大 Token**：500
 
-## 8. 待确认项
+### 7.2 分页配置
+- **默认每页条数**：20 条
+- **最大每页条数**：100 条
 
-- [ ] API Key 配置方式（环境变量 / 配置文件）
-- [ ] LLM 模型具体参数（温度、最大 token 等）
-- [ ] 分页大小（每页加载多少条记录）
-- [ ] 日志级别和输出位置
+### 7.3 日志配置
+- **级别**：INFO（生产环境）/ DEBUG（开发环境）
+- **输出**：stdout
+- **格式**：JSON 格式
+
+### 7.4 数据库索引建议
+- `records.ledger_id`：账本查询
+- `records.created_at`：时间排序
+- `record_tags.record_id`：标签关联查询
+
+本项目**不包含**以下功能：
+- 数据导出（Excel/CSV）
+- 预算功能（超支提醒）
+- 数据备份/恢复
+- 账本共享/协作
+- 多设备同步
+- 数据导入

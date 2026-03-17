@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { ArrowLeft, User, Lock, Save, Loader2 } from 'lucide-react'
+import { ArrowLeft, User, Lock, Save, Loader2, Download } from 'lucide-react'
 
 export default function SettingsPage() {
   const navigate = useNavigate()
@@ -165,6 +165,21 @@ export default function SettingsPage() {
                 修改密码
               </Button>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Export Section */}
+        <Card>
+          <CardContent className="p-4">
+            <Link
+              to="/export"
+              className="flex items-center justify-between p-2 -m-2 rounded-lg hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <Download className="h-4 w-4 text-muted-foreground" />
+                <span>导出数据</span>
+              </div>
+            </Link>
           </CardContent>
         </Card>
 

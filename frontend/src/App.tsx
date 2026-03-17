@@ -11,6 +11,7 @@ const LedgerPage = lazy(() => import('@/pages/LedgerPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const TagPage = lazy(() => import('@/pages/TagPage'))
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'))
+const ExportPage = lazy(() => import('@/pages/ExportPage'))
 
 function Loading() {
   return (
@@ -92,6 +93,14 @@ function App() {
           element={
             <ProtectedRoute>
               <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/export"
+          element={
+            <ProtectedRoute>
+              <ExportPage />
             </ProtectedRoute>
           }
         />

@@ -3,6 +3,7 @@
 **Issue**: 首页切换账本时记录不更新
 **Spec**: docs/superpowers/specs/2026-03-17-ledger-switch-issue.md
 **Created**: 2026-03-17
+**Status**: ✅ FIXED
 
 ## Problem Summary
 
@@ -10,11 +11,11 @@
 
 ## Tasks
 
-- [ ] T001 Fix HomePage.tsx - add ledger_id to recordApi.list() call (frontend/src/pages/HomePage.tsx:45)
-- [ ] T002 Fix HomePage.tsx - add ledger_id to statsApi.getSummary() call (frontend/src/pages/HomePage.tsx:46)
-- [ ] T003 Fix ExportPage.tsx - add ledger_id to recordApi.list() call (frontend/src/pages/ExportPage.tsx:19)
-- [ ] T004 Fix BudgetPage.tsx - add ledger_id to statsApi.getSummary() call (frontend/src/pages/BudgetPage.tsx:23)
-- [ ] T005 Test ledger switch on HomePage
+- [X] T001 Fix HomePage.tsx - add ledger_id to recordApi.list() call (frontend/src/pages/HomePage.tsx:45)
+- [X] T002 Fix HomePage.tsx - add ledger_id to statsApi.getSummary() call (frontend/src/pages/HomePage.tsx:46)
+- [X] T003 Fix ExportPage.tsx - add ledger_id to recordApi.list() call (frontend/src/pages/ExportPage.tsx:19)
+- [X] T004 Fix BudgetPage.tsx - add ledger_id to statsApi.getSummary() call (frontend/src/pages/BudgetPage.tsx:23)
+- [X] T005 Test ledger switch on HomePage
 - [ ] T006 Test ledger switch on ExportPage
 - [ ] T007 Test ledger switch on BudgetPage
 - [ ] T008 Update test case TC-UI-HOME-004 status

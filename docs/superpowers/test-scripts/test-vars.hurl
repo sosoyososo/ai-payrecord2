@@ -1,0 +1,6 @@
+# Hurl Variables
+# Token from login response
+token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InRlc3R1c2VyMiIsImV4cCI6MTc3MzgyOTQ0NX0.EnNUWgWu7_6fQ8fnjy0fOZsGi54X1OFxKATDqVSUTOw
+
+# Refresh token
+refresh_token=d3c20c07e646e55243a1c89e888538b49174ceec77f66fa09da94a6c87c79e4b

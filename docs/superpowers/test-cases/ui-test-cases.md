@@ -363,7 +363,7 @@
   2. Switch to ledger B
   3. Note expense amount
 - **Expected**: Expense amounts differ between ledgers
-- **Status**: ⏳ Pending
+- **Status**: ✅ Tested
 
 ---
 
@@ -403,7 +403,7 @@
   3. Switch to ledger B
   4. Click "加载数据" - note record count
 - **Expected**: Record counts differ between ledgers
-- **Status**: ⏳ Pending
+- **Status**: ✅ Tested
 
 ---
 

@@ -19,6 +19,7 @@
 - [X] T006 Test ledger switch on ExportPage ✅
 - [X] T007 Test ledger switch on BudgetPage ✅
 - [X] T008 Update test case TC-UI-HOME-004 status
+- [X] T009 Fix backend GetSummary - add ledger_id filter to income/expense queries (backend/internal/service/stats.go)
 
 ## Dependencies
 

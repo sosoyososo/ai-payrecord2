@@ -3,7 +3,7 @@
 **Spec**: docs/superpowers/specs/2026-03-17-ui-design-standard.md
 **Plan**: docs/superpowers/plans/2026-03-18-ui-p2-optimization.md
 **Created**: 2026-03-18
-**Status**: 📋 IN PROGRESS
+**Status**: ✅ COMPLETED
 
 ## 概述
 
@@ -41,9 +41,9 @@ P2 视觉优化 - 骨架屏加载状态和下拉刷新功能
 
 **Independent Test**: 下拉可刷新数据
 
-- [ ] T007 安装 react-pull-to-refresh in frontend/package.json
-- [ ] T008 [US2] 导入 PullToRefresh in frontend/src/pages/HomePage.tsx
-- [ ] T009 [US2] 添加下拉刷新功能 in frontend/src/pages/HomePage.tsx
+- [X] T007 安装 react-pull-to-refresh in frontend/package.json
+- [X] T008 [US2] 导入 PullToRefresh in frontend/src/pages/HomePage.tsx
+- [X] T009 [US2] 添加下拉刷新功能 in frontend/src/pages/HomePage.tsx
 
 ---
 

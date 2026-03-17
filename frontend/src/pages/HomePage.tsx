@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User, Search, X } from 'lucide-react'
+import PullToRefresh from 'react-pull-to-refresh'
 
 export default function HomePage() {
   const { t } = useTranslation()
@@ -104,7 +105,12 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <PullToRefresh
+      onRefresh={loadData}
+      distanceToRefresh={80}
+      className="min-h-screen"
+    >
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
@@ -310,5 +316,6 @@ export default function HomePage() {
         <Plus className="h-6 w-6" />
       </Link>
     </div>
+    </PullToRefresh>
   )
 }

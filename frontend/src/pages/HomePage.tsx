@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
@@ -19,6 +19,8 @@ export default function HomePage() {
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [summary, setSummary] = useState<SummaryStats | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     loadData()
@@ -38,6 +40,19 @@ export default function HomePage() {
       setFilteredRecords(records)
     }
   }, [searchQuery, records])
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [menuOpen])
 
   const loadData = async () => {
     try {
@@ -99,11 +114,11 @@ export default function HomePage() {
                 <BarChart3 className="h-5 w-5" />
               </Link>
             </Button>
-            <div className="relative group">
-              <Button variant="ghost" size="icon">
+            <div className="relative">
+              <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen) }}>
                 <Settings className="h-5 w-5" />
               </Button>
-              <div className="absolute right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border hidden group-hover:block z-50">
+              <div ref={menuRef} className={`absolute right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border z-50 ${menuOpen ? 'block' : 'hidden'}`}>
                 <Link
                   to="/settings"
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-t-lg"

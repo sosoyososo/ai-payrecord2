@@ -111,7 +111,7 @@
   4. Enter note: "Test note"
   5. Click "保存记录"
 - **Expected**: Note saved with record
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 

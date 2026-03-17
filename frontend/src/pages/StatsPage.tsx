@@ -1,0 +1,298 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { statsApi, ledgerApi } from '@/services/api'
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import type { SummaryStats, CategoryStats, Ledger } from '@/types'
+import { ArrowLeft } from 'lucide-react'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+} from 'recharts'
+
+const COLORS = [
+  '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
+  '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1',
+]
+
+export default function StatsPage() {
+  const navigate = useNavigate()
+  const [ledgers, setLedgers] = useState<Ledger[]>([])
+  const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
+  const [year, setYear] = useState(new Date().getFullYear())
+  const [summary, setSummary] = useState<SummaryStats | null>(null)
+  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([])
+  const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<'overview' | 'category' | 'monthly'>('overview')
+
+  useEffect(() => {
+    loadData()
+  }, [year, currentLedger])
+
+  const loadData = async () => {
+    setLoading(true)
+    try {
+      const [ledgersRes, currentRes, summaryRes, categoryRes] = await Promise.all([
+        ledgerApi.list(),
+        ledgerApi.getCurrent(),
+        statsApi.getSummary(year, currentLedger?.id),
+        statsApi.getByCategory({
+          ledger_id: currentLedger?.id,
+          type: 1, // expense
+        }),
+      ])
+
+      setLedgers(ledgersRes.data.data)
+      setCurrentLedger(currentRes.data.data)
+      setSummary(summaryRes.data.data)
+      setCategoryStats(categoryRes.data.data)
+    } catch (error) {
+      console.error('Failed to load stats:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const switchLedger = async (ledgerId: number) => {
+    await ledgerApi.setCurrent(ledgerId)
+    loadData()
+  }
+
+  const formatAmount = (amount: number) => {
+    return amount.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  }
+
+  if (loading && !summary) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-24">
+      {/* Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <span className="font-semibold text-lg">统计</span>
+          <select
+            value={year}
+            onChange={(e) => setYear(parseInt(e.target.value))}
+            className="ml-auto text-sm border rounded px-2 py-1"
+          >
+            {[2024, 2025, 2026].map((y) => (
+              <option key={y} value={y}>
+                {y}年
+              </option>
+            ))}
+          </select>
+        </div>
+      </header>
+
+      {/* Ledger Selector */}
+      {ledgers.length > 1 && (
+        <div className="max-w-md mx-auto px-4 py-3 overflow-x-auto flex gap-2">
+          {ledgers.map((ledger) => (
+            <button
+              key={ledger.id}
+              onClick={() => switchLedger(ledger.id)}
+              className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors ${
+                currentLedger?.id === ledger.id
+                  ? 'bg-primary text-white'
+                  : 'bg-white text-muted-foreground hover:bg-slate-100'
+              }`}
+            >
+              {ledger.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Tabs */}
+      <div className="max-w-md mx-auto px-4 py-2 flex gap-2">
+        <Button
+          variant={activeTab === 'overview' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setActiveTab('overview')}
+        >
+          概览
+        </Button>
+        <Button
+          variant={activeTab === 'category' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setActiveTab('category')}
+        >
+          分类
+        </Button>
+        <Button
+          variant={activeTab === 'monthly' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setActiveTab('monthly')}
+        >
+          月度
+        </Button>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-md mx-auto px-4 py-4 space-y-4">
+        {activeTab === 'overview' && summary && (
+          <>
+            {/* Summary Cards */}
+            <div className="grid grid-cols-3 gap-3">
+              <Card className="bg-green-50 border-green-200">
+                <CardContent className="p-3 text-center">
+                  <div className="text-xs text-green-600 mb-1">收入</div>
+                  <div className="text-lg font-bold text-green-700">
+                    ¥{formatAmount(summary.total_income)}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-red-50 border-red-200">
+                <CardContent className="p-3 text-center">
+                  <div className="text-xs text-red-600 mb-1">支出</div>
+                  <div className="text-lg font-bold text-red-700">
+                    ¥{formatAmount(summary.total_expense)}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-3 text-center">
+                  <div className="text-xs text-blue-600 mb-1">结余</div>
+                  <div className="text-lg font-bold text-blue-700">
+                    ¥{formatAmount(summary.balance)}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Monthly Trend */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">月度趋势</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={summary.monthly_stats}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
+                      <Tooltip
+                        formatter={(value) => `¥${formatAmount(Number(value) || 0)}`}
+                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="income"
+                        stroke="#10B981"
+                        strokeWidth={2}
+                        dot={{ fill: '#10B981' }}
+                        name="收入"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="expense"
+                        stroke="#EF4444"
+                        strokeWidth={2}
+                        dot={{ fill: '#EF4444' }}
+                        name="支出"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {activeTab === 'category' && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">支出分类</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={categoryStats}
+                      dataKey="total_amount"
+                      nameKey="category_name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {categoryStats.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value) => `¥${formatAmount(Number(value) || 0)}`}
+                      contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Category List */}
+              <div className="mt-4 space-y-2">
+                {categoryStats.map((stat, index) => (
+                  <div key={stat.category_id} className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <span className="flex-1 text-sm">{stat.category_name}</span>
+                    <span className="text-sm font-medium">¥{formatAmount(stat.total_amount)}</span>
+                    <span className="text-xs text-muted-foreground">({stat.percentage.toFixed(1)}%)</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === 'monthly' && summary && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">月度详情</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={summary.monthly_stats}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip
+                      formatter={(value) => `¥${formatAmount(Number(value) || 0)}`}
+                      contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                    />
+                    <Bar dataKey="expense" fill="#EF4444" name="支出" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="income" fill="#10B981" name="收入" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  )
+}

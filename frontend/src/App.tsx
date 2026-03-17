@@ -12,6 +12,7 @@ const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const TagPage = lazy(() => import('@/pages/TagPage'))
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'))
 const ExportPage = lazy(() => import('@/pages/ExportPage'))
+const BudgetPage = lazy(() => import('@/pages/BudgetPage'))
 
 function Loading() {
   return (
@@ -101,6 +102,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ExportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/budget"
+          element={
+            <ProtectedRoute>
+              <BudgetPage />
             </ProtectedRoute>
           }
         />

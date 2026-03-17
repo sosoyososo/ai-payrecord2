@@ -6,7 +6,7 @@ import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor } from 'lucide-react'
+import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet } from 'lucide-react'
 
 export default function SettingsPage() {
   const navigate = useNavigate()
@@ -213,10 +213,19 @@ export default function SettingsPage() {
 
         {/* Export Section */}
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 space-y-1">
+            <Link
+              to="/budget"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <Wallet className="h-4 w-4 text-muted-foreground" />
+                <span>预算设置</span>
+              </div>
+            </Link>
             <Link
               to="/export"
-              className="flex items-center justify-between p-2 -m-2 rounded-lg hover:bg-slate-50"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
             >
               <div className="flex items-center gap-3">
                 <Download className="h-4 w-4 text-muted-foreground" />

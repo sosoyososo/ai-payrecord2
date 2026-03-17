@@ -15,16 +15,16 @@ var (
 )
 
 type CreateRecordRequest struct {
-	LedgerID   uint     `json:"ledger_id" binding:"required"`
-	CategoryID uint     `json:"category_id" binding:"required"`
-	Amount     float64  `json:"amount" binding:"required,gt=0"`
+	LedgerID   uint            `json:"ledger_id"`
+	CategoryID uint            `json:"category_id" binding:"required"`
+	Amount     float64         `json:"amount" binding:"required,gt=0"`
 	Type       model.RecordType `json:"type" binding:"required"`
-	Date       time.Time `json:"date" binding:"required"`
-	Note       string    `json:"note"`
-	ImageURL   string    `json:"image_url"`
-	Location   string    `json:"location"`
-	Source     string    `json:"source"`
-	TagIDs     []uint    `json:"tag_ids"`
+	Date       time.Time       `json:"date" binding:"required"`
+	Note       string          `json:"note"`
+	ImageURL   string          `json:"image_url"`
+	Location   string          `json:"location"`
+	Source     string          `json:"source"`
+	TagIDs     []uint          `json:"tag_ids"`
 }
 
 type UpdateRecordRequest struct {
@@ -122,9 +122,23 @@ func (s *RecordService) GetByID(userID, recordID uint) (*model.Record, error) {
 func (s *RecordService) Create(userID uint, req *CreateRecordRequest) (*model.Record, error) {
 	db := database.GetDB()
 
+	// Get current ledger if not provided
+	ledgerID := req.LedgerID
+	if ledgerID == 0 {
+		// Use default ledger
+		var ledger model.Ledger
+		if err := db.Where("user_id = ? AND is_default = ?", userID, true).First(&ledger).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return nil, errors.New("no default ledger found")
+			}
+			return nil, err
+		}
+		ledgerID = ledger.ID
+	}
+
 	// Verify ledger ownership
 	var ledger model.Ledger
-	if err := db.Where("id = ? AND user_id = ?", req.LedgerID, userID).First(&ledger).Error; err != nil {
+	if err := db.Where("id = ? AND user_id = ?", ledgerID, userID).First(&ledger).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("ledger not found")
 		}
@@ -143,7 +157,7 @@ func (s *RecordService) Create(userID uint, req *CreateRecordRequest) (*model.Re
 	// Create record
 	record := &model.Record{
 		UserID:     userID,
-		LedgerID:   req.LedgerID,
+		LedgerID:   ledgerID,
 		CategoryID: req.CategoryID,
 		Amount:     req.Amount,
 		Type:       req.Type,

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/karsa/ai-payrecord2/backend/internal/model"
@@ -109,7 +110,7 @@ func (s *StatsService) getMonthlyStats(userID uint, ledgerID *uint, year int) []
 
 	query := db.Model(&model.Record{}).
 		Select("strftime('%m', date) as month, type, SUM(amount) as total, COUNT(*) as count").
-		Where("user_id = ? AND strftime('%Y', date) = ? AND status = 1", userID, string(rune(year))).
+		Where("user_id = ? AND strftime('%Y', date) = ? AND status = 1", userID, strconv.Itoa(year)).
 		Group("strftime('%m', date), type")
 
 	if ledgerID != nil && *ledgerID > 0 {
@@ -154,7 +155,7 @@ func (s *StatsService) GetDailyStats(userID uint, ledgerID *uint, startDate, end
 	}
 
 	var results []struct {
-		Date  time.Time
+		Date  string
 		Type  int
 		Total float64
 		Count int64
@@ -165,7 +166,7 @@ func (s *StatsService) GetDailyStats(userID uint, ledgerID *uint, startDate, end
 	// Group by date
 	dailyMap := make(map[string]*DailyStats)
 	for _, r := range results {
-		dateStr := r.Date.Format("2006-01-02")
+		dateStr := r.Date
 		if dailyMap[dateStr] == nil {
 			dailyMap[dateStr] = &DailyStats{Date: dateStr}
 		}

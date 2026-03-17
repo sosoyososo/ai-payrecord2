@@ -54,11 +54,24 @@ func (h *StatsHandler) GetSummary(c *gin.Context) {
 func (h *StatsHandler) GetDailyStats(c *gin.Context) {
 	userID := middleware.GetUserID(c)
 
-	// Parse dates
-	startDate := time.Now().AddDate(0, 0, -30) // Default: last 30 days
-	endDate := time.Now()
+	// Parse dates - support year/month or use defaults
+	now := time.Now()
+	startDate := now.AddDate(0, 0, -30) // Default: last 30 days
+	endDate := now
 
-	if startDateStr := c.Query("start_date"); startDateStr != "" {
+	// Try to parse year/month
+	if yearStr := c.Query("year"); yearStr != "" {
+		if year, err := strconv.Atoi(yearStr); err == nil {
+			month := now.Month()
+			if monthStr := c.Query("month"); monthStr != "" {
+				if m, err := strconv.Atoi(monthStr); err == nil && m >= 1 && m <= 12 {
+					month = time.Month(m)
+				}
+			}
+			startDate = time.Date(year, month, 1, 0, 0, 0, 0, time.Local)
+			endDate = startDate.AddDate(0, 1, -1) // End of month
+		}
+	} else if startDateStr := c.Query("start_date"); startDateStr != "" {
 		if t, err := time.Parse("2006-01-02", startDateStr); err == nil {
 			startDate = t
 		}

@@ -41,3 +41,17 @@ build/
 
 # Logs
 *.log
+
+# Test scripts
+test_*.sh
+test_*.py
+
+# Build cache
+.vite/
+node_modules/
+
+# Claude Code local config
+.claude/
+
+# Temporary files
+init-payrecord.md

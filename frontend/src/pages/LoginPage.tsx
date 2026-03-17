@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
+  const { t } = useTranslation()
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -42,12 +44,12 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
+            {isLogin ? t('auth.welcomeBack') : t('auth.createAccount')}
           </CardTitle>
           <CardDescription>
             {isLogin
-              ? 'Enter your credentials to access your account'
-              : 'Start tracking your finances today'}
+              ? t('auth.enterCredentials')
+              : t('auth.startTracking')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -61,7 +63,7 @@ export default function LoginPage() {
               <>
                 <div className="space-y-2">
                   <Input
-                    placeholder="Username"
+                    placeholder={t('auth.username')}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -70,7 +72,7 @@ export default function LoginPage() {
                 </div>
                 <div className="space-y-2">
                   <Input
-                    placeholder="Nickname (optional)"
+                    placeholder={t('auth.nicknameOptional')}
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
                     disabled={loading}
@@ -81,7 +83,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Input
                 type="email"
-                placeholder="Email"
+                placeholder={t('auth.email')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -91,7 +93,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Input
                 type="password"
-                placeholder="Password"
+                placeholder={t('auth.password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -102,16 +104,16 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLogin ? 'Sign In' : 'Create Account'}
+              {isLogin ? t('auth.signIn') : t('auth.createAccount')}
             </Button>
             <p className="text-sm text-center text-muted-foreground">
-              {isLogin ? "Don't have an account? " : 'Already have an account? '}
+              {isLogin ? t('auth.noAccount') : t('auth.haveAccount')}
               <button
                 type="button"
                 className="text-primary hover:underline"
                 onClick={() => setIsLogin(!isLogin)}
               >
-                {isLogin ? 'Sign up' : 'Sign in'}
+                {isLogin ? t('auth.signUp') : t('auth.signIn')}
               </button>
             </p>
           </CardFooter>

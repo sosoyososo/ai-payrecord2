@@ -1,0 +1,136 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "confirm": "确认",
+    "loading": "加载中...",
+    "system": "系统"
+  },
+  "auth": {
+    "welcomeBack": "欢迎回来",
+    "createAccount": "创建账户",
+    "enterCredentials": "输入您的凭据以访问您的账户",
+    "startTracking": "开始记录您的财务",
+    "email": "邮箱",
+    "password": "密码",
+    "username": "用户名",
+    "nicknameOptional": "昵称（可选）",
+    "signIn": "登录",
+    "signUp": "注册",
+    "noAccount": "没有账号？",
+    "haveAccount": "已有账号？"
+  },
+  "nav": {
+    "home": "首页",
+    "stats": "统计",
+    "settings": "设置",
+    "categories": "分类",
+    "tags": "标签",
+    "ledgers": "账本"
+  },
+  "home": {
+    "monthlyExpense": "本月支出",
+    "income": "收入",
+    "balance": "结余",
+    "recentRecords": "最近记录",
+    "searchPlaceholder": "搜索记录...",
+    "noRecords": "暂无记录",
+    "addFirst": "点击 + 添加第一条记录",
+    "searchResults": "搜索结果",
+    "noMatchRecords": "没有找到匹配的记录"
+  },
+  "addRecord": {
+    "title": "添加记录",
+    "expense": "支出",
+    "income": "收入",
+    "amount": "金额",
+    "date": "日期",
+    "category": "分类",
+    "note": "备注",
+    "notePlaceholder": "添加备注...",
+    "save": "保存记录",
+    "expenseAmount": "支出金额",
+    "incomeAmount": "收入金额"
+  },
+  "stats": {
+    "title": "统计",
+    "overview": "概览",
+    "byCategory": "分类",
+    "monthly": "月度",
+    "yearly": "年度",
+    "monthlyTrend": "月度趋势"
+  },
+  "category": {
+    "title": "分类管理",
+    "incomeCategory": "收入分类",
+    "expenseCategory": "支出分类",
+    "addCategory": "添加分类"
+  },
+  "tag": {
+    "title": "标签管理",
+    "addTag": "添加标签"
+  },
+  "ledger": {
+    "title": "账本管理",
+    "addLedger": "添加账本",
+    "default": "默认账本"
+  },
+  "settings": {
+    "title": "设置",
+    "appearance": "外观",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统",
+    "profile": "个人信息",
+    "username": "用户名",
+    "email": "邮箱",
+    "nickname": "昵称",
+    "nicknamePlaceholder": "设置昵称",
+    "changePassword": "修改密码",
+    "currentPassword": "当前密码",
+    "currentPasswordPlaceholder": "输入当前密码",
+    "newPassword": "新密码",
+    "newPasswordPlaceholder": "输入新密码",
+    "confirmPassword": "确认新密码",
+    "confirmPasswordPlaceholder": "再次输入新密码",
+    "budgetSettings": "预算设置",
+    "exportData": "导出数据",
+    "language": "语言",
+    "profileUpdated": "个人信息已更新",
+    "passwordChanged": "密码已修改",
+    "updateFailed": "更新失败",
+    "passwordMismatch": "两次输入的密码不一致",
+    "passwordTooShort": "密码长度至少6位",
+    "passwordChangeFailed": "修改密码失败"
+  },
+  "budget": {
+    "title": "预算设置",
+    "monthlyBudget": "月度预算",
+    "budgetAmount": "预算金额",
+    "saveBudget": "保存预算",
+    "thisMonthExpense": "本月支出",
+    "used": "已使用",
+    "remaining": "剩余",
+    "description": "设置月度预算可以帮助您更好地控制支出。当支出达到预算的 80% 时会提醒您。",
+    "saved": "预算已保存"
+  },
+  "export": {
+    "title": "数据导出",
+    "description": "导出说明",
+    "exportDesc": "导出当前账本的所有记录数据，支持 JSON 和 CSV 格式。",
+    "loadData": "加载数据",
+    "exportJson": "导出 JSON",
+    "exportCsv": "导出 CSV",
+    "reloadData": "重新加载数据",
+    "recordCount": "记录数",
+    "warning": "导出的数据仅包含您当前的账本记录",
+    "ledger": "账本"
+  },
+  "confirm": {
+    "deleteLedger": "确定要删除这个账本吗？",
+    "deleteCategory": "确定要删除这个分类吗？",
+    "deleteTag": "确定要删除这个标签吗？"
+  }
+}

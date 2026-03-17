@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet } from 'lucide-react'
+import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe } from 'lucide-react'
 
 export default function SettingsPage() {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { user, refreshUser } = useAuth()
   const { theme, setTheme } = useTheme()
@@ -23,6 +25,11 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
+  const handleLanguageChange = (lang: string) => {
+    i18n.changeLanguage(lang)
+    localStorage.setItem('language', lang)
+  }
+
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -30,9 +37,9 @@ export default function SettingsPage() {
     try {
       await userApi.updateProfile({ nickname: nickname || undefined })
       await refreshUser()
-      setMessage('个人信息已更新')
+      setMessage(t('settings.profileUpdated'))
     } catch (error: any) {
-      setMessage(error.response?.data?.message || '更新失败')
+      setMessage(error.response?.data?.message || t('settings.updateFailed'))
     } finally {
       setLoading(false)
     }
@@ -42,12 +49,12 @@ export default function SettingsPage() {
     e.preventDefault()
 
     if (newPassword !== confirmPassword) {
-      setMessage('两次输入的密码不一致')
+      setMessage(t('settings.passwordMismatch'))
       return
     }
 
     if (newPassword.length < 6) {
-      setMessage('密码长度至少6位')
+      setMessage(t('settings.passwordTooShort'))
       return
     }
 
@@ -61,9 +68,9 @@ export default function SettingsPage() {
       setOldPassword('')
       setNewPassword('')
       setConfirmPassword('')
-      setMessage('密码已修改')
+      setMessage(t('settings.passwordChanged'))
     } catch (error: any) {
-      setMessage(error.response?.data?.message || '修改密码失败')
+      setMessage(error.response?.data?.message || t('settings.passwordChangeFailed'))
     } finally {
       setLoading(false)
     }
@@ -76,7 +83,7 @@ export default function SettingsPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">设置</span>
+          <span className="font-semibold text-lg">{t('settings.title')}</span>
         </div>
       </header>
 
@@ -86,7 +93,7 @@ export default function SettingsPage() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               {theme === 'dark' ? <Moon className="h-4 w-4" /> : theme === 'light' ? <Sun className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
-              外观
+              {t('settings.appearance')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -98,7 +105,7 @@ export default function SettingsPage() {
                 className="flex-1"
               >
                 <Sun className="h-4 w-4 mr-2" />
-                浅色
+                {t('settings.light')}
               </Button>
               <Button
                 variant={theme === 'dark' ? 'default' : 'outline'}
@@ -107,7 +114,7 @@ export default function SettingsPage() {
                 className="flex-1"
               >
                 <Moon className="h-4 w-4 mr-2" />
-                深色
+                {t('settings.dark')}
               </Button>
               <Button
                 variant={theme === 'system' ? 'default' : 'outline'}
@@ -116,7 +123,37 @@ export default function SettingsPage() {
                 className="flex-1"
               >
                 <Monitor className="h-4 w-4 mr-2" />
-                跟随系统
+                {t('settings.system')}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Language Section */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              {t('settings.language')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2">
+              <Button
+                variant={i18n.language === 'zh' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => handleLanguageChange('zh')}
+                className="flex-1"
+              >
+                中文
+              </Button>
+              <Button
+                variant={i18n.language === 'en' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => handleLanguageChange('en')}
+                className="flex-1"
+              >
+                English
               </Button>
             </div>
           </CardContent>
@@ -124,7 +161,7 @@ export default function SettingsPage() {
 
         {message && (
           <div className={`p-3 rounded-md text-sm ${
-            message.includes('失败') || message.includes('不一致') || message.includes('至少')
+            message.includes('失败') || message.includes('不一致') || message.includes('至少') || message.includes('Failed') || message.includes('mismatch') || message.includes('short')
               ? 'bg-red-50 text-red-600'
               : 'bg-green-50 text-green-600'
           }`}>
@@ -137,30 +174,30 @@ export default function SettingsPage() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <User className="h-4 w-4" />
-              个人信息
+              {t('settings.profile')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm text-muted-foreground">用户名</label>
+                <label className="text-sm text-muted-foreground">{t('settings.username')}</label>
                 <Input value={user?.username || ''} disabled />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-muted-foreground">邮箱</label>
+                <label className="text-sm text-muted-foreground">{t('settings.email')}</label>
                 <Input value={user?.email || ''} disabled />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-muted-foreground">昵称</label>
+                <label className="text-sm text-muted-foreground">{t('settings.nickname')}</label>
                 <Input
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  placeholder="设置昵称"
+                  placeholder={t('settings.nicknamePlaceholder')}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-                保存
+                {t('common.save')}
               </Button>
             </form>
           </CardContent>
@@ -171,41 +208,41 @@ export default function SettingsPage() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <Lock className="h-4 w-4" />
-              修改密码
+              {t('settings.changePassword')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm text-muted-foreground">当前密码</label>
+                <label className="text-sm text-muted-foreground">{t('settings.currentPassword')}</label>
                 <Input
                   type="password"
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
-                  placeholder="输入当前密码"
+                  placeholder={t('settings.currentPasswordPlaceholder')}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-muted-foreground">新密码</label>
+                <label className="text-sm text-muted-foreground">{t('settings.newPassword')}</label>
                 <Input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="输入新密码"
+                  placeholder={t('settings.newPasswordPlaceholder')}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-muted-foreground">确认新密码</label>
+                <label className="text-sm text-muted-foreground">{t('settings.confirmPassword')}</label>
                 <Input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="再次输入新密码"
+                  placeholder={t('settings.confirmPasswordPlaceholder')}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading || !oldPassword || !newPassword}>
                 {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Lock className="h-4 w-4 mr-2" />}
-                修改密码
+                {t('settings.changePassword')}
               </Button>
             </form>
           </CardContent>
@@ -220,7 +257,7 @@ export default function SettingsPage() {
             >
               <div className="flex items-center gap-3">
                 <Wallet className="h-4 w-4 text-muted-foreground" />
-                <span>预算设置</span>
+                <span>{t('settings.budgetSettings')}</span>
               </div>
             </Link>
             <Link
@@ -229,7 +266,7 @@ export default function SettingsPage() {
             >
               <div className="flex items-center gap-3">
                 <Download className="h-4 w-4 text-muted-foreground" />
-                <span>导出数据</span>
+                <span>{t('settings.exportData')}</span>
               </div>
             </Link>
           </CardContent>
@@ -239,7 +276,7 @@ export default function SettingsPage() {
         <Card>
           <CardContent className="p-4">
             <div className="text-center text-sm text-muted-foreground">
-              <p>账本 App</p>
+              <p>Ledger App</p>
               <p className="text-xs mt-1">Version 1.0.0</p>
             </div>
           </CardContent>

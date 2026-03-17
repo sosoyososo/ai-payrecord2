@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
@@ -9,6 +10,7 @@ import type { Record, Ledger, SummaryStats } from '@/types'
 import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User, Search, X } from 'lucide-react'
 
 export default function HomePage() {
+  const { t } = useTranslation()
   const { logout } = useAuth()
   const navigate = useNavigate()
   const [records, setRecords] = useState<Record[]>([])
@@ -89,7 +91,7 @@ export default function HomePage() {
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Wallet className="h-6 w-6 text-primary" />
-            <span className="font-semibold text-lg">{currentLedger?.name || '账本'}</span>
+            <span className="font-semibold text-lg">{currentLedger?.name || t('nav.ledgers')}</span>
           </div>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" asChild>
@@ -114,7 +116,7 @@ export default function HomePage() {
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100"
                 >
                   <BookOpen className="h-4 w-4" />
-                  <span>账本管理</span>
+                  <span>{t('ledger.title')}</span>
                 </Link>
                 <Link
                   to="/categories"
@@ -163,7 +165,7 @@ export default function HomePage() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="搜索记录..."
+            placeholder={t('home.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 pr-10"
@@ -183,19 +185,19 @@ export default function HomePage() {
       <div className="max-w-md mx-auto px-4 py-4">
         <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden scale-enter">
           <CardContent className="p-6">
-            <div className="text-sm opacity-80 mb-1">本月支出</div>
+            <div className="text-sm opacity-80 mb-1">{t('home.monthlyExpense')}</div>
             <div className="text-3xl font-bold mb-4">
               ¥{(summary?.total_expense || 0).toFixed(2)}
             </div>
             <div className="flex justify-between text-sm">
               <div className="flex items-center gap-1">
                 <TrendingUp className="h-4 w-4 opacity-80" />
-                <span className="opacity-80">收入</span>
+                <span className="opacity-80">{t('home.income')}</span>
                 <span className="font-medium">¥{(summary?.total_income || 0).toFixed(2)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <TrendingDown className="h-4 w-4 opacity-80" />
-                <span className="opacity-80">结余</span>
+                <span className="opacity-80">{t('home.balance')}</span>
                 <span className="font-medium">¥{(summary?.balance || 0).toFixed(2)}</span>
               </div>
             </div>
@@ -207,7 +209,7 @@ export default function HomePage() {
       <div className="max-w-md mx-auto px-4 pb-24">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">
-            {searchQuery ? `搜索结果 (${filteredRecords.length})` : '最近记录'}
+            {searchQuery ? `${t('home.searchResults')} (${filteredRecords.length})` : t('home.recentRecords')}
           </h2>
         </div>
 
@@ -256,7 +258,7 @@ export default function HomePage() {
 
           {filteredRecords.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
-              <p>{searchQuery ? '没有找到匹配的记录' : 'No records yet'}</p>
+              <p>{searchQuery ? t('home.noMatchRecords') : t('home.noRecords')}</p>
               <p className="text-sm">{searchQuery ? '尝试其他关键词' : 'Click + to add your first record'}</p>
             </div>
           )}

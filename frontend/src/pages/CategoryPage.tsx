@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { categoryApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,7 @@ const DEFAULT_COLORS = [
 ]
 
 export default function CategoryPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -70,7 +72,7 @@ export default function CategoryPage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('确定要删除这个分类吗？')) return
+    if (!confirm(t('confirm.deleteCategory'))) return
     try {
       await categoryApi.delete(id)
       loadData()
@@ -97,14 +99,14 @@ export default function CategoryPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">分类管理</span>
+          <span className="font-semibold text-lg">{t('category.title')}</span>
         </div>
       </header>
 
       <div className="max-w-md mx-auto px-4 py-4 space-y-6">
         {/* Income Categories */}
         <div>
-          <h3 className="font-medium mb-3 text-green-600">收入分类</h3>
+          <h3 className="font-medium mb-3 text-green-600">{t('category.incomeCategory')}</h3>
           <div className="space-y-2">
             {incomeCategories.map((category) => (
               <Card key={category.id}>
@@ -163,7 +165,7 @@ export default function CategoryPage() {
 
         {/* Expense Categories */}
         <div>
-          <h3 className="font-medium mb-3 text-red-600">支出分类</h3>
+          <h3 className="font-medium mb-3 text-red-600">{t('category.expenseCategory')}</h3>
           <div className="space-y-2">
             {expenseCategories.map((category) => (
               <Card key={category.id}>
@@ -225,7 +227,7 @@ export default function CategoryPage() {
           <Card>
             <CardContent className="p-4 space-y-3">
               <Input
-                placeholder="分类名称"
+                placeholder={t('category.namePlaceholder')}
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
@@ -236,14 +238,14 @@ export default function CategoryPage() {
                   variant={newType === 1 ? 'default' : 'outline'}
                   onClick={() => setNewType(1)}
                 >
-                  收入
+                  {t('addRecord.income')}
                 </Button>
                 <Button
                   size="sm"
                   variant={newType === 2 ? 'default' : 'outline'}
                   onClick={() => setNewType(2)}
                 >
-                  支出
+                  {t('addRecord.expense')}
                 </Button>
               </div>
               <div className="flex items-center gap-2">
@@ -264,7 +266,7 @@ export default function CategoryPage() {
               <div className="flex gap-2">
                 <Button onClick={handleAdd} className="flex-1">
                   <Check className="h-4 w-4 mr-2" />
-                  保存
+                  {t('common.save')}
                 </Button>
                 <Button variant="outline" onClick={() => setShowAdd(false)}>
                   <X className="h-4 w-4" />
@@ -275,7 +277,7 @@ export default function CategoryPage() {
         ) : (
           <Button variant="outline" className="w-full" onClick={() => setShowAdd(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            添加分类
+            {t('category.addCategory')}
           </Button>
         )}
       </div>

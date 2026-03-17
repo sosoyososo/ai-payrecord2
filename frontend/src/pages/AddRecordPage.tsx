@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { recordApi, categoryApi, ledgerApi, llmApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,6 +9,7 @@ import type { Category, Ledger } from '@/types'
 import { ArrowLeft, Check, Sparkles, Loader2 } from 'lucide-react'
 
 export default function AddRecordPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
@@ -108,7 +110,7 @@ export default function AddRecordPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">添加记录</span>
+          <span className="font-semibold text-lg">{t('addRecord.title')}</span>
         </div>
       </header>
 
@@ -151,7 +153,7 @@ export default function AddRecordPage() {
                 setCategoryId(null)
               }}
             >
-              支出
+              {t('addRecord.expense')}
             </Button>
             <Button
               type="button"
@@ -162,7 +164,7 @@ export default function AddRecordPage() {
                 setCategoryId(null)
               }}
             >
-              收入
+              {t('addRecord.income')}
             </Button>
           </div>
 
@@ -170,7 +172,7 @@ export default function AddRecordPage() {
           <Card>
             <CardContent className="p-4">
               <div className="text-sm text-muted-foreground mb-1">
-                {type === 1 ? '支出金额' : '收入金额'}
+                {type === 1 ? t('addRecord.expenseAmount') : t('addRecord.incomeAmount')}
               </div>
               <div className="flex items-center gap-1 text-3xl font-bold">
                 <span>¥</span>
@@ -190,7 +192,7 @@ export default function AddRecordPage() {
           {/* Date */}
           <Card>
             <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-1">日期</div>
+              <div className="text-sm text-muted-foreground mb-1">{t('addRecord.date')}</div>
               <Input
                 type="datetime-local"
                 value={date}
@@ -203,7 +205,7 @@ export default function AddRecordPage() {
           {/* Category */}
           <Card>
             <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-2">分类</div>
+              <div className="text-sm text-muted-foreground mb-2">{t('addRecord.category')}</div>
               <div className="grid grid-cols-4 gap-2">
                 {filteredCategories.map((category) => (
                   <button
@@ -232,9 +234,9 @@ export default function AddRecordPage() {
           {/* Note */}
           <Card>
             <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-1">备注</div>
+              <div className="text-sm text-muted-foreground mb-1">{t('addRecord.note')}</div>
               <Input
-                placeholder="添加备注..."
+                placeholder={t('addRecord.notePlaceholder')}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
               />
@@ -254,7 +256,7 @@ export default function AddRecordPage() {
             ) : (
               <>
                 <Check className="h-5 w-5 mr-2" />
-                保存记录
+                {t('addRecord.save')}
               </>
             )}
           </Button>

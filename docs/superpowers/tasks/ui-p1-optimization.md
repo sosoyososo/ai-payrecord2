@@ -13,7 +13,7 @@
 ## Tasks
 
 - [X] T001 [P1] 优化导航菜单 - 将 hover 触发改为点击触发 (HomePage.tsx)
-- [ ] T002 [P1] 优化 Ledger 切换 - 改为下拉选择器 (HomePage.tsx)
+- [X] T002 [P1] 优化 Ledger 切换 - 改为下拉选择器 (HomePage.tsx)
 - [ ] T003 [P1] 优化 FAB 位置 - 调整为更安全的底部位置 (HomePage.tsx)
 
 ---

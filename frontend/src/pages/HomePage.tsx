@@ -158,20 +158,18 @@ export default function HomePage() {
 
       {/* Ledger Selector */}
       {ledgers.length > 1 && (
-        <div className="max-w-md mx-auto px-4 py-3 overflow-x-auto flex gap-2">
-          {ledgers.map((ledger) => (
-            <button
-              key={ledger.id}
-              onClick={() => switchLedger(ledger.id)}
-              className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors ${
-                currentLedger?.id === ledger.id
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-muted-foreground hover:bg-slate-100'
-              }`}
-            >
-              {ledger.name}
-            </button>
-          ))}
+        <div className="max-w-md mx-auto px-4 py-3">
+          <select
+            value={currentLedger?.id || ''}
+            onChange={(e) => switchLedger(Number(e.target.value))}
+            className="w-full px-3 py-2 rounded-lg border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            {ledgers.map((ledger) => (
+              <option key={ledger.id} value={ledger.id}>
+                {ledger.name}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 

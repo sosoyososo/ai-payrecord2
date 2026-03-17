@@ -27,7 +27,7 @@
 - **Test Steps**:
   1. Click logout icon in header
 - **Expected**: Redirect to login page
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 
@@ -59,7 +59,7 @@
 - **Test Steps**:
   1. Enter search term in search box
 - **Expected**: Filter records by search term
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-UI-HOME-004: Switch Ledger
 - **ID**: TC-UI-HOME-004
@@ -205,7 +205,7 @@
   1. Navigate to /categories
   2. Click delete button on custom category
 - **Expected**: Category removed from list
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 
@@ -277,7 +277,7 @@
   1. Navigate to /ledgers
   2. Click delete on non-default ledger
 - **Expected**: Ledger removed
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 
@@ -325,7 +325,7 @@
   4. Confirm new password
   5. Click "修改密码"
 - **Expected**: Password changed
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 
@@ -351,7 +351,7 @@
   2. Enter budget amount
   3. Click "保存预算"
 - **Expected**: Budget saved, shows remaining
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 

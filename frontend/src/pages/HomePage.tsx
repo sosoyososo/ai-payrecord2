@@ -4,39 +4,55 @@ import { useAuth } from '@/contexts/AuthContext'
 import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User, Search, X } from 'lucide-react'
 
 export default function HomePage() {
   const { logout } = useAuth()
   const navigate = useNavigate()
   const [records, setRecords] = useState<Record[]>([])
+  const [filteredRecords, setFilteredRecords] = useState<Record[]>([])
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [summary, setSummary] = useState<SummaryStats | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     loadData()
   }, [])
+
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      const filtered = records.filter(
+        (r) =>
+          r.note?.toLowerCase().includes(query) ||
+          r.category?.name.toLowerCase().includes(query) ||
+          r.tags?.some((t) => t.name.toLowerCase().includes(query))
+      )
+      setFilteredRecords(filtered)
+    } else {
+      setFilteredRecords(records)
+    }
+  }, [searchQuery, records])
 
   const loadData = async () => {
     try {
       const [ledgersRes, currentRes, recordsRes, summaryRes] = await Promise.all([
         ledgerApi.list(),
         ledgerApi.getCurrent(),
-        recordApi.list({ page: 1, page_size: 20 }),
+        recordApi.list({ page: 1, page_size: 100 }),
         statsApi.getSummary(new Date().getFullYear()),
       ])
 
-      // Handle ledgers: { code, message, data: Ledger[] }
       setLedgers(ledgersRes.data.data || [])
       setCurrentLedger(currentRes.data.data || null)
 
-      // Handle records: { code, message, data: { total, page, page_size, data: Record[] } }
       const recordsData = recordsRes.data.data
       setRecords(recordsData?.data || [])
+      setFilteredRecords(recordsData?.data || [])
 
-      // Handle summary: { code, message, data: SummaryStats }
       setSummary(summaryRes.data.data || null)
     } catch (error) {
       console.error('Failed to load data:', error)
@@ -139,6 +155,27 @@ export default function HomePage() {
         </div>
       )}
 
+      {/* Search */}
+      <div className="max-w-md mx-auto px-4 py-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="搜索记录..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 pr-10"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+            >
+              <X className="h-4 w-4 text-muted-foreground" />
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Summary Card */}
       <div className="max-w-md mx-auto px-4 py-4">
         <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden scale-enter">
@@ -166,11 +203,13 @@ export default function HomePage() {
       {/* Records List */}
       <div className="max-w-md mx-auto px-4 pb-24">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">最近记录</h2>
+          <h2 className="text-lg font-semibold">
+            {searchQuery ? `搜索结果 (${filteredRecords.length})` : '最近记录'}
+          </h2>
         </div>
 
         <div className="space-y-3 stagger-children">
-          {records.map((record) => (
+          {filteredRecords.map((record) => (
             <Card key={record.id} className="card-hover cursor-pointer">
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -186,6 +225,19 @@ export default function HomePage() {
                       {formatDate(record.date)}
                       {record.note && ` · ${record.note}`}
                     </div>
+                    {record.tags && record.tags.length > 0 && (
+                      <div className="flex gap-1 mt-1">
+                        {record.tags.map((tag) => (
+                          <span
+                            key={tag.id}
+                            className="text-xs px-1.5 py-0.5 rounded-full"
+                            style={{ backgroundColor: tag.color || '#666', color: '#fff' }}
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div
@@ -199,10 +251,10 @@ export default function HomePage() {
             </Card>
           ))}
 
-          {records.length === 0 && (
+          {filteredRecords.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
-              <p>No records yet</p>
-              <p className="text-sm">Click + to add your first record</p>
+              <p>{searchQuery ? '没有找到匹配的记录' : 'No records yet'}</p>
+              <p className="text-sm">{searchQuery ? '尝试其他关键词' : 'Click + to add your first record'}</p>
             </div>
           )}
         </div>

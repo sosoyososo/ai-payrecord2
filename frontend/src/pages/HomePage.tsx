@@ -5,7 +5,7 @@ import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User } from 'lucide-react'
 
 export default function HomePage() {
   const { logout } = useAuth()
@@ -84,8 +84,15 @@ export default function HomePage() {
               </Button>
               <div className="absolute right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border hidden group-hover:block z-50">
                 <Link
-                  to="/ledgers"
+                  to="/settings"
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-t-lg"
+                >
+                  <User className="h-4 w-4" />
+                  <span>个人设置</span>
+                </Link>
+                <Link
+                  to="/ledgers"
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100"
                 >
                   <BookOpen className="h-4 w-4" />
                   <span>账本管理</span>

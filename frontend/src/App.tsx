@@ -7,6 +7,7 @@ import StatsPage from '@/pages/StatsPage'
 import LedgerPage from '@/pages/LedgerPage'
 import CategoryPage from '@/pages/CategoryPage'
 import TagPage from '@/pages/TagPage'
+import SettingsPage from '@/pages/SettingsPage'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -75,6 +76,14 @@ function App() {
         element={
           <ProtectedRoute>
             <TagPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
           </ProtectedRoute>
         }
       />

@@ -142,7 +142,7 @@ export default function CategoryPage() {
                         </div>
                         <span>{category.name}</span>
                         {category.is_system && (
-                          <span className="text-xs text-muted-foreground">(系统)</span>
+                          <span className="text-xs text-muted-foreground">{t('category.systemCategory')}</span>
                         )}
                       </div>
                       {!category.is_system && (
@@ -201,7 +201,7 @@ export default function CategoryPage() {
                         </div>
                         <span>{category.name}</span>
                         {category.is_system && (
-                          <span className="text-xs text-muted-foreground">(系统)</span>
+                          <span className="text-xs text-muted-foreground">{t('category.systemCategory')}</span>
                         )}
                       </div>
                       {!category.is_system && (
@@ -232,7 +232,7 @@ export default function CategoryPage() {
                 onChange={(e) => setNewName(e.target.value)}
               />
               <div className="flex items-center gap-2">
-                <span className="text-sm">类型:</span>
+                <span className="text-sm">{t('category.type')}:</span>
                 <Button
                   size="sm"
                   variant={newType === 1 ? 'default' : 'outline'}
@@ -249,7 +249,7 @@ export default function CategoryPage() {
                 </Button>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm">颜色:</span>
+                <span className="text-sm">{t('category.color')}:</span>
                 <div className="flex gap-1">
                   {DEFAULT_COLORS.map((color) => (
                     <button

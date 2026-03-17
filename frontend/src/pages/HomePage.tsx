@@ -109,7 +109,7 @@ export default function HomePage() {
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-t-lg"
                 >
                   <User className="h-4 w-4" />
-                  <span>个人设置</span>
+                  <span>{t('home.personalSettings')}</span>
                 </Link>
                 <Link
                   to="/ledgers"
@@ -123,14 +123,14 @@ export default function HomePage() {
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100"
                 >
                   <Tag className="h-4 w-4" />
-                  <span>分类管理</span>
+                  <span>{t('home.categoryManagement')}</span>
                 </Link>
                 <Link
                   to="/tags"
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-b-lg"
                 >
                   <Tag className="h-4 w-4" />
-                  <span>标签管理</span>
+                  <span>{t('home.tagManagement')}</span>
                 </Link>
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function HomePage() {
           {filteredRecords.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
               <p>{searchQuery ? t('home.noMatchRecords') : t('home.noRecords')}</p>
-              <p className="text-sm">{searchQuery ? '尝试其他关键词' : 'Click + to add your first record'}</p>
+              <p className="text-sm">{searchQuery ? t('home.tryOtherKeywords') : t('home.addFirst')}</p>
             </div>
           )}
         </div>

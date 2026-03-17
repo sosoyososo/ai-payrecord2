@@ -39,7 +39,11 @@
     "noRecords": "No records yet",
     "addFirst": "Click + to add your first record",
     "searchResults": "Search Results",
-    "noMatchRecords": "No matching records found"
+    "noMatchRecords": "No matching records found",
+    "personalSettings": "Personal Settings",
+    "categoryManagement": "Category Management",
+    "tagManagement": "Tag Management",
+    "tryOtherKeywords": "Try other keywords"
   },
   "addRecord": {
     "title": "Add Record",
@@ -67,12 +71,17 @@
     "incomeCategory": "Income Categories",
     "expenseCategory": "Expense Categories",
     "addCategory": "Add Category",
-    "namePlaceholder": "Category name"
+    "namePlaceholder": "Category name",
+    "systemCategory": "(System)",
+    "type": "Type",
+    "color": "Color"
   },
   "tag": {
     "title": "Tag Management",
     "addTag": "Add Tag",
-    "namePlaceholder": "Tag name"
+    "namePlaceholder": "Tag name",
+    "systemTag": "(System)",
+    "color": "Color"
   },
   "ledger": {
     "title": "Ledger Management",

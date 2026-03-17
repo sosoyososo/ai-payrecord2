@@ -136,7 +136,7 @@ export default function TagPage() {
                     />
                     <span>{tag.name}</span>
                     {tag.is_system && (
-                      <span className="text-xs text-muted-foreground">(系统)</span>
+                      <span className="text-xs text-muted-foreground">{t('tag.systemTag')}</span>
                     )}
                   </div>
                   {!tag.is_system && (
@@ -164,7 +164,7 @@ export default function TagPage() {
                 onChange={(e) => setNewName(e.target.value)}
               />
               <div className="flex items-center gap-2">
-                <span className="text-sm">颜色:</span>
+                <span className="text-sm">{t('tag.color')}:</span>
                 <div className="flex gap-1">
                   {DEFAULT_COLORS.map((color) => (
                     <button

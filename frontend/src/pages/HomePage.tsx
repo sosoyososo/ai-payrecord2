@@ -141,7 +141,7 @@ export default function HomePage() {
 
       {/* Summary Card */}
       <div className="max-w-md mx-auto px-4 py-4">
-        <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden">
+        <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden scale-enter">
           <CardContent className="p-6">
             <div className="text-sm opacity-80 mb-1">本月支出</div>
             <div className="text-3xl font-bold mb-4">
@@ -169,9 +169,9 @@ export default function HomePage() {
           <h2 className="text-lg font-semibold">最近记录</h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 stagger-children">
           {records.map((record) => (
-            <Card key={record.id} className="hover:shadow-md transition-shadow cursor-pointer">
+            <Card key={record.id} className="card-hover cursor-pointer">
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
@@ -211,7 +211,7 @@ export default function HomePage() {
       {/* FAB */}
       <Link
         to="/add"
-        className="fixed bottom-6 right-6 w-14 h-14 bg-accent text-white rounded-full shadow-lg flex items-center justify-center hover:bg-accent/90 transition-transform hover:scale-105"
+        className="fixed bottom-6 right-6 w-14 h-14 bg-accent text-white rounded-full shadow-lg flex items-center justify-center btn-press fab-pulse"
       >
         <Plus className="h-6 w-6" />
       </Link>

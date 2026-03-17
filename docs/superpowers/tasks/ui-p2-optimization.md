@@ -17,7 +17,7 @@ P2 视觉优化 - 骨架屏加载状态和下拉刷新功能
 
 **Independent Test**: 组件可正常导入使用
 
-- [ ] T001 创建 Skeleton 组件 in frontend/src/components/ui/skeleton.tsx
+- [X] T001 创建 Skeleton 组件 in frontend/src/components/ui/skeleton.tsx
 
 ---
 
@@ -27,11 +27,11 @@ P2 视觉优化 - 骨架屏加载状态和下拉刷新功能
 
 **Independent Test**: 加载数据时显示骨架占位
 
-- [ ] T002 [US1] 导入 Skeleton 组件 in frontend/src/pages/HomePage.tsx
-- [ ] T003 [US1] 添加 loading state in frontend/src/pages/HomePage.tsx
-- [ ] T004 [US1] 设置 loading 状态 in frontend/src/pages/HomePage.tsx
-- [ ] T005 [US1] 添加 Summary Card 骨架屏 in frontend/src/pages/HomePage.tsx
-- [ ] T006 [US1] 添加 Records List 骨架屏 in frontend/src/pages/HomePage.tsx
+- [X] T002 [US1] 导入 Skeleton 组件 in frontend/src/pages/HomePage.tsx
+- [X] T003 [US1] 添加 loading state in frontend/src/pages/HomePage.tsx
+- [X] T004 [US1] 设置 loading 状态 in frontend/src/pages/HomePage.tsx
+- [X] T005 [US1] 添加 Summary Card 骨架屏 in frontend/src/pages/HomePage.tsx
+- [X] T006 [US1] 添加 Records List 骨架屏 in frontend/src/pages/HomePage.tsx
 
 ---
 

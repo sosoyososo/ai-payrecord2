@@ -6,6 +6,7 @@ import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User, Search, X } from 'lucide-react'
 
@@ -20,6 +21,7 @@ export default function HomePage() {
   const [summary, setSummary] = useState<SummaryStats | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -74,8 +76,10 @@ export default function HomePage() {
       setFilteredRecords(recordsData?.data || [])
 
       setSummary(summaryRes.data.data || null)
+      setLoading(false)
     } catch (error) {
       console.error('Failed to load data:', error)
+      setLoading(false)
     }
   }
 
@@ -196,26 +200,39 @@ export default function HomePage() {
 
       {/* Summary Card */}
       <div className="max-w-md mx-auto px-4 py-4">
-        <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden scale-enter">
-          <CardContent className="p-6">
-            <div className="text-sm opacity-80 mb-1">{t('home.monthlyExpense')}</div>
-            <div className="text-3xl font-bold mb-4">
-              ¥{(summary?.total_expense || 0).toFixed(2)}
-            </div>
-            <div className="flex justify-between text-sm">
-              <div className="flex items-center gap-1">
-                <TrendingUp className="h-4 w-4 opacity-80" />
-                <span className="opacity-80">{t('home.income')}</span>
-                <span className="font-medium">¥{(summary?.total_income || 0).toFixed(2)}</span>
+        {loading ? (
+          <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden">
+            <CardContent className="p-6">
+              <Skeleton className="h-4 w-24 mb-1 bg-white/20" />
+              <Skeleton className="h-8 w-32 mb-4 bg-white/20" />
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-20 bg-white/20" />
+                <Skeleton className="h-4 w-20 bg-white/20" />
               </div>
-              <div className="flex items-center gap-1">
-                <TrendingDown className="h-4 w-4 opacity-80" />
-                <span className="opacity-80">{t('home.balance')}</span>
-                <span className="font-medium">¥{(summary?.balance || 0).toFixed(2)}</span>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="bg-gradient-to-br from-primary to-primary/80 text-white overflow-hidden scale-enter">
+            <CardContent className="p-6">
+              <div className="text-sm opacity-80 mb-1">{t('home.monthlyExpense')}</div>
+              <div className="text-3xl font-bold mb-4">
+                ¥{(summary?.total_expense || 0).toFixed(2)}
               </div>
-            </div>
-          </CardContent>
-        </Card>
+              <div className="flex justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  <TrendingUp className="h-4 w-4 opacity-80" />
+                  <span className="opacity-80">{t('home.income')}</span>
+                  <span className="font-medium">¥{(summary?.total_income || 0).toFixed(2)}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <TrendingDown className="h-4 w-4 opacity-80" />
+                  <span className="opacity-80">{t('home.balance')}</span>
+                  <span className="font-medium">¥{(summary?.balance || 0).toFixed(2)}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Records List */}
@@ -227,6 +244,13 @@ export default function HomePage() {
         </div>
 
         <div className="space-y-3 stagger-children">
+          {loading && (
+            <>
+              <Card><CardContent className="p-4"><div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-full" /><div className="space-y-2 flex-1"><Skeleton className="h-4 w-full" /><Skeleton className="h-3 w-2/3" /></div></div></CardContent></Card>
+              <Card><CardContent className="p-4"><div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-full" /><div className="space-y-2 flex-1"><Skeleton className="h-4 w-full" /><Skeleton className="h-3 w-2/3" /></div></div></CardContent></Card>
+              <Card><CardContent className="p-4"><div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-full" /><div className="space-y-2 flex-1"><Skeleton className="h-4 w-full" /><Skeleton className="h-3 w-2/3" /></div></div></CardContent></Card>
+            </>
+          )}
           {filteredRecords.map((record) => (
             <Card key={record.id} className="card-hover cursor-pointer">
               <CardContent className="p-4 flex items-center justify-between">
@@ -269,7 +293,7 @@ export default function HomePage() {
             </Card>
           ))}
 
-          {filteredRecords.length === 0 && (
+          {!loading && filteredRecords.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
               <p>{searchQuery ? t('home.noMatchRecords') : t('home.noRecords')}</p>
               <p className="text-sm">{searchQuery ? t('home.tryOtherKeywords') : t('home.addFirst')}</p>

@@ -112,7 +112,7 @@
   }
   ```
 - **Expected**: 200 OK
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-API-LEDGER-006: Delete Ledger
 - **ID**: TC-API-LEDGER-006
@@ -159,7 +159,7 @@
   }
   ```
 - **Expected**: 200 OK, returns updated category
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-API-CATEGORY-004: Delete Category
 - **ID**: TC-API-CATEGORY-004
@@ -204,7 +204,7 @@
   }
   ```
 - **Expected**: 200 OK
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-API-TAG-004: Delete Tag
 - **ID**: TC-API-TAG-004
@@ -276,7 +276,7 @@
   }
   ```
 - **Expected**: 200 OK, returns updated record
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-API-RECORD-006: Delete Record
 - **ID**: TC-API-RECORD-006
@@ -329,7 +329,7 @@
 - **Endpoint**: GET /api/v1/stats/by-tag
 - **Preconditions**: Valid access_token
 - **Expected**: 200 OK, returns tag breakdown
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested (2026-03-17)
 
 ---
 
@@ -340,7 +340,7 @@
 - **Endpoint**: GET /api/v1/user/profile
 - **Preconditions**: Valid access_token
 - **Expected**: 200 OK, returns user profile
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-API-PROFILE-002: Update Profile
 - **ID**: TC-API-PROFILE-002
@@ -353,7 +353,7 @@
   }
   ```
 - **Expected**: 200 OK, returns updated profile
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-API-PROFILE-003: Change Password
 - **ID**: TC-API-PROFILE-003

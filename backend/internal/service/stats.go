@@ -68,22 +68,30 @@ func (s *StatsService) GetSummary(userID uint, ledgerID *uint, year int) (*Summa
 		query = query.Where("ledger_id = ?", *ledgerID)
 	}
 
+	// Build ledger filter condition
+	ledgerFilter := ""
+	var ledgerFilterArgs []interface{}
+	if ledgerID != nil && *ledgerID > 0 {
+		ledgerFilter = " AND ledger_id = ?"
+		ledgerFilterArgs = []interface{}{*ledgerID}
+	}
+
 	// Get total income
 	var totalIncome float64
 	db.Model(&model.Record{}).Select("COALESCE(SUM(amount), 0)").
-		Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1", userID, model.RecordTypeIncome, startDate, endDate).
+		Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeIncome, startDate, endDate}, ledgerFilterArgs...)...).
 		Scan(&totalIncome)
 
 	// Get total expense
 	var totalExpense float64
 	db.Model(&model.Record{}).Select("COALESCE(SUM(amount), 0)").
-		Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1", userID, model.RecordTypeExpense, startDate, endDate).
+		Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeExpense, startDate, endDate}, ledgerFilterArgs...)...).
 		Scan(&totalExpense)
 
 	// Get counts
 	var incomeCount, expenseCount int64
-	db.Model(&model.Record{}).Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1", userID, model.RecordTypeIncome, startDate, endDate).Count(&incomeCount)
-	db.Model(&model.Record{}).Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1", userID, model.RecordTypeExpense, startDate, endDate).Count(&expenseCount)
+	db.Model(&model.Record{}).Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeIncome, startDate, endDate}, ledgerFilterArgs...)...).Count(&incomeCount)
+	db.Model(&model.Record{}).Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeExpense, startDate, endDate}, ledgerFilterArgs...)...).Count(&expenseCount)
 
 	// Get monthly stats
 	monthlyStats := s.getMonthlyStats(userID, ledgerID, year)

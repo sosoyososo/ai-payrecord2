@@ -1,0 +1,5 @@
+{
+  "appId": "com.payrecord.app",
+  "appName": "账本",
+  "webDir": "dist"
+}

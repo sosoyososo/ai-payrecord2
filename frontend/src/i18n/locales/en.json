@@ -71,11 +71,13 @@
   },
   "tag": {
     "title": "Tag Management",
-    "addTag": "Add Tag"
+    "addTag": "Add Tag",
+    "namePlaceholder": "Tag name"
   },
   "ledger": {
     "title": "Ledger Management",
     "addLedger": "Add Ledger",
+    "namePlaceholder": "Ledger name",
     "default": "Default"
   },
   "settings": {
@@ -115,7 +117,9 @@
     "used": "Used",
     "remaining": "Remaining",
     "description": "Setting a monthly budget helps you control spending. You'll be notified when you reach 80% of your budget.",
-    "saved": "Budget saved"
+    "saved": "Budget saved",
+    "overBudget": "Over budget ¥{{amount}}",
+    "budgetRemaining": "Budget remaining ¥{{amount}}"
   },
   "export": {
     "title": "Data Export",

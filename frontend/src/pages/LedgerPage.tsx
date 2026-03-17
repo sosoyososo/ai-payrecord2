@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,6 +9,7 @@ import type { Ledger } from '@/types'
 import { ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
 export default function LedgerPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [loading, setLoading] = useState(true)
@@ -60,7 +62,7 @@ export default function LedgerPage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('确定要删除这个账本吗？')) return
+    if (!confirm(t('confirm.deleteLedger'))) return
     try {
       await ledgerApi.delete(id)
       loadData()
@@ -84,7 +86,7 @@ export default function LedgerPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">账本管理</span>
+          <span className="font-semibold text-lg">{t('ledger.title')}</span>
         </div>
       </header>
 
@@ -111,7 +113,7 @@ export default function LedgerPage() {
                   <div>
                     <div className="font-medium">{ledger.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      {ledger.is_default ? '默认账本' : ''}
+                      {ledger.is_default ? t('ledger.default') : ''}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -134,7 +136,7 @@ export default function LedgerPage() {
           <Card>
             <CardContent className="p-4 flex items-center gap-2">
               <Input
-                placeholder="账本名称"
+                placeholder={t('ledger.namePlaceholder')}
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 className="flex-1"
@@ -150,7 +152,7 @@ export default function LedgerPage() {
         ) : (
           <Button variant="outline" className="w-full" onClick={() => setShowAdd(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            添加账本
+            {t('ledger.addLedger')}
           </Button>
         )}
       </div>

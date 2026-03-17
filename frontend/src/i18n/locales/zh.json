@@ -71,11 +71,13 @@
   },
   "tag": {
     "title": "标签管理",
-    "addTag": "添加标签"
+    "addTag": "添加标签",
+    "namePlaceholder": "标签名称"
   },
   "ledger": {
     "title": "账本管理",
     "addLedger": "添加账本",
+    "namePlaceholder": "账本名称",
     "default": "默认账本"
   },
   "settings": {
@@ -115,7 +117,9 @@
     "used": "已使用",
     "remaining": "剩余",
     "description": "设置月度预算可以帮助您更好地控制支出。当支出达到预算的 80% 时会提醒您。",
-    "saved": "预算已保存"
+    "saved": "预算已保存",
+    "overBudget": "已超出预算 ¥{{amount}}",
+    "budgetRemaining": "预算剩余 ¥{{amount}}"
   },
   "export": {
     "title": "数据导出",

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { tagApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,7 @@ const DEFAULT_COLORS = [
 ]
 
 export default function TagPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [tags, setTags] = useState<Tag[]>([])
   const [loading, setLoading] = useState(true)
@@ -69,7 +71,7 @@ export default function TagPage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('确定要删除这个标签吗？')) return
+    if (!confirm(t('confirm.deleteTag'))) return
     try {
       await tagApi.delete(id)
       loadData()
@@ -93,7 +95,7 @@ export default function TagPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">标签管理</span>
+          <span className="font-semibold text-lg">{t('tag.title')}</span>
         </div>
       </header>
 
@@ -157,7 +159,7 @@ export default function TagPage() {
           <Card>
             <CardContent className="p-4 space-y-3">
               <Input
-                placeholder="标签名称"
+                placeholder={t('tag.namePlaceholder')}
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
@@ -179,7 +181,7 @@ export default function TagPage() {
               <div className="flex gap-2">
                 <Button onClick={handleAdd} className="flex-1">
                   <Check className="h-4 w-4 mr-2" />
-                  保存
+                  {t('common.save')}
                 </Button>
                 <Button variant="outline" onClick={() => setShowAdd(false)}>
                   <X className="h-4 w-4" />
@@ -190,7 +192,7 @@ export default function TagPage() {
         ) : (
           <Button variant="outline" className="w-full" onClick={() => setShowAdd(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            添加标签
+            {t('tag.addTag')}
           </Button>
         )}
       </div>

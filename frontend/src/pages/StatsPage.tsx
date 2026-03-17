@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -26,6 +27,7 @@ const COLORS = [
 ]
 
 export default function StatsPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
@@ -89,7 +91,7 @@ export default function StatsPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">统计</span>
+          <span className="font-semibold text-lg">{t('stats.title')}</span>
           <select
             value={year}
             onChange={(e) => setYear(parseInt(e.target.value))}
@@ -97,7 +99,7 @@ export default function StatsPage() {
           >
             {[2024, 2025, 2026].map((y) => (
               <option key={y} value={y}>
-                {y}年
+                {y}
               </option>
             ))}
           </select>
@@ -130,21 +132,21 @@ export default function StatsPage() {
           size="sm"
           onClick={() => setActiveTab('overview')}
         >
-          概览
+          {t('stats.overview')}
         </Button>
         <Button
           variant={activeTab === 'category' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setActiveTab('category')}
         >
-          分类
+          {t('stats.byCategory')}
         </Button>
         <Button
           variant={activeTab === 'monthly' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setActiveTab('monthly')}
         >
-          月度
+          {t('stats.monthly')}
         </Button>
       </div>
 
@@ -156,7 +158,7 @@ export default function StatsPage() {
             <div className="grid grid-cols-3 gap-3">
               <Card className="bg-green-50 border-green-200">
                 <CardContent className="p-3 text-center">
-                  <div className="text-xs text-green-600 mb-1">收入</div>
+                  <div className="text-xs text-green-600 mb-1">{t('home.income')}</div>
                   <div className="text-lg font-bold text-green-700">
                     ¥{formatAmount(summary.total_income)}
                   </div>
@@ -164,7 +166,7 @@ export default function StatsPage() {
               </Card>
               <Card className="bg-red-50 border-red-200">
                 <CardContent className="p-3 text-center">
-                  <div className="text-xs text-red-600 mb-1">支出</div>
+                  <div className="text-xs text-red-600 mb-1">{t('addRecord.expense')}</div>
                   <div className="text-lg font-bold text-red-700">
                     ¥{formatAmount(summary.total_expense)}
                   </div>
@@ -172,7 +174,7 @@ export default function StatsPage() {
               </Card>
               <Card className="bg-blue-50 border-blue-200">
                 <CardContent className="p-3 text-center">
-                  <div className="text-xs text-blue-600 mb-1">结余</div>
+                  <div className="text-xs text-blue-600 mb-1">{t('home.balance')}</div>
                   <div className="text-lg font-bold text-blue-700">
                     ¥{formatAmount(summary.balance)}
                   </div>
@@ -183,7 +185,7 @@ export default function StatsPage() {
             {/* Monthly Trend */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">月度趋势</CardTitle>
+                <CardTitle className="text-base">{t('stats.monthlyTrend')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-48">
@@ -202,7 +204,7 @@ export default function StatsPage() {
                         stroke="#10B981"
                         strokeWidth={2}
                         dot={{ fill: '#10B981' }}
-                        name="收入"
+                        name={t('home.income')}
                       />
                       <Line
                         type="monotone"
@@ -210,7 +212,7 @@ export default function StatsPage() {
                         stroke="#EF4444"
                         strokeWidth={2}
                         dot={{ fill: '#EF4444' }}
-                        name="支出"
+                        name={t('addRecord.expense')}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -223,7 +225,7 @@ export default function StatsPage() {
         {activeTab === 'category' && categoryStats && categoryStats.length > 0 && (
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-base">支出分类</CardTitle>
+              <CardTitle className="text-base">{t('category.expenseCategory')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-64">
@@ -272,7 +274,7 @@ export default function StatsPage() {
         {activeTab === 'monthly' && summary && summary.monthly_stats && summary.monthly_stats.length > 0 && (
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-base">月度详情</CardTitle>
+              <CardTitle className="text-base">{t('stats.monthly')} {t('stats.overview')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-64">
@@ -285,8 +287,8 @@ export default function StatsPage() {
                       formatter={(value) => `¥${formatAmount(Number(value) || 0)}`}
                       contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
                     />
-                    <Bar dataKey="expense" fill="#EF4444" name="支出" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="income" fill="#10B981" name="收入" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="expense" fill="#EF4444" name={t('addRecord.expense')} radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="income" fill="#10B981" name={t('home.income')} radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

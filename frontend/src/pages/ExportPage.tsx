@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { recordApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { ArrowLeft, Download, FileJson, FileSpreadsheet, Loader2 } from 'lucide-react'
 
 export default function ExportPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [records, setRecords] = useState<any[]>([])
@@ -81,24 +83,24 @@ export default function ExportPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">数据导出</span>
+          <span className="font-semibold text-lg">{t('export.title')}</span>
         </div>
       </header>
 
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">导出说明</CardTitle>
+            <CardTitle className="text-base">{t('export.description')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              导出当前账本的所有记录数据，支持 JSON 和 CSV 格式。
+              {t('export.exportDesc')}
             </p>
 
             {!records.length && (
               <Button onClick={handleLoadData} disabled={loading} className="w-full">
                 {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-                加载数据
+                {t('export.loadData')}
               </Button>
             )}
 
@@ -106,10 +108,10 @@ export default function ExportPage() {
               <>
                 <div className="p-3 bg-slate-50 rounded-lg">
                   <p className="text-sm">
-                    <span className="font-medium">账本:</span> {currentLedger?.name}
+                    <span className="font-medium">{t('export.ledger')}:</span> {currentLedger?.name}
                   </p>
                   <p className="text-sm">
-                    <span className="font-medium">记录数:</span> {records.length}
+                    <span className="font-medium">{t('export.recordCount')}:</span> {records.length}
                   </p>
                 </div>
 
@@ -121,7 +123,7 @@ export default function ExportPage() {
                     className="w-full"
                   >
                     <FileJson className="h-4 w-4 mr-2" />
-                    导出 JSON
+                    {t('export.exportJson')}
                   </Button>
                   <Button
                     variant="outline"
@@ -130,13 +132,13 @@ export default function ExportPage() {
                     className="w-full"
                   >
                     <FileSpreadsheet className="h-4 w-4 mr-2" />
-                    导出 CSV
+                    {t('export.exportCsv')}
                   </Button>
                 </div>
 
                 <Button variant="ghost" onClick={handleLoadData} disabled={loading} className="w-full">
                   {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
-                  重新加载数据
+                  {t('export.reloadData')}
                 </Button>
               </>
             )}
@@ -146,7 +148,7 @@ export default function ExportPage() {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground text-center">
-              导出的数据仅包含您当前的账本记录
+              {t('export.warning')}
             </p>
           </CardContent>
         </Card>

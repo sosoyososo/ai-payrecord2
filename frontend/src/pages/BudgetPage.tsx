@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { ArrowLeft, Save, AlertTriangle } from 'lucide-react'
 
 export default function BudgetPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [monthlyExpense, setMonthlyExpense] = useState(0)
@@ -37,7 +39,7 @@ export default function BudgetPage() {
 
   const handleSave = () => {
     localStorage.setItem('monthly_budget', budget)
-    alert('预算已保存')
+    alert(t('budget.saved'))
   }
 
   const budgetAmount = parseFloat(budget) || 0
@@ -59,7 +61,7 @@ export default function BudgetPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg">预算设置</span>
+          <span className="font-semibold text-lg">{t('budget.title')}</span>
         </div>
       </header>
 
@@ -67,21 +69,21 @@ export default function BudgetPage() {
         {/* Budget Setting */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">月度预算</CardTitle>
+            <CardTitle className="text-base">{t('budget.monthlyBudget')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm text-muted-foreground">预算金额 (¥)</label>
+              <label className="text-sm text-muted-foreground">{t('budget.budgetAmount')} (¥)</label>
               <Input
                 type="number"
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
-                placeholder="设置每月预算"
+                placeholder={t('budget.description')}
               />
             </div>
             <Button onClick={handleSave} className="w-full">
               <Save className="h-4 w-4 mr-2" />
-              保存预算
+              {t('budget.saveBudget')}
             </Button>
           </CardContent>
         </Card>
@@ -89,7 +91,7 @@ export default function BudgetPage() {
         {/* Current Month Status */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">本月支出</CardTitle>
+            <CardTitle className="text-base">{t('budget.thisMonthExpense')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-center">
@@ -116,15 +118,15 @@ export default function BudgetPage() {
                 <AlertTriangle className="h-4 w-4" />
                 <span className="text-sm">
                   {percent > 100
-                    ? `已超出预算 ¥${Math.abs(remaining).toFixed(2)}`
-                    : `预算剩余 ¥${remaining.toFixed(2)}`}
+                    ? t('budget.overBudget', { amount: Math.abs(remaining).toFixed(2) })
+                    : t('budget.budgetRemaining', { amount: remaining.toFixed(2) })}
                 </span>
               </div>
             )}
 
             <div className="flex justify-between text-sm text-muted-foreground">
-              <span>已使用 {percent.toFixed(0)}%</span>
-              <span>剩余 ¥{remaining.toFixed(2)}</span>
+              <span>{t('budget.used')} {percent.toFixed(0)}%</span>
+              <span>{t('budget.remaining')} ¥{remaining.toFixed(2)}</span>
             </div>
           </CardContent>
         </Card>
@@ -133,7 +135,7 @@ export default function BudgetPage() {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">
-              设置月度预算可以帮助您更好地控制支出。当支出达到预算的 80% 时会提醒您。
+              {t('budget.description')}
             </p>
           </CardContent>
         </Card>

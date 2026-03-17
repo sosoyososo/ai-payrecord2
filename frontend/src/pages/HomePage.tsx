@@ -5,7 +5,7 @@ import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3 } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag } from 'lucide-react'
 
 export default function HomePage() {
   const { logout } = useAuth()
@@ -72,12 +72,40 @@ export default function HomePage() {
             <Wallet className="h-6 w-6 text-primary" />
             <span className="font-semibold text-lg">{currentLedger?.name || '账本'}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" asChild>
               <Link to="/stats">
                 <BarChart3 className="h-5 w-5" />
               </Link>
             </Button>
+            <div className="relative group">
+              <Button variant="ghost" size="icon">
+                <Settings className="h-5 w-5" />
+              </Button>
+              <div className="absolute right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border hidden group-hover:block z-50">
+                <Link
+                  to="/ledgers"
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-t-lg"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  <span>账本管理</span>
+                </Link>
+                <Link
+                  to="/categories"
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100"
+                >
+                  <Tag className="h-4 w-4" />
+                  <span>分类管理</span>
+                </Link>
+                <Link
+                  to="/tags"
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-b-lg"
+                >
+                  <Tag className="h-4 w-4" />
+                  <span>标签管理</span>
+                </Link>
+              </div>
+            </div>
             <Button variant="ghost" size="icon" onClick={handleLogout}>
               <LogOut className="h-5 w-5" />
             </Button>

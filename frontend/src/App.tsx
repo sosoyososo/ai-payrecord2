@@ -4,6 +4,9 @@ import LoginPage from '@/pages/LoginPage'
 import HomePage from '@/pages/HomePage'
 import AddRecordPage from '@/pages/AddRecordPage'
 import StatsPage from '@/pages/StatsPage'
+import LedgerPage from '@/pages/LedgerPage'
+import CategoryPage from '@/pages/CategoryPage'
+import TagPage from '@/pages/TagPage'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -48,6 +51,30 @@ function App() {
         element={
           <ProtectedRoute>
             <StatsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/ledgers"
+        element={
+          <ProtectedRoute>
+            <LedgerPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <ProtectedRoute>
+            <CategoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/tags"
+        element={
+          <ProtectedRoute>
+            <TagPage />
           </ProtectedRoute>
         }
       />

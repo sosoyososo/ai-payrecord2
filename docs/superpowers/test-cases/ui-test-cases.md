@@ -98,7 +98,7 @@
   4. Select category: 工资
   5. Click "保存记录"
 - **Expected**: Record created as income
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-UI-ADD-003: Add Record with Note
 - **ID**: TC-UI-ADD-003
@@ -156,7 +156,7 @@
   1. Navigate to /stats
   2. Select different year from dropdown
 - **Expected**: Data updates for selected year
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 
@@ -195,7 +195,7 @@
   3. Change name
   4. Click "保存"
 - **Expected**: Category updated
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-UI-CATEGORY-004: Delete Category
 - **ID**: TC-UI-CATEGORY-004
@@ -241,7 +241,7 @@
   1. Navigate to /tags
   2. Click delete on custom tag
 - **Expected**: Tag removed
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 
@@ -312,7 +312,7 @@
   2. Enter nickname
   3. Click "保存"
 - **Expected**: Profile updated
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ### TC-UI-SETTINGS-004: Change Password
 - **ID**: TC-UI-SETTINGS-004
@@ -378,7 +378,7 @@
   2. Click "加载数据"
   3. Click "导出 CSV"
 - **Expected**: CSV file downloads
-- **Status**: ⏳ Not tested
+- **Status**: ✅ Tested
 
 ---
 

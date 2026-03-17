@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { ArrowLeft, User, Lock, Save, Loader2, Download } from 'lucide-react'
+import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor } from 'lucide-react'
 
 export default function SettingsPage() {
   const navigate = useNavigate()
   const { user, refreshUser } = useAuth()
+  const { theme, setTheme } = useTheme()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -79,6 +81,47 @@ export default function SettingsPage() {
       </header>
 
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
+        {/* Theme Section */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              {theme === 'dark' ? <Moon className="h-4 w-4" /> : theme === 'light' ? <Sun className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
+              外观
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2">
+              <Button
+                variant={theme === 'light' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTheme('light')}
+                className="flex-1"
+              >
+                <Sun className="h-4 w-4 mr-2" />
+                浅色
+              </Button>
+              <Button
+                variant={theme === 'dark' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTheme('dark')}
+                className="flex-1"
+              >
+                <Moon className="h-4 w-4 mr-2" />
+                深色
+              </Button>
+              <Button
+                variant={theme === 'system' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTheme('system')}
+                className="flex-1"
+              >
+                <Monitor className="h-4 w-4 mr-2" />
+                跟随系统
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         {message && (
           <div className={`p-3 rounded-md text-sm ${
             message.includes('失败') || message.includes('不一致') || message.includes('至少')

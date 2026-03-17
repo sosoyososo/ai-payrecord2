@@ -39,6 +39,7 @@ export default function StatsPage() {
     loadData()
   }, [year, currentLedger])
 
+
   const loadData = async () => {
     setLoading(true)
     try {
@@ -149,7 +150,7 @@ export default function StatsPage() {
 
       {/* Content */}
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
-        {activeTab === 'overview' && summary && (
+        {activeTab === 'overview' && summary && summary.monthly_stats && summary.monthly_stats.length > 0 && (
           <>
             {/* Summary Cards */}
             <div className="grid grid-cols-3 gap-3">
@@ -219,7 +220,7 @@ export default function StatsPage() {
           </>
         )}
 
-        {activeTab === 'category' && (
+        {activeTab === 'category' && categoryStats && categoryStats.length > 0 && (
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">支出分类</CardTitle>
@@ -268,7 +269,7 @@ export default function StatsPage() {
           </Card>
         )}
 
-        {activeTab === 'monthly' && summary && (
+        {activeTab === 'monthly' && summary && summary.monthly_stats && summary.monthly_stats.length > 0 && (
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">月度详情</CardTitle>

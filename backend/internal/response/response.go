@@ -50,11 +50,15 @@ func ErrorWithStatus(c *gin.Context, httpStatus int, code int, message string) {
 }
 
 func PageSuccess(c *gin.Context, total int64, page, pageSize int, data interface{}) {
-	c.JSON(http.StatusOK, PageResponse{
-		Total:    total,
-		Page:     page,
-		PageSize: pageSize,
-		Data:     data,
+	c.JSON(http.StatusOK, Response{
+		Code:    0,
+		Message: "success",
+		Data: PageResponse{
+			Total:    total,
+			Page:     page,
+			PageSize: pageSize,
+			Data:     data,
+		},
 	})
 }
 

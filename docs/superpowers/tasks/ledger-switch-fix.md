@@ -15,10 +15,10 @@
 - [X] T002 Fix HomePage.tsx - add ledger_id to statsApi.getSummary() call (frontend/src/pages/HomePage.tsx:46)
 - [X] T003 Fix ExportPage.tsx - add ledger_id to recordApi.list() call (frontend/src/pages/ExportPage.tsx:19)
 - [X] T004 Fix BudgetPage.tsx - add ledger_id to statsApi.getSummary() call (frontend/src/pages/BudgetPage.tsx:23)
-- [X] T005 Test ledger switch on HomePage
-- [ ] T006 Test ledger switch on ExportPage
-- [ ] T007 Test ledger switch on BudgetPage
-- [ ] T008 Update test case TC-UI-HOME-004 status
+- [X] T005 Test ledger switch on HomePage ✅
+- [X] T006 Test ledger switch on ExportPage ✅
+- [X] T007 Test ledger switch on BudgetPage ✅
+- [X] T008 Update test case TC-UI-HOME-004 status
 
 ## Dependencies
 

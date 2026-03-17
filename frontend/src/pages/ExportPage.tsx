@@ -14,10 +14,9 @@ export default function ExportPage() {
   const handleLoadData = async () => {
     setLoading(true)
     try {
-      const [ledgerRes, recordsRes] = await Promise.all([
-        ledgerApi.getCurrent(),
-        recordApi.list({ page: 1, page_size: 1000 }),
-      ])
+      const ledgerRes = await ledgerApi.getCurrent()
+      const ledgerId = ledgerRes.data.data?.id
+      const recordsRes = await recordApi.list({ ledger_id: ledgerId, page: 1, page_size: 1000 })
       setCurrentLedger(ledgerRes.data.data)
       setRecords(recordsRes.data.data.data || [])
     } catch (error) {

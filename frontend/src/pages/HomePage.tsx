@@ -39,11 +39,14 @@ export default function HomePage() {
 
   const loadData = async () => {
     try {
-      const [ledgersRes, currentRes, recordsRes, summaryRes] = await Promise.all([
+      const [ledgersRes, currentRes] = await Promise.all([
         ledgerApi.list(),
         ledgerApi.getCurrent(),
-        recordApi.list({ page: 1, page_size: 100 }),
-        statsApi.getSummary(new Date().getFullYear()),
+      ])
+      const currentLedgerId = currentRes.data.data?.id
+      const [recordsRes, summaryRes] = await Promise.all([
+        recordApi.list({ ledger_id: currentLedgerId, page: 1, page_size: 100 }),
+        statsApi.getSummary(new Date().getFullYear(), currentLedgerId),
       ])
 
       setLedgers(ledgersRes.data.data || [])

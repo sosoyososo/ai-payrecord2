@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { statsApi } from '@/services/api'
+import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -20,7 +20,9 @@ export default function BudgetPage() {
 
   const loadData = async () => {
     try {
-      const statsRes = await statsApi.getSummary(new Date().getFullYear())
+      const ledgerRes = await ledgerApi.getCurrent()
+      const ledgerId = ledgerRes.data.data?.id
+      const statsRes = await statsApi.getSummary(new Date().getFullYear(), ledgerId)
       const stats = statsRes.data.data
       // Get current month expense
       const currentMonth = new Date().getMonth()

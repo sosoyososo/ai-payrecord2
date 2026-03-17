@@ -353,6 +353,18 @@
 - **Expected**: Budget saved, shows remaining
 - **Status**: ✅ Tested
 
+### TC-UI-BUDGET-003: Switch Ledger - Budget Stats Change
+- **ID**: TC-UI-BUDGET-003
+- **Feature**: Ledger Switching - Budget
+- **Preconditions**: Logged in, multiple ledgers with different expenses
+- **URL**: http://localhost:5173/budget
+- **Test Steps**:
+  1. Select ledger A - note expense amount
+  2. Switch to ledger B
+  3. Note expense amount
+- **Expected**: Expense amounts differ between ledgers
+- **Status**: ⏳ Pending
+
 ---
 
 ## 10. Export
@@ -379,6 +391,19 @@
   3. Click "导出 CSV"
 - **Expected**: CSV file downloads
 - **Status**: ✅ Tested
+
+### TC-UI-EXPORT-003: Switch Ledger - Export Data Changes
+- **ID**: TC-UI-EXPORT-003
+- **Feature**: Ledger Switching - Export
+- **Preconditions**: Logged in, multiple ledgers with different records
+- **URL**: http://localhost:5173/export
+- **Test Steps**:
+  1. Select ledger A
+  2. Click "加载数据" - note record count
+  3. Switch to ledger B
+  4. Click "加载数据" - note record count
+- **Expected**: Record counts differ between ledgers
+- **Status**: ⏳ Pending
 
 ---
 

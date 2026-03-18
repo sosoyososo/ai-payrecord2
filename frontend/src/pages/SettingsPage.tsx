@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -11,7 +11,6 @@ import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wal
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation()
-  const navigate = useNavigate()
   const { user, refreshUser } = useAuth()
   const { theme, setTheme } = useTheme()
   const [loading, setLoading] = useState(false)
@@ -80,7 +79,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-24">
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <span className="font-semibold text-lg">{t('settings.title')}</span>

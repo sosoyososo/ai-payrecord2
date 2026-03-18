@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, categoryApi, ledgerApi, llmApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
@@ -10,7 +9,6 @@ import { ArrowLeft, Check, Sparkles, Loader2 } from 'lucide-react'
 
 export default function AddRecordPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
 
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
@@ -82,7 +80,7 @@ export default function AddRecordPage() {
         date: dateTime,
         note: note || undefined,
       })
-      navigate('/')
+      window.location.href = '/'
     } catch (error) {
       console.error('Failed to create record:', error)
     } finally {
@@ -107,7 +105,7 @@ export default function AddRecordPage() {
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <span className="font-semibold text-lg">{t('addRecord.title')}</span>

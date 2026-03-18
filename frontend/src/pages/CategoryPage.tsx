@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { categoryApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
@@ -15,7 +14,6 @@ const DEFAULT_COLORS = [
 
 export default function CategoryPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -96,7 +94,7 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-24">
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <span className="font-semibold text-lg">{t('category.title')}</span>

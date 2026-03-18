@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { useTranslation } from 'react-i18next'
 import { recordApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,6 @@ import { ArrowLeft, Download, FileJson, FileSpreadsheet, Loader2 } from 'lucide-
 
 export default function ExportPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [records, setRecords] = useState<any[]>([])
   const [currentLedger, setCurrentLedger] = useState<any>(null)
@@ -80,7 +79,7 @@ export default function ExportPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-24">
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <span className="font-semibold text-lg">{t('export.title')}</span>

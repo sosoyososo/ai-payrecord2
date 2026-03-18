@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { useTranslation } from 'react-i18next'
 import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
@@ -29,7 +29,6 @@ const COLORS = [
 
 export default function StatsPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [year, setYear] = useState(new Date().getFullYear())
@@ -89,7 +88,7 @@ export default function StatsPage() {
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <span className="font-semibold text-lg">{t('stats.title')}</span>

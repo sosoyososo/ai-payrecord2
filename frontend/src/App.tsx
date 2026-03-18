@@ -22,6 +22,10 @@ function Loading() {
   )
 }
 
+function AnimatedPage({ children }: { children: React.ReactNode }) {
+  return <div className="page-enter">{children}</div>
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
 
@@ -45,7 +49,9 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <HomePage />
+              <AnimatedPage>
+                <HomePage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -53,7 +59,9 @@ function App() {
           path="/add"
           element={
             <ProtectedRoute>
-              <AddRecordPage />
+              <AnimatedPage>
+                <AddRecordPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -61,7 +69,9 @@ function App() {
           path="/stats"
           element={
             <ProtectedRoute>
-              <StatsPage />
+              <AnimatedPage>
+                <StatsPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -69,7 +79,9 @@ function App() {
           path="/ledgers"
           element={
             <ProtectedRoute>
-              <LedgerPage />
+              <AnimatedPage>
+                <LedgerPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -77,7 +89,9 @@ function App() {
           path="/categories"
           element={
             <ProtectedRoute>
-              <CategoryPage />
+              <AnimatedPage>
+                <CategoryPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -85,7 +99,9 @@ function App() {
           path="/tags"
           element={
             <ProtectedRoute>
-              <TagPage />
+              <AnimatedPage>
+                <TagPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -93,7 +109,9 @@ function App() {
           path="/settings"
           element={
             <ProtectedRoute>
-              <SettingsPage />
+              <AnimatedPage>
+                <SettingsPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -101,7 +119,9 @@ function App() {
           path="/export"
           element={
             <ProtectedRoute>
-              <ExportPage />
+              <AnimatedPage>
+                <ExportPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -109,7 +129,9 @@ function App() {
           path="/budget"
           element={
             <ProtectedRoute>
-              <BudgetPage />
+              <AnimatedPage>
+                <BudgetPage />
+              </AnimatedPage>
             </ProtectedRoute>
           }
         />

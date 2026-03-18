@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import type { SummaryStats, CategoryStats, Ledger } from '@/types'
 import { ArrowLeft } from 'lucide-react'
+import { LedgerSelector } from '@/components/LedgerSelector'
 import {
   BarChart,
   Bar,
@@ -107,23 +108,13 @@ export default function StatsPage() {
       </header>
 
       {/* Ledger Selector */}
-      {ledgers.length > 1 && (
-        <div className="max-w-md mx-auto px-4 py-3 overflow-x-auto flex gap-2">
-          {ledgers.map((ledger) => (
-            <button
-              key={ledger.id}
-              onClick={() => switchLedger(ledger.id)}
-              className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors ${
-                currentLedger?.id === ledger.id
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-muted-foreground hover:bg-slate-100'
-              }`}
-            >
-              {ledger.name}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="max-w-md mx-auto px-4 py-3">
+        <LedgerSelector
+          ledgers={ledgers}
+          currentLedger={currentLedger}
+          onChange={switchLedger}
+        />
+      </div>
 
       {/* Tabs */}
       <div className="max-w-md mx-auto px-4 py-2 flex gap-2">

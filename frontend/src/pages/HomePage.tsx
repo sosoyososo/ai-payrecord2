@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
+import { LedgerSelector } from '@/components/LedgerSelector'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User, Search, X } from 'lucide-react'
 import PullToRefresh from 'react-pull-to-refresh'
@@ -167,21 +168,13 @@ export default function HomePage() {
       </header>
 
       {/* Ledger Selector */}
-      {ledgers.length > 1 && (
-        <div className="max-w-md mx-auto px-4 py-3">
-          <select
-            value={currentLedger?.id || ''}
-            onChange={(e) => switchLedger(Number(e.target.value))}
-            className="w-full px-3 py-2 rounded-lg border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            {ledgers.map((ledger) => (
-              <option key={ledger.id} value={ledger.id}>
-                {ledger.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <div className="max-w-md mx-auto px-4 py-3">
+        <LedgerSelector
+          ledgers={ledgers}
+          currentLedger={currentLedger}
+          onChange={switchLedger}
+        />
+      </div>
 
       {/* Search */}
       <div className="max-w-md mx-auto px-4 py-3">

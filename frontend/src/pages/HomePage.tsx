@@ -58,13 +58,13 @@ export default function HomePage() {
     }
   }, [menuOpen])
 
-  const loadData = async () => {
+  const loadData = async (targetLedgerId?: number) => {
     try {
       const [ledgersRes, currentRes] = await Promise.all([
         ledgerApi.list(),
         ledgerApi.getCurrent(),
       ])
-      const currentLedgerId = currentRes.data.data?.id
+      const currentLedgerId = targetLedgerId ?? currentRes.data.data?.id
       const [recordsRes, summaryRes] = await Promise.all([
         recordApi.list({ ledger_id: currentLedgerId, page: 1, page_size: 100 }),
         statsApi.getSummary(new Date().getFullYear(), currentLedgerId),
@@ -92,7 +92,9 @@ export default function HomePage() {
 
   const switchLedger = async (ledgerId: number) => {
     await ledgerApi.setCurrent(ledgerId)
-    loadData()
+    const newLedger = ledgers.find(l => l.id === ledgerId)
+    setCurrentLedger(newLedger || null)
+    loadData(ledgerId)
   }
 
   const formatDate = (dateStr: string) => {

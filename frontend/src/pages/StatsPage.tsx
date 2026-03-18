@@ -39,24 +39,26 @@ export default function StatsPage() {
 
   useEffect(() => {
     loadData()
-  }, [year, currentLedger])
+  }, [year, currentLedger?.id])
 
-
-  const loadData = async () => {
+  const loadData = async (ledgerId?: number) => {
     setLoading(true)
     try {
+      const targetLedgerId = ledgerId ?? currentLedger?.id
       const [ledgersRes, currentRes, summaryRes, categoryRes] = await Promise.all([
         ledgerApi.list(),
         ledgerApi.getCurrent(),
-        statsApi.getSummary(year, currentLedger?.id),
+        statsApi.getSummary(year, targetLedgerId),
         statsApi.getByCategory({
-          ledger_id: currentLedger?.id,
+          ledger_id: targetLedgerId,
           type: 1, // expense
         }),
       ])
 
       setLedgers(ledgersRes.data.data)
-      setCurrentLedger(currentRes.data.data)
+      if (!ledgerId) {
+        setCurrentLedger(currentRes.data.data)
+      }
       setSummary(summaryRes.data.data)
       setCategoryStats(categoryRes.data.data)
     } catch (error) {
@@ -70,6 +72,7 @@ export default function StatsPage() {
     await ledgerApi.setCurrent(ledgerId)
     const newLedger = ledgers.find(l => l.id === ledgerId)
     setCurrentLedger(newLedger || null)
+    loadData(ledgerId)
   }
 
   const formatAmount = (amount: number) => {

@@ -258,7 +258,7 @@ export default function HomePage() {
             </>
           )}
           {filteredRecords.map((record) => (
-            <Card key={record.id} className="card-hover cursor-pointer">
+            <Card key={record.id} className="card-hover cursor-pointer scale-enter">
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
@@ -289,7 +289,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div
-                  className={`font-semibold ${
+                  className={`font-semibold amount-animate ${
                     record.type === 2 ? 'text-green-600' : 'text-red-600'
                   }`}
                 >

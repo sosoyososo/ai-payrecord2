@@ -243,7 +243,7 @@ export default function HomePage() {
       {/* FAB */}
       <Link
         to="/add"
-        className="fixed bottom-6 right-6 w-14 h-14 bg-accent text-white rounded-full shadow-lg flex items-center justify-center btn-press fab-pulse safe-area-bottom"
+        className="fixed bottom-20 right-6 w-14 h-14 bg-accent text-white rounded-full shadow-lg flex items-center justify-center btn-press fab-pulse safe-area-bottom"
       >
         <Plus className="h-6 w-6" />
       </Link>

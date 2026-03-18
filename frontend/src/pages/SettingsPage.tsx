@@ -7,7 +7,7 @@ import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe, LogOut } from 'lucide-react'
+import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe, LogOut } from 'lucide-react'
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation()
@@ -78,6 +78,16 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
+      {/* 返回导航 */}
+      <div className="sticky top-0 z-10 bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-2">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <span className="font-semibold text-lg ml-2">{t('settings.title')}</span>
+        </div>
+      </div>
+
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
         {/* Theme Section */}
         <Card>

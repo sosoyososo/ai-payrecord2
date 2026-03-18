@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import type { SummaryStats, CategoryStats, Ledger } from '@/types'
 import { LedgerSelector } from '@/components/LedgerSelector'
+import { ArrowLeft } from 'lucide-react'
 import {
   BarChart,
   Bar,
@@ -28,6 +29,7 @@ const COLORS = [
 
 export default function StatsPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [year, setYear] = useState(new Date().getFullYear())
@@ -88,9 +90,19 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
+      {/* 返回导航 */}
+      <div className="sticky top-0 z-10 bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-2">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <span className="font-semibold text-lg ml-2">{t('stats.title')}</span>
+        </div>
+      </div>
+
       {/* Year Selector */}
-      <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-2">
-        <span className="font-semibold">{t('stats.title')}</span>
+      <div className="max-w-md mx-auto px-4 py-2 flex items-center gap-2">
+        <span className="text-sm text-muted-foreground">{t('stats.year')}</span>
         <select
           value={year}
           onChange={(e) => setYear(parseInt(e.target.value))}

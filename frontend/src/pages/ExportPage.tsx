@@ -1,13 +1,14 @@
 import { useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Download, FileJson, FileSpreadsheet, Loader2 } from 'lucide-react'
+import { ArrowLeft, Download, FileJson, FileSpreadsheet, Loader2 } from 'lucide-react'
 
 export default function ExportPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [records, setRecords] = useState<any[]>([])
   const [currentLedger, setCurrentLedger] = useState<any>(null)
@@ -77,6 +78,16 @@ export default function ExportPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
+      {/* 返回导航 */}
+      <div className="sticky top-0 z-10 bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-2">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <span className="font-semibold text-lg ml-2">{t('export.title')}</span>
+        </div>
+      </div>
+
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
         <Card>
           <CardHeader>

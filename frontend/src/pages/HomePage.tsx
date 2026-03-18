@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LedgerSelector } from '@/components/LedgerSelector'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import { Plus, TrendingUp, TrendingDown, Search, X, Wallet } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, Search, X, Wallet, Pencil, Trash2 } from 'lucide-react'
 import PullToRefresh from 'react-pull-to-refresh'
 
 export default function HomePage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [records, setRecords] = useState<Record[]>([])
   const [filteredRecords, setFilteredRecords] = useState<Record[]>([])
   const [ledgers, setLedgers] = useState<Ledger[]>([])
@@ -19,6 +21,16 @@ export default function HomePage() {
   const [summary, setSummary] = useState<SummaryStats | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
+
+  const handleDelete = async (id: number) => {
+    if (!confirm(t('confirm.deleteRecord') || '确定删除这条记录吗？')) return
+    try {
+      await recordApi.delete(id)
+      loadData()
+    } catch (error) {
+      console.error('Failed to delete record:', error)
+    }
+  }
 
   useEffect(() => {
     loadData()
@@ -187,21 +199,21 @@ export default function HomePage() {
           {filteredRecords.map((record) => (
             <Card key={record.id} className="card-hover cursor-pointer scale-enter">
               <CardContent className="p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium shrink-0"
                     style={{ backgroundColor: record.category?.color || '#666' }}
                   >
                     {record.category?.icon?.charAt(0).toUpperCase() || '?'}
                   </div>
-                  <div>
-                    <div className="font-medium">{record.category?.name || 'Unknown'}</div>
-                    <div className="text-xs text-muted-foreground">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium truncate">{record.category?.name || 'Unknown'}</div>
+                    <div className="text-xs text-muted-foreground truncate">
                       {formatDate(record.date)}
                       {record.note && ` · ${record.note}`}
                     </div>
                     {record.tags && record.tags.length > 0 && (
-                      <div className="flex gap-1 mt-1">
+                      <div className="flex gap-1 mt-1 flex-wrap">
                         {record.tags.map((tag) => (
                           <span
                             key={tag.id}
@@ -215,12 +227,28 @@ export default function HomePage() {
                     )}
                   </div>
                 </div>
-                <div
-                  className={`font-semibold amount-animate ${
-                    record.type === 2 ? 'text-green-600' : 'text-red-600'
-                  }`}
-                >
-                  {formatAmount(record.amount, record.type)}
+                <div className="flex items-center gap-2 shrink-0 ml-2">
+                  <div
+                    className={`font-semibold amount-animate ${
+                      record.type === 2 ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
+                    {formatAmount(record.amount, record.type)}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => navigate(`/edit/${record.id}`)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDelete(record.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-red-600" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>

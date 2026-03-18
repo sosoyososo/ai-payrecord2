@@ -8,6 +8,7 @@ import AppLayout from '@/components/AppLayout'
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const AddRecordPage = lazy(() => import('@/pages/AddRecordPage'))
+const EditRecordPage = lazy(() => import('@/pages/EditRecordPage'))
 const StatsPage = lazy(() => import('@/pages/StatsPage'))
 const LedgerPage = lazy(() => import('@/pages/LedgerPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
@@ -65,6 +66,16 @@ function App() {
               <ProtectedRoute>
                 <AnimatedPage>
                   <AddRecordPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <EditRecordPage />
                 </AnimatedPage>
               </ProtectedRoute>
             }

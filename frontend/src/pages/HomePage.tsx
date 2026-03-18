@@ -113,9 +113,9 @@ export default function HomePage() {
       distanceToRefresh={80}
       className="min-h-screen"
     >
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+      <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
+      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Wallet className="h-6 w-6 text-primary" />
@@ -131,7 +131,7 @@ export default function HomePage() {
               <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen) }}>
                 <Settings className="h-5 w-5" />
               </Button>
-              <div ref={menuRef} className={`absolute right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border z-50 ${menuOpen ? 'block' : 'hidden'}`}>
+              <div ref={menuRef} className={`absolute right-0 top-full mt-1 w-40 bg-white dark:bg-slate-800 rounded-lg shadow-lg border dark:border-slate-700 z-50 ${menuOpen ? 'block' : 'hidden'}`}>
                 <Link
                   to="/settings"
                   className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-t-lg"

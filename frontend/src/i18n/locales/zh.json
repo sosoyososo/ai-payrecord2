@@ -121,7 +121,8 @@
     "updateFailed": "更新失败",
     "passwordMismatch": "两次输入的密码不一致",
     "passwordTooShort": "密码长度至少6位",
-    "passwordChangeFailed": "修改密码失败"
+    "passwordChangeFailed": "修改密码失败",
+    "logout": "退出登录"
   },
   "budget": {
     "title": "预算设置",

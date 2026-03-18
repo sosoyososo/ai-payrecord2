@@ -7,7 +7,7 @@ import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe, LogOut } from 'lucide-react'
+import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe, LogOut, Tags, Layers } from 'lucide-react'
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation()
@@ -259,6 +259,24 @@ export default function SettingsPage() {
               <div className="flex items-center gap-3">
                 <Wallet className="h-4 w-4 text-muted-foreground" />
                 <span>{t('settings.budgetSettings')}</span>
+              </div>
+            </Link>
+            <Link
+              to="/categories"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <Layers className="h-4 w-4 text-muted-foreground" />
+                <span>{t('home.categoryManagement')}</span>
+              </div>
+            </Link>
+            <Link
+              to="/tags"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <Tags className="h-4 w-4 text-muted-foreground" />
+                <span>{t('home.tagManagement')}</span>
               </div>
             </Link>
             <Link

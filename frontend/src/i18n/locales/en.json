@@ -78,7 +78,9 @@
     "namePlaceholder": "Category name",
     "systemCategory": "(System)",
     "type": "Type",
-    "color": "Color"
+    "color": "Color",
+    "selectIcon": "Select Icon",
+    "iconSearch": "Search icons..."
   },
   "tag": {
     "title": "Tag Management",
@@ -119,7 +121,8 @@
     "updateFailed": "Update failed",
     "passwordMismatch": "Passwords do not match",
     "passwordTooShort": "Password must be at least 6 characters",
-    "passwordChangeFailed": "Failed to change password"
+    "passwordChangeFailed": "Failed to change password",
+    "logout": "Logout"
   },
   "budget": {
     "title": "Budget Settings",
@@ -157,9 +160,5 @@
     "deleteTagDesc": "This action cannot be undone.",
     "cancel": "Cancel",
     "delete": "Delete"
-  },
-  "category": {
-    "selectIcon": "Select Icon",
-    "iconSearch": "Search icons..."
   }
 }

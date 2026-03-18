@@ -5,7 +5,6 @@ import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import type { SummaryStats, CategoryStats, Ledger } from '@/types'
-import { ArrowLeft } from 'lucide-react'
 import { LedgerSelector } from '@/components/LedgerSelector'
 import {
   BarChart,
@@ -89,26 +88,21 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* Header */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('stats.title')}</span>
-          <select
-            value={year}
-            onChange={(e) => setYear(parseInt(e.target.value))}
-            className="ml-auto text-sm border rounded px-2 py-1"
-          >
-            {[2024, 2025, 2026].map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-        </div>
-      </header>
+      {/* Year Selector */}
+      <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-2">
+        <span className="font-semibold">{t('stats.title')}</span>
+        <select
+          value={year}
+          onChange={(e) => setYear(parseInt(e.target.value))}
+          className="ml-auto text-sm border rounded px-2 py-1"
+        >
+          {[2024, 2025, 2026].map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Ledger Selector */}
       <div className="max-w-md mx-auto px-4 py-3">

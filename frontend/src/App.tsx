@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import AppLayout from '@/components/AppLayout'
 
 // Lazy load pages for code splitting
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
@@ -47,96 +48,98 @@ function App() {
       <Suspense fallback={<Loading />}>
         <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <HomePage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/add"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <AddRecordPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/stats"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <StatsPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ledgers"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <LedgerPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/categories"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <CategoryPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/tags"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <TagPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <SettingsPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/export"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <ExportPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/budget"
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <BudgetPage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          }
-        />
+        <Route element={<AppLayout />}>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <HomePage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <AddRecordPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/stats"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <StatsPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ledgers"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <LedgerPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <CategoryPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tags"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <TagPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <SettingsPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/export"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <ExportPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/budget"
+            element={
+              <ProtectedRoute>
+                <AnimatedPage>
+                  <BudgetPage />
+                </AnimatedPage>
+              </ProtectedRoute>
+            }
+          />
+        </Route>
       </Routes>
       </Suspense>
     </ThemeProvider>

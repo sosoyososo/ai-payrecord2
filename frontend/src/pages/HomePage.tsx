@@ -1,21 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '@/contexts/AuthContext'
 import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LedgerSelector } from '@/components/LedgerSelector'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import { Plus, TrendingUp, TrendingDown, Wallet, LogOut, BarChart3, Settings, BookOpen, Tag, User, Search, X } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, Search, X } from 'lucide-react'
 import PullToRefresh from 'react-pull-to-refresh'
 
 export default function HomePage() {
   const { t } = useTranslation()
-  const { logout } = useAuth()
-  const navigate = useNavigate()
   const [records, setRecords] = useState<Record[]>([])
   const [filteredRecords, setFilteredRecords] = useState<Record[]>([])
   const [ledgers, setLedgers] = useState<Ledger[]>([])
@@ -85,11 +81,6 @@ export default function HomePage() {
     }
   }
 
-  const handleLogout = async () => {
-    await logout()
-    navigate('/login')
-  }
-
   const switchLedger = async (ledgerId: number) => {
     await ledgerApi.setCurrent(ledgerId)
     const newLedger = ledgers.find(l => l.id === ledgerId)
@@ -113,61 +104,7 @@ export default function HomePage() {
       distanceToRefresh={80}
       className="min-h-screen"
     >
-      <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wallet className="h-6 w-6 text-primary" />
-            <span className="font-semibold text-lg">{currentLedger?.name || t('nav.ledgers')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/stats">
-                <BarChart3 className="h-5 w-5" />
-              </Link>
-            </Button>
-            <div className="relative">
-              <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen) }}>
-                <Settings className="h-5 w-5" />
-              </Button>
-              <div ref={menuRef} className={`absolute right-0 top-full mt-1 w-40 bg-white dark:bg-slate-800 rounded-lg shadow-lg border dark:border-slate-700 z-50 ${menuOpen ? 'block' : 'hidden'}`}>
-                <Link
-                  to="/settings"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-t-lg"
-                >
-                  <User className="h-4 w-4" />
-                  <span>{t('home.personalSettings')}</span>
-                </Link>
-                <Link
-                  to="/ledgers"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  <span>{t('ledger.title')}</span>
-                </Link>
-                <Link
-                  to="/categories"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100"
-                >
-                  <Tag className="h-4 w-4" />
-                  <span>{t('home.categoryManagement')}</span>
-                </Link>
-                <Link
-                  to="/tags"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 rounded-b-lg"
-                >
-                  <Tag className="h-4 w-4" />
-                  <span>{t('home.tagManagement')}</span>
-                </Link>
-              </div>
-            </div>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </header>
+      <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
 
       {/* Ledger Selector */}
       <div className="max-w-md mx-auto px-4 py-3">

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -7,11 +7,12 @@ import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe } from 'lucide-react'
+import { User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe, LogOut } from 'lucide-react'
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation()
-  const { user, refreshUser } = useAuth()
+  const { user, refreshUser, logout } = useAuth()
+  const navigate = useNavigate()
   const { theme, setTheme } = useTheme()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -77,15 +78,6 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('settings.title')}</span>
-        </div>
-      </header>
-
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
         {/* Theme Section */}
         <Card>
@@ -268,6 +260,18 @@ export default function SettingsPage() {
                 <span>{t('settings.exportData')}</span>
               </div>
             </Link>
+            <button
+              onClick={async () => {
+                await logout()
+                navigate('/login')
+              }}
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50 w-full text-left text-red-600"
+            >
+              <div className="flex items-center gap-3">
+                <LogOut className="h-4 w-4" />
+                <span>{t('settings.logout') || '退出登录'}</span>
+              </div>
+            </button>
           </CardContent>
         </Card>
 

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Category, Ledger } from '@/types'
-import { ArrowLeft, Check, Sparkles, Loader2 } from 'lucide-react'
+import { Check, Sparkles, Loader2 } from 'lucide-react'
 
 export default function AddRecordPage() {
   const { t } = useTranslation()
@@ -102,16 +102,6 @@ export default function AddRecordPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* Header */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => window.location.href = '/'}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('addRecord.title')}</span>
-        </div>
-      </header>
-
       {/* AI Input Section */}
       <div className="max-w-md mx-auto px-4 py-4">
         <div className="relative">

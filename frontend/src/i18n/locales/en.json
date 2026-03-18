@@ -125,7 +125,9 @@
     "passwordMismatch": "Passwords do not match",
     "passwordTooShort": "Password must be at least 6 characters",
     "passwordChangeFailed": "Failed to change password",
-    "logout": "Logout"
+    "logout": "Logout",
+    "zh": "Chinese",
+    "en": "English"
   },
   "budget": {
     "title": "Budget Settings",

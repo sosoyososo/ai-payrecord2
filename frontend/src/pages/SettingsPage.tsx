@@ -146,7 +146,7 @@ export default function SettingsPage() {
                 onClick={() => handleLanguageChange('zh')}
                 className="flex-1"
               >
-                中文
+                {t('settings.zh')}
               </Button>
               <Button
                 variant={i18n.language === 'en' ? 'default' : 'outline'}
@@ -154,7 +154,7 @@ export default function SettingsPage() {
                 onClick={() => handleLanguageChange('en')}
                 className="flex-1"
               >
-                English
+                {t('settings.en')}
               </Button>
             </div>
           </CardContent>
@@ -297,7 +297,7 @@ export default function SettingsPage() {
             >
               <div className="flex items-center gap-3">
                 <LogOut className="h-4 w-4" />
-                <span>{t('settings.logout') || '退出登录'}</span>
+                <span>{t('settings.logout')}</span>
               </div>
             </button>
           </CardContent>

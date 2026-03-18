@@ -24,6 +24,7 @@ export default function EditRecordPage() {
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [date, setDate] = useState(new Date().toISOString().slice(0, 16))
+  const [originalDate, setOriginalDate] = useState('') // 保留原始日期
   const [note, setNote] = useState('')
 
   useEffect(() => {
@@ -44,10 +45,12 @@ export default function EditRecordPage() {
       // Fill form with record data
       if (recordRes.data.data) {
         const record = recordRes.data.data
+        const recordDate = new Date(record.date).toISOString().slice(0, 16)
         setAmount(record.amount.toString())
         setType(record.type as 1 | 2)
         setCategoryId(record.category_id)
-        setDate(new Date(record.date).toISOString().slice(0, 16))
+        setDate(recordDate)
+        setOriginalDate(recordDate) // 保存原始日期
         setNote(record.note || '')
       }
     } catch (error) {
@@ -61,8 +64,9 @@ export default function EditRecordPage() {
     e.preventDefault()
     if (!amount || !categoryId || !currentLedger) return
 
-    // Convert datetime-local format "YYYY-MM-DDTHH:MM" to ISO format
-    const dateTime = new Date(date).toISOString()
+    // 只在日期改变时更新日期，避免位置变化
+    const newDateTime = new Date(date).toISOString()
+    const dateChanged = date !== originalDate
 
     setSaving(true)
     try {
@@ -71,7 +75,7 @@ export default function EditRecordPage() {
         category_id: categoryId,
         amount: parseFloat(amount),
         type,
-        date: dateTime,
+        ...(dateChanged ? { date: newDateTime } : {}), // 只更新改变了的日期
         note: note || undefined,
       })
       window.location.href = '/'

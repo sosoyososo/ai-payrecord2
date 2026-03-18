@@ -161,8 +161,8 @@ export default function SettingsPage() {
         {message && (
           <div className={`p-3 rounded-md text-sm ${
             message.includes('失败') || message.includes('不一致') || message.includes('至少') || message.includes('Failed') || message.includes('mismatch') || message.includes('short')
-              ? 'bg-red-50 text-red-600'
-              : 'bg-green-50 text-green-600'
+              ? 'bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400'
+              : 'bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400'
           }`}>
             {message}
           </div>

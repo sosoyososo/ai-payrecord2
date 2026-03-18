@@ -150,26 +150,26 @@ export default function StatsPage() {
           <>
             {/* Summary Cards */}
             <div className="grid grid-cols-3 gap-3">
-              <Card className="bg-green-50 border-green-200">
+              <Card className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
                 <CardContent className="p-3 text-center">
-                  <div className="text-xs text-green-600 mb-1">{t('home.income')}</div>
-                  <div className="text-lg font-bold text-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 mb-1">{t('home.income')}</div>
+                  <div className="text-lg font-bold text-green-700 dark:text-green-300">
                     ¥{formatAmount(summary.total_income)}
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-red-50 border-red-200">
+              <Card className="bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800">
                 <CardContent className="p-3 text-center">
-                  <div className="text-xs text-red-600 mb-1">{t('addRecord.expense')}</div>
-                  <div className="text-lg font-bold text-red-700">
+                  <div className="text-xs text-red-600 dark:text-red-400 mb-1">{t('addRecord.expense')}</div>
+                  <div className="text-lg font-bold text-red-700 dark:text-red-300">
                     ¥{formatAmount(summary.total_expense)}
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-blue-50 border-blue-200">
+              <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
                 <CardContent className="p-3 text-center">
-                  <div className="text-xs text-blue-600 mb-1">{t('home.balance')}</div>
-                  <div className="text-lg font-bold text-blue-700">
+                  <div className="text-xs text-blue-600 dark:text-blue-400 mb-1">{t('home.balance')}</div>
+                  <div className="text-lg font-bold text-blue-700 dark:text-blue-300">
                     ¥{formatAmount(summary.balance)}
                   </div>
                 </CardContent>

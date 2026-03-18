@@ -111,7 +111,7 @@ export default function BudgetPage() {
 
             {percent >= 80 && (
               <div className={`flex items-center gap-2 p-3 rounded-lg ${
-                percent > 100 ? 'bg-red-50 text-red-600' : 'bg-yellow-50 text-yellow-600'
+                percent > 100 ? 'bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400' : 'bg-yellow-50 dark:bg-yellow-950 text-yellow-600 dark:text-yellow-400'
               }`}>
                 <AlertTriangle className="h-4 w-4" />
                 <span className="text-sm">

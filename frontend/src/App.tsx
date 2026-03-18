@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 // Lazy load pages for code splitting
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
@@ -42,8 +43,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
+    <ThemeProvider>
+      <Suspense fallback={<Loading />}>
+        <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route
           path="/"
@@ -136,7 +138,8 @@ function App() {
           }
         />
       </Routes>
-    </Suspense>
+      </Suspense>
+    </ThemeProvider>
   )
 }
 

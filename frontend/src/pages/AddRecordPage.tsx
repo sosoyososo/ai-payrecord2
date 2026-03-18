@@ -248,7 +248,7 @@ export default function AddRecordPage() {
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 max-w-md w-full px-4">
           <Button
             type="submit"
-            className="w-full h-12 text-lg"
+            className="w-full h-12 text-lg btn-press"
             disabled={saving || !amount || !categoryId}
           >
             {saving ? (

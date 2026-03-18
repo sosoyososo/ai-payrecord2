@@ -3,7 +3,7 @@
 **Spec**: docs/superpowers/specs/2026-03-18-ledger-selector-optimization.md
 **Plan**: docs/superpowers/plans/2026-03-18-ledger-selector-optimization.md
 **Created**: 2026-03-18
-**Status**: In Progress
+**Status**: ✅ COMPLETED
 
 ## 概述
 
@@ -17,7 +17,7 @@
 
 **Independent Test**: Select 组件可正常导入
 
-- [ ] T001 安装 shadcn/ui Select 组件 in frontend
+- [X] T001 安装 shadcn/ui Select 组件 in frontend
 
 ---
 
@@ -27,7 +27,7 @@
 
 **Independent Test**: 组件可正常导入使用
 
-- [ ] T002 创建 LedgerSelector 组件 in frontend/src/components/LedgerSelector.tsx
+- [X] T002 创建 LedgerSelector 组件 in frontend/src/components/LedgerSelector.tsx
 
 ---
 
@@ -37,8 +37,8 @@
 
 **Independent Test**: 页面正常显示账本选择器
 
-- [ ] T003 [US1] 导入 LedgerSelector in frontend/src/pages/HomePage.tsx
-- [ ] T004 [US1] 替换原生 select in frontend/src/pages/HomePage.tsx
+- [X] T003 [US1] 导入 LedgerSelector in frontend/src/pages/HomePage.tsx
+- [X] T004 [US1] 替换原生 select in frontend/src/pages/HomePage.tsx
 
 ---
 
@@ -48,8 +48,8 @@
 
 **Independent Test**: 页面正常显示账本选择器
 
-- [ ] T005 [US2] 导入 LedgerSelector in frontend/src/pages/StatsPage.tsx
-- [ ] T006 [US2] 替换按钮组 in frontend/src/pages/StatsPage.tsx
+- [X] T005 [US2] 导入 LedgerSelector in frontend/src/pages/StatsPage.tsx
+- [X] T006 [US2] 替换按钮组 in frontend/src/pages/StatsPage.tsx
 
 ---
 

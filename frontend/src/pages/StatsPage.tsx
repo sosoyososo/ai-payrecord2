@@ -90,15 +90,15 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* 返回导航 */}
-      <div className="sticky top-0 z-10 bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-2">
-        <div className="max-w-md mx-auto px-4 py-3 flex items-center">
+      {/* 顶部标题栏 */}
+      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
+        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-lg ml-2">{t('stats.title')}</span>
+          <span className="font-semibold text-lg">{t('stats.title')}</span>
         </div>
-      </div>
+      </header>
 
       {/* Year Selector */}
       <div className="max-w-md mx-auto px-4 py-2 flex items-center gap-2">

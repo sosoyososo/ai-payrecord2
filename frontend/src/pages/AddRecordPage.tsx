@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { recordApi, categoryApi, ledgerApi, llmApi } from '@/services/api'
+import { recordApi, categoryApi, ledgerApi, tagApi, llmApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent } from '@/components/ui/card'
-import type { Category, Ledger } from '@/types'
-import { ArrowLeft, Check, Sparkles, Loader2 } from 'lucide-react'
+import { RecordForm } from '@/components/RecordForm'
+import type { Category, Ledger, Tag } from '@/types'
+import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react'
 
 export default function AddRecordPage() {
   const { t } = useTranslation()
@@ -14,15 +14,17 @@ export default function AddRecordPage() {
 
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
+  const [tags, setTags] = useState<Tag[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
   // Form state
-  const [type, setType] = useState<1 | 2>(1) // 1=expense, 2=income
+  const [type, setType] = useState<1 | 2>(1)
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [date, setDate] = useState(new Date().toISOString().slice(0, 16))
   const [note, setNote] = useState('')
+  const [tagIds, setTagIds] = useState<number[]>([])
 
   // AI parsing
   const [aiInput, setAiInput] = useState('')
@@ -34,13 +36,15 @@ export default function AddRecordPage() {
 
   const loadData = async () => {
     try {
-      const [currentRes, categoriesRes] = await Promise.all([
+      const [currentRes, categoriesRes, tagsRes] = await Promise.all([
         ledgerApi.getCurrent(),
         categoryApi.list(),
+        tagApi.list(),
       ])
 
       setCurrentLedger(currentRes.data.data)
-      setCategories(categoriesRes.data.data)
+      setCategories(categoriesRes.data.data || [])
+      setTags(tagsRes.data.data || [])
     } catch (error) {
       console.error('Failed to load data:', error)
     } finally {
@@ -65,11 +69,9 @@ export default function AddRecordPage() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     if (!amount || !categoryId || !currentLedger) return
 
-    // Convert datetime-local format "YYYY-MM-DDTHH:MM" to ISO format
     const dateTime = new Date(date).toISOString()
 
     setSaving(true)
@@ -81,6 +83,7 @@ export default function AddRecordPage() {
         type,
         date: dateTime,
         note: note || undefined,
+        tag_ids: tagIds.length > 0 ? tagIds : undefined,
       })
       window.location.href = '/'
     } catch (error) {
@@ -89,10 +92,6 @@ export default function AddRecordPage() {
       setSaving(false)
     }
   }
-
-  // Map form type to category type: form 1=expense -> category 2, form 2=income -> category 1
-  const categoryTypeFilter = type === 1 ? 2 : 1
-  const filteredCategories = categories.filter((c) => c.type === categoryTypeFilter || c.type === 3)
 
   if (loading) {
     return (
@@ -104,7 +103,7 @@ export default function AddRecordPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* 顶部标题栏 */}
+      {/* Header */}
       <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
@@ -140,128 +139,40 @@ export default function AddRecordPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="max-w-md mx-auto px-4 space-y-4">
-          {/* Type Selector */}
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant={type === 1 ? 'default' : 'outline'}
-              className="flex-1"
-              onClick={() => {
-                setType(1)
-                setCategoryId(null)
-              }}
-            >
-              {t('addRecord.expense')}
-            </Button>
-            <Button
-              type="button"
-              variant={type === 2 ? 'default' : 'outline'}
-              className="flex-1"
-              onClick={() => {
-                setType(2)
-                setCategoryId(null)
-              }}
-            >
-              {t('addRecord.income')}
-            </Button>
-          </div>
-
-          {/* Amount */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-1">
-                {type === 1 ? t('addRecord.expenseAmount') : t('addRecord.incomeAmount')}
-              </div>
-              <div className="flex items-center gap-1 text-3xl font-bold">
-                <span>¥</span>
-                <Input
-                  type="number"
-                  step="0.01"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0.00"
-                  className="text-3xl font-bold border-0 bg-transparent p-0 focus-visible:ring-0"
-                  required
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Date */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-1">{t('addRecord.date')}</div>
-              <Input
-                type="datetime-local"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </CardContent>
-          </Card>
-
-          {/* Category */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-2">{t('addRecord.category')}</div>
-              <div className="grid grid-cols-4 gap-2">
-                {filteredCategories.map((category) => (
-                  <button
-                    key={category.id}
-                    type="button"
-                    onClick={() => setCategoryId(category.id)}
-                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
-                      categoryId === category.id
-                        ? 'bg-primary/10 ring-2 ring-primary'
-                        : 'hover:bg-slate-100'
-                    }`}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium"
-                      style={{ backgroundColor: category.color || '#666' }}
-                    >
-                      {category.icon?.charAt(0).toUpperCase() || '?'}
-                    </div>
-                    <span className="text-xs">{category.name}</span>
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Note */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground mb-1">{t('addRecord.note')}</div>
-              <Input
-                placeholder={t('addRecord.notePlaceholder')}
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Submit Button */}
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 max-w-md w-full px-4">
-          <Button
-            type="submit"
-            className="w-full h-12 text-lg btn-press"
-            disabled={saving || !amount || !categoryId}
-          >
-            {saving ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <>
-                <Check className="h-5 w-5 mr-2" />
-                {t('addRecord.save')}
-              </>
-            )}
-          </Button>
-        </div>
-      </form>
+      {/* Form */}
+      <div className="max-w-md mx-auto px-4">
+        <RecordForm
+          type={type}
+          onTypeChange={setType}
+          amount={amount}
+          onAmountChange={setAmount}
+          date={date}
+          onDateChange={setDate}
+          categoryId={categoryId}
+          onCategoryChange={(id) => setCategoryId(id)}
+          tagIds={tagIds}
+          onTagIdsChange={setTagIds}
+          note={note}
+          onNoteChange={setNote}
+          categories={categories}
+          tags={tags}
+          onSubmit={handleSubmit}
+          isLoading={saving}
+          isSubmitDisabled={!amount || !categoryId}
+          submitText={t('addRecord.save')}
+          translations={{
+            expense: t('addRecord.expense'),
+            income: t('addRecord.income'),
+            expenseAmount: t('addRecord.expenseAmount'),
+            incomeAmount: t('addRecord.incomeAmount'),
+            date: t('addRecord.date'),
+            category: t('addRecord.category'),
+            note: t('addRecord.note'),
+            notePlaceholder: t('addRecord.notePlaceholder'),
+            tags: t('tag.title'),
+          }}
+        />
+      </div>
     </div>
   )
 }

@@ -249,15 +249,16 @@ func (s *AuthService) seedDefaultCategories(db *gorm.DB, userID uint) {
 		Icon string
 		Color string
 	}{
-		{"餐饮", "restaurant", "#FF5722"},
-		{"交通", "directions_car", "#2196F3"},
-		{"购物", "shopping_bag", "#E91E63"},
-		{"娱乐", "movie", "#9C27B0"},
-		{"住房", "home", "#795548"},
-		{"医疗", "local_hospital", "#F44336"},
-		{"教育", "school", "#00BCD4"},
-		{"通讯", "phone", "#607D8B"},
-		{"其他", "more_horiz", "#9E9E9E"},
+		{"餐饮", "Utensils", "#FF5722"},
+		{"交通", "Car", "#2196F3"},
+		{"购物", "ShoppingBag", "#E91E63"},
+		{"居住", "Home", "#795548"},
+		{"娱乐", "Gamepad2", "#9C27B0"},
+		{"医疗", "HeartPulse", "#F44336"},
+		{"教育", "GraduationCap", "#00BCD4"},
+		{"通讯", "Smartphone", "#607D8B"},
+		{"旅行", "Plane", "#4CAF50"},
+		{"其他", "MoreHorizontal", "#9E9E9E"},
 	}
 
 	// Income categories
@@ -266,10 +267,11 @@ func (s *AuthService) seedDefaultCategories(db *gorm.DB, userID uint) {
 		Icon string
 		Color string
 	}{
-		{"工资", "work", "#4CAF50"},
-		{"奖金", "card_giftcard", "#8BC34A"},
-		{"投资", "trending_up", "#CDDC39"},
-		{"其他收入", "attach_money", "#FFEB3B"},
+		{"工资", "Briefcase", "#4CAF50"},
+		{"奖金", "Gift", "#8BC34A"},
+		{"投资", "TrendingUp", "#CDDC39"},
+		{"兑换", "Repeat", "#FFEB3B"},
+		{"其他", "MoreHorizontal", "#9E9E9E"},
 	}
 
 	for _, cat := range expenseCategories {

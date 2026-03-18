@@ -5,6 +5,7 @@ import { tagApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
+import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import type { Tag } from '@/types'
 import { ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
@@ -24,6 +25,8 @@ export default function TagPage() {
   const [showAdd, setShowAdd] = useState(false)
   const [newName, setNewName] = useState('')
   const [newColor, setNewColor] = useState(DEFAULT_COLORS[0])
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
 
   useEffect(() => {
     loadData()
@@ -71,9 +74,14 @@ export default function TagPage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('confirm.deleteTag'))) return
+    setPendingDeleteId(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return
     try {
-      await tagApi.delete(id)
+      await tagApi.delete(pendingDeleteId)
       loadData()
     } catch (error) {
       console.error('Failed to delete tag:', error)
@@ -197,6 +205,17 @@ export default function TagPage() {
           </Button>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        title={t('confirm.deleteTag')}
+        description={t('confirm.deleteTagDesc')}
+        confirmText={t('confirm.delete')}
+        cancelText={t('confirm.cancel')}
+      />
     </div>
   )
 }

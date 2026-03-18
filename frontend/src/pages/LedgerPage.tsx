@@ -5,6 +5,7 @@ import { ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
+import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import type { Ledger } from '@/types'
 import { ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
@@ -17,6 +18,8 @@ export default function LedgerPage() {
   const [editName, setEditName] = useState('')
   const [showAdd, setShowAdd] = useState(false)
   const [newName, setNewName] = useState('')
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
 
   useEffect(() => {
     loadData()
@@ -62,9 +65,14 @@ export default function LedgerPage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('confirm.deleteLedger'))) return
+    setPendingDeleteId(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return
     try {
-      await ledgerApi.delete(id)
+      await ledgerApi.delete(pendingDeleteId)
       loadData()
     } catch (error) {
       console.error('Failed to delete ledger:', error)
@@ -157,6 +165,17 @@ export default function LedgerPage() {
           </Button>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        title={t('confirm.deleteLedger')}
+        description={t('confirm.deleteLedgerDesc')}
+        confirmText={t('confirm.delete')}
+        cancelText={t('confirm.cancel')}
+      />
     </div>
   )
 }

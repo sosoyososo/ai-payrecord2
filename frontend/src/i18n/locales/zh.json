@@ -58,6 +58,10 @@
     "expenseAmount": "支出金额",
     "incomeAmount": "收入金额"
   },
+  "editRecord": {
+    "title": "编辑记录",
+    "save": "保存修改"
+  },
   "stats": {
     "title": "统计",
     "overview": "概览",
@@ -74,7 +78,9 @@
     "namePlaceholder": "分类名称",
     "systemCategory": "(系统)",
     "type": "类型",
-    "color": "颜色"
+    "color": "颜色",
+    "selectIcon": "选择图标",
+    "iconSearch": "搜索图标..."
   },
   "tag": {
     "title": "标签管理",
@@ -143,8 +149,15 @@
     "ledger": "账本"
   },
   "confirm": {
+    "deleteRecord": "确定删除这条记录吗？",
+    "deleteRecordDesc": "此操作无法撤销。",
     "deleteLedger": "确定要删除这个账本吗？",
+    "deleteLedgerDesc": "此操作无法撤销。",
     "deleteCategory": "确定要删除这个分类吗？",
-    "deleteTag": "确定要删除这个标签吗？"
+    "deleteCategoryDesc": "此操作无法撤销。",
+    "deleteTag": "确定要删除这个标签吗？",
+    "deleteTagDesc": "此操作无法撤销。",
+    "cancel": "取消",
+    "delete": "删除"
   }
 }

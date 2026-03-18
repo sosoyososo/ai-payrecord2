@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LedgerSelector } from '@/components/LedgerSelector'
+import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
+import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import { Plus, TrendingUp, TrendingDown, Search, X, Wallet, Pencil, Trash2 } from 'lucide-react'
 import PullToRefresh from 'react-pull-to-refresh'
@@ -21,11 +23,18 @@ export default function HomePage() {
   const [summary, setSummary] = useState<SummaryStats | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('confirm.deleteRecord') || '确定删除这条记录吗？')) return
+    setPendingDeleteId(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return
     try {
-      await recordApi.delete(id)
+      await recordApi.delete(pendingDeleteId)
       loadData()
     } catch (error) {
       console.error('Failed to delete record:', error)
@@ -204,7 +213,7 @@ export default function HomePage() {
                     className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium shrink-0"
                     style={{ backgroundColor: record.category?.color || '#666' }}
                   >
-                    {record.category?.icon?.charAt(0).toUpperCase() || '?'}
+                    <CategoryIcon icon={record.category?.icon || 'HelpCircle'} size={20} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="font-medium truncate">{record.category?.name || 'Unknown'}</div>
@@ -270,6 +279,17 @@ export default function HomePage() {
       >
         <Plus className="h-6 w-6" />
       </Link>
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        title={t('confirm.deleteRecord')}
+        description={t('confirm.deleteRecordDesc')}
+        confirmText={t('confirm.delete')}
+        cancelText={t('confirm.cancel')}
+      />
     </div>
     </PullToRefresh>
   )

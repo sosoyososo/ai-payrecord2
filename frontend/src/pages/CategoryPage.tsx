@@ -5,6 +5,9 @@ import { categoryApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
+import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
+import { IconPicker } from '@/components/IconPicker'
+import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Category } from '@/types'
 import { ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
@@ -21,10 +24,14 @@ export default function CategoryPage() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editName, setEditName] = useState('')
   const [editColor, setEditColor] = useState('')
+  const [editIcon, setEditIcon] = useState('')
   const [showAdd, setShowAdd] = useState(false)
   const [newName, setNewName] = useState('')
   const [newColor, setNewColor] = useState(DEFAULT_COLORS[0])
+  const [newIcon, setNewIcon] = useState('MoreHorizontal')
   const [newType, setNewType] = useState<1 | 2>(1)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
 
   useEffect(() => {
     loadData()
@@ -44,9 +51,10 @@ export default function CategoryPage() {
   const handleAdd = async () => {
     if (!newName.trim()) return
     try {
-      await categoryApi.create({ name: newName, color: newColor, type: newType })
+      await categoryApi.create({ name: newName, color: newColor, type: newType, icon: newIcon })
       setNewName('')
       setNewColor(DEFAULT_COLORS[0])
+      setNewIcon('MoreHorizontal')
       setShowAdd(false)
       loadData()
     } catch (error) {
@@ -58,12 +66,13 @@ export default function CategoryPage() {
     setEditingId(category.id)
     setEditName(category.name)
     setEditColor(category.color || DEFAULT_COLORS[0])
+    setEditIcon(category.icon || 'MoreHorizontal')
   }
 
   const handleSave = async (id: number) => {
     if (!editName.trim()) return
     try {
-      await categoryApi.update(id, { name: editName, color: editColor })
+      await categoryApi.update(id, { name: editName, color: editColor, icon: editIcon })
       setEditingId(null)
       loadData()
     } catch (error) {
@@ -72,9 +81,14 @@ export default function CategoryPage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('confirm.deleteCategory'))) return
+    setPendingDeleteId(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return
     try {
-      await categoryApi.delete(id)
+      await categoryApi.delete(pendingDeleteId)
       loadData()
     } catch (error) {
       console.error('Failed to delete category:', error)
@@ -113,24 +127,27 @@ export default function CategoryPage() {
               <Card key={category.id}>
                 <CardContent className="p-3 flex items-center justify-between">
                   {editingId === category.id ? (
-                    <div className="flex items-center gap-2 flex-1">
-                      <Input
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        className="flex-1"
-                      />
-                      <input
-                        type="color"
-                        value={editColor}
-                        onChange={(e) => setEditColor(e.target.value)}
-                        className="w-8 h-8 rounded cursor-pointer"
-                      />
-                      <Button size="icon" variant="ghost" onClick={() => handleSave(category.id)}>
-                        <Check className="h-4 w-4 text-green-600" />
-                      </Button>
-                      <Button size="icon" variant="ghost" onClick={() => setEditingId(null)}>
-                        <X className="h-4 w-4 text-red-600" />
-                      </Button>
+                    <div className="flex flex-col gap-2 flex-1">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          className="flex-1"
+                        />
+                        <input
+                          type="color"
+                          value={editColor}
+                          onChange={(e) => setEditColor(e.target.value)}
+                          className="w-8 h-8 rounded cursor-pointer"
+                        />
+                        <Button size="icon" variant="ghost" onClick={() => handleSave(category.id)}>
+                          <Check className="h-4 w-4 text-green-600" />
+                        </Button>
+                        <Button size="icon" variant="ghost" onClick={() => setEditingId(null)}>
+                          <X className="h-4 w-4 text-red-600" />
+                        </Button>
+                      </div>
+                      <IconPicker selectedIcon={editIcon} onSelect={setEditIcon} />
                     </div>
                   ) : (
                     <>
@@ -139,7 +156,7 @@ export default function CategoryPage() {
                           className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm"
                           style={{ backgroundColor: category.color || '#666' }}
                         >
-                          {category.icon?.charAt(0).toUpperCase() || '?'}
+                          <CategoryIcon icon={category.icon || 'MoreHorizontal'} />
                         </div>
                         <span>{category.name}</span>
                         {category.is_system && (
@@ -172,24 +189,27 @@ export default function CategoryPage() {
               <Card key={category.id}>
                 <CardContent className="p-3 flex items-center justify-between">
                   {editingId === category.id ? (
-                    <div className="flex items-center gap-2 flex-1">
-                      <Input
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        className="flex-1"
-                      />
-                      <input
-                        type="color"
-                        value={editColor}
-                        onChange={(e) => setEditColor(e.target.value)}
-                        className="w-8 h-8 rounded cursor-pointer"
-                      />
-                      <Button size="icon" variant="ghost" onClick={() => handleSave(category.id)}>
-                        <Check className="h-4 w-4 text-green-600" />
-                      </Button>
-                      <Button size="icon" variant="ghost" onClick={() => setEditingId(null)}>
-                        <X className="h-4 w-4 text-red-600" />
-                      </Button>
+                    <div className="flex flex-col gap-2 flex-1">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          className="flex-1"
+                        />
+                        <input
+                          type="color"
+                          value={editColor}
+                          onChange={(e) => setEditColor(e.target.value)}
+                          className="w-8 h-8 rounded cursor-pointer"
+                        />
+                        <Button size="icon" variant="ghost" onClick={() => handleSave(category.id)}>
+                          <Check className="h-4 w-4 text-green-600" />
+                        </Button>
+                        <Button size="icon" variant="ghost" onClick={() => setEditingId(null)}>
+                          <X className="h-4 w-4 text-red-600" />
+                        </Button>
+                      </div>
+                      <IconPicker selectedIcon={editIcon} onSelect={setEditIcon} />
                     </div>
                   ) : (
                     <>
@@ -198,7 +218,7 @@ export default function CategoryPage() {
                           className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm"
                           style={{ backgroundColor: category.color || '#666' }}
                         >
-                          {category.icon?.charAt(0).toUpperCase() || '?'}
+                          <CategoryIcon icon={category.icon || 'MoreHorizontal'} />
                         </div>
                         <span>{category.name}</span>
                         {category.is_system && (
@@ -264,6 +284,10 @@ export default function CategoryPage() {
                   ))}
                 </div>
               </div>
+              <div className="space-y-2">
+                <span className="text-sm">{t('category.selectIcon')}:</span>
+                <IconPicker selectedIcon={newIcon} onSelect={setNewIcon} />
+              </div>
               <div className="flex gap-2">
                 <Button onClick={handleAdd} className="flex-1">
                   <Check className="h-4 w-4 mr-2" />
@@ -282,6 +306,17 @@ export default function CategoryPage() {
           </Button>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        title={t('confirm.deleteCategory')}
+        description={t('confirm.deleteCategoryDesc')}
+        confirmText={t('confirm.delete')}
+        cancelText={t('confirm.cancel')}
+      />
     </div>
   )
 }

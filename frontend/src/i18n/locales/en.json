@@ -58,6 +58,10 @@
     "expenseAmount": "Expense Amount",
     "incomeAmount": "Income Amount"
   },
+  "editRecord": {
+    "title": "Edit Record",
+    "save": "Save Changes"
+  },
   "stats": {
     "title": "Statistics",
     "overview": "Overview",
@@ -143,8 +147,19 @@
     "ledger": "Ledger"
   },
   "confirm": {
+    "deleteRecord": "Are you sure you want to delete this record?",
+    "deleteRecordDesc": "This action cannot be undone.",
     "deleteLedger": "Are you sure you want to delete this ledger?",
+    "deleteLedgerDesc": "This action cannot be undone.",
     "deleteCategory": "Are you sure you want to delete this category?",
-    "deleteTag": "Are you sure you want to delete this tag?"
+    "deleteCategoryDesc": "This action cannot be undone.",
+    "deleteTag": "Are you sure you want to delete this tag?",
+    "deleteTagDesc": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "category": {
+    "selectIcon": "Select Icon",
+    "iconSearch": "Search icons..."
   }
 }

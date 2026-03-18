@@ -8,6 +8,13 @@ import type { SummaryStats, CategoryStats, Ledger } from '@/types'
 import { LedgerSelector } from '@/components/LedgerSelector'
 import { ArrowLeft } from 'lucide-react'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   BarChart,
   Bar,
   XAxis,
@@ -103,17 +110,18 @@ export default function StatsPage() {
       {/* Year Selector */}
       <div className="max-w-md mx-auto px-4 py-2 flex items-center gap-2">
         <span className="text-sm text-muted-foreground">{t('stats.year')}</span>
-        <select
-          value={year}
-          onChange={(e) => setYear(parseInt(e.target.value))}
-          className="ml-auto text-sm border rounded px-2 py-1"
-        >
-          {[2024, 2025, 2026].map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
+        <Select value={year.toString()} onValueChange={(value) => setYear(parseInt(value))}>
+          <SelectTrigger className="ml-auto w-24">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {[2024, 2025, 2026].map((y) => (
+              <SelectItem key={y} value={y.toString()}>
+                {y}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Ledger Selector */}

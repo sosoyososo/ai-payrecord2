@@ -1,14 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LedgerSelector } from '@/components/LedgerSelector'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import { Plus, TrendingUp, TrendingDown, Search, X, Wallet, Settings, User, BarChart3, BookOpen, Tag } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, Search, X, Wallet } from 'lucide-react'
 import PullToRefresh from 'react-pull-to-refresh'
 
 export default function HomePage() {
@@ -19,9 +18,7 @@ export default function HomePage() {
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [summary, setSummary] = useState<SummaryStats | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
-  const [menuOpen, setMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
-  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     loadData()
@@ -41,19 +38,6 @@ export default function HomePage() {
       setFilteredRecords(records)
     }
   }, [searchQuery, records])
-
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false)
-      }
-    }
-    if (menuOpen) {
-      document.addEventListener('click', handleClickOutside)
-      return () => document.removeEventListener('click', handleClickOutside)
-    }
-  }, [menuOpen])
 
   const loadData = async (targetLedgerId?: number) => {
     try {
@@ -109,52 +93,10 @@ export default function HomePage() {
 
       {/* 顶部标题栏 */}
       <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-md mx-auto px-4 py-4 flex items-center">
           <div className="flex items-center gap-2">
             <Wallet className="h-6 w-6 text-primary" />
             <span className="font-semibold text-lg">{currentLedger?.name || t('nav.ledgers')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/stats">
-                <BarChart3 className="h-5 w-5" />
-              </Link>
-            </Button>
-            <div className="relative">
-              <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen) }}>
-                <Settings className="h-5 w-5" />
-              </Button>
-              <div ref={menuRef} className={`absolute right-0 top-full mt-1 w-40 bg-white dark:bg-slate-800 rounded-lg shadow-lg border dark:border-slate-700 z-50 ${menuOpen ? 'block' : 'hidden'}`}>
-                <Link
-                  to="/settings"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-t-lg"
-                >
-                  <User className="h-4 w-4" />
-                  <span>{t('home.personalSettings')}</span>
-                </Link>
-                <Link
-                  to="/ledgers"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  <span>{t('ledger.title')}</span>
-                </Link>
-                <Link
-                  to="/categories"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700"
-                >
-                  <Tag className="h-4 w-4" />
-                  <span>{t('home.categoryManagement')}</span>
-                </Link>
-                <Link
-                  to="/tags"
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-b-lg"
-                >
-                  <Tag className="h-4 w-4" />
-                  <span>{t('home.tagManagement')}</span>
-                </Link>
-              </div>
-            </div>
           </div>
         </div>
       </header>

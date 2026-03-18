@@ -26,8 +26,8 @@
 ## Test Cases (docs/superpowers/test-cases/)
 
 - [X] TC-UI-HOME-004: 切换账本后记录变化 ✅
-- [ ] TC-UI-EXPORT-003: 切换账本后导出数据变化 (待添加)
-- [ ] TC-UI-BUDGET-003: 切换账本后预算统计变化 (待添加)
+- [X] TC-UI-EXPORT-003: 切换账本后导出数据变化 ✅ (已存在于测试用例文档)
+- [X] TC-UI-BUDGET-003: 切换账本后预算统计变化 ✅ (已存在于测试用例文档)
 
 ## Dependencies
 

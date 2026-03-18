@@ -3,7 +3,7 @@
 **Spec**: docs/superpowers/specs/2026-03-18-ledger-stats-fix.md
 **Plan**: docs/superpowers/plans/2026-03-18-ledger-stats-fix.md
 **Created**: 2026-03-18
-**Status**: ✅ COMPLETED
+**Status**: ✅ COMPLETED (verified)
 
 ## 概述
 

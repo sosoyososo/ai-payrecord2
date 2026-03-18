@@ -107,27 +107,27 @@ HTTP 200
 # ============================================
 
 # TC-API-STATS-001: Summary
-GET http://localhost:8080/api/v1/stats/summary?year=2026
+GET http://localhost:8080/api/v1/stats/summary?year=2026&ledger_id=1
 Authorization: Bearer {{token}}
 HTTP 200
 
 # TC-API-STATS-002: Daily Stats
-GET http://localhost:8080/api/v1/stats/daily?start_date=2026-03-01&end_date=2026-03-17
+GET http://localhost:8080/api/v1/stats/daily?start_date=2026-03-01&end_date=2026-03-17&ledger_id=1
 Authorization: Bearer {{token}}
 HTTP 200
 
 # TC-API-STATS-003: Category Stats
-GET http://localhost:8080/api/v1/stats/by-category?type=1
+GET http://localhost:8080/api/v1/stats/by-category?type=1&ledger_id=1
 Authorization: Bearer {{token}}
 HTTP 200
 
 # TC-API-STATS-004: Monthly Stats
-GET http://localhost:8080/api/v1/stats/monthly?year=2026
+GET http://localhost:8080/api/v1/stats/monthly?year=2026&ledger_id=1
 Authorization: Bearer {{token}}
 HTTP 200
 
 # TC-API-STATS-005: Monthly Detail
-GET http://localhost:8080/api/v1/stats/monthly-detail?year=2026&month=3
+GET http://localhost:8080/api/v1/stats/monthly-detail?year=2026&month=3&ledger_id=1
 Authorization: Bearer {{token}}
 HTTP 200
 

@@ -38,7 +38,9 @@ func (h *StatsHandler) GetSummary(c *gin.Context) {
 	if ledgerIDStr := c.Query("ledger_id"); ledgerIDStr != "" {
 		if id, err := strconv.ParseUint(ledgerIDStr, 10, 32); err == nil {
 			uid := uint(id)
-			ledgerID = &uid
+			if uid > 0 {
+				ledgerID = &uid
+			}
 		}
 	}
 
@@ -88,7 +90,9 @@ func (h *StatsHandler) GetDailyStats(c *gin.Context) {
 	if ledgerIDStr := c.Query("ledger_id"); ledgerIDStr != "" {
 		if id, err := strconv.ParseUint(ledgerIDStr, 10, 32); err == nil {
 			uid := uint(id)
-			ledgerID = &uid
+			if uid > 0 {
+				ledgerID = &uid
+			}
 		}
 	}
 
@@ -125,7 +129,9 @@ func (h *StatsHandler) GetCategoryStats(c *gin.Context) {
 	if ledgerIDStr := c.Query("ledger_id"); ledgerIDStr != "" {
 		if id, err := strconv.ParseUint(ledgerIDStr, 10, 32); err == nil {
 			uid := uint(id)
-			ledgerID = &uid
+			if uid > 0 {
+				ledgerID = &uid
+			}
 		}
 	}
 
@@ -163,7 +169,9 @@ func (h *StatsHandler) GetMonthlyStats(c *gin.Context) {
 	if ledgerIDStr := c.Query("ledger_id"); ledgerIDStr != "" {
 		if id, err := strconv.ParseUint(ledgerIDStr, 10, 32); err == nil {
 			uid := uint(id)
-			ledgerID = &uid
+			if uid > 0 {
+				ledgerID = &uid
+			}
 		}
 	}
 
@@ -200,7 +208,9 @@ func (h *StatsHandler) GetTagStats(c *gin.Context) {
 	if ledgerIDStr := c.Query("ledger_id"); ledgerIDStr != "" {
 		if id, err := strconv.ParseUint(ledgerIDStr, 10, 32); err == nil {
 			uid := uint(id)
-			ledgerID = &uid
+			if uid > 0 {
+				ledgerID = &uid
+			}
 		}
 	}
 
@@ -237,7 +247,9 @@ func (h *StatsHandler) GetMonthlyDetail(c *gin.Context) {
 	if ledgerIDStr := c.Query("ledger_id"); ledgerIDStr != "" {
 		if id, err := strconv.ParseUint(ledgerIDStr, 10, 32); err == nil {
 			uid := uint(id)
-			ledgerID = &uid
+			if uid > 0 {
+				ledgerID = &uid
+			}
 		}
 	}
 

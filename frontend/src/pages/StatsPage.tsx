@@ -68,7 +68,8 @@ export default function StatsPage() {
 
   const switchLedger = async (ledgerId: number) => {
     await ledgerApi.setCurrent(ledgerId)
-    loadData()
+    const newLedger = ledgers.find(l => l.id === ledgerId)
+    setCurrentLedger(newLedger || null)
   }
 
   const formatAmount = (amount: number) => {

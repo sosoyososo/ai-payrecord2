@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import type { Tag } from '@/types'
 
@@ -15,6 +16,7 @@ export function TagSelector({
   onChange,
   className,
 }: TagSelectorProps) {
+  const { t } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
 
   const toggleTag = (tagId: number) => {
@@ -50,7 +52,7 @@ export function TagSelector({
         onClick={() => setIsExpanded(!isExpanded)}
         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
-        {isExpanded ? '收起标签' : selectedTags.length > 0 ? '修改标签' : '添加标签'}
+        {isExpanded ? t('tagSelector.collapseTags') : selectedTags.length > 0 ? t('tagSelector.editTags') : t('tagSelector.addTags')}
       </button>
 
       {/* Tag Selection Grid */}

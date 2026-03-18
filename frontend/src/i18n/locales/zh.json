@@ -28,7 +28,9 @@
     "settings": "设置",
     "categories": "分类",
     "tags": "标签",
-    "ledgers": "账本"
+    "ledgers": "账本",
+    "budget": "预算",
+    "appName": "账本"
   },
   "home": {
     "monthlyExpense": "本月支出",
@@ -56,7 +58,8 @@
     "notePlaceholder": "添加备注...",
     "save": "保存记录",
     "expenseAmount": "支出金额",
-    "incomeAmount": "收入金额"
+    "incomeAmount": "收入金额",
+    "voiceInputPlaceholder": "语音输入：午餐花费 25 元"
   },
   "editRecord": {
     "title": "编辑记录",
@@ -147,7 +150,37 @@
     "reloadData": "重新加载数据",
     "recordCount": "记录数",
     "warning": "导出的数据仅包含您当前的账本记录",
-    "ledger": "账本"
+    "ledger": "账本",
+    "date": "日期",
+    "type": "类型",
+    "expense": "支出",
+    "income": "收入",
+    "exportFilePrefix": "账本导出"
+  },
+  "iconPicker": {
+    "searchPlaceholder": "搜索图标...",
+    "all": "全部",
+    "noMatch": "未找到匹配的图标",
+    "food": "餐饮",
+    "transport": "交通",
+    "shopping": "购物",
+    "home": "居住",
+    "entertainment": "娱乐",
+    "health": "健康",
+    "education": "教育",
+    "communication": "通讯",
+    "finance": "金融",
+    "lifestyle": "生活",
+    "fashion": "服饰",
+    "pets": "宠物"
+  },
+  "tagSelector": {
+    "collapseTags": "收起标签",
+    "editTags": "修改标签",
+    "addTags": "添加标签"
+  },
+  "ledgerSelector": {
+    "selectLedger": "选择账本"
   },
   "confirm": {
     "deleteRecord": "确定删除这条记录吗？",

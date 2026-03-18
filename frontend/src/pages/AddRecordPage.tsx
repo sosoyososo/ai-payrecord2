@@ -117,7 +117,7 @@ export default function AddRecordPage() {
       <div className="max-w-md mx-auto px-4 py-4">
         <div className="relative">
           <Input
-            placeholder="语音输入：午餐花费 25 元"
+            placeholder={t('addRecord.voiceInputPlaceholder')}
             value={aiInput}
             onChange={(e) => setAiInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAiParse()}

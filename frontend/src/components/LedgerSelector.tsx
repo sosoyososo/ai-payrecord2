@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTranslation } from "react-i18next"
 import type { Ledger } from "@/types"
 
 interface LedgerSelectorProps {
@@ -14,12 +15,13 @@ interface LedgerSelectorProps {
 }
 
 export function LedgerSelector({ ledgers, currentLedger, onChange }: LedgerSelectorProps) {
+  const { t } = useTranslation()
   if (ledgers.length <= 1) return null
 
   return (
     <Select value={String(currentLedger?.id)} onValueChange={(v) => onChange(Number(v))}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="选择账本" />
+        <SelectValue placeholder={t('ledgerSelector.selectLedger')} />
       </SelectTrigger>
       <SelectContent>
         {ledgers.map((ledger) => (

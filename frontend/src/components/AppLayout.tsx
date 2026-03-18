@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Home, BarChart3, PiggyBank, Settings, Wallet } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 
 const navItems = [
-  { path: '/', icon: Home, label: '首页' },
-  { path: '/stats', icon: BarChart3, label: '统计' },
-  { path: '/budget', icon: PiggyBank, label: '预算' },
-  { path: '/settings', icon: Settings, label: '设置' },
+  { path: '/', icon: Home, labelKey: 'nav.home' },
+  { path: '/stats', icon: BarChart3, labelKey: 'nav.stats' },
+  { path: '/budget', icon: PiggyBank, labelKey: 'nav.budget' },
+  { path: '/settings', icon: Settings, labelKey: 'nav.settings' },
 ]
 
 export default function AppLayout() {
+  const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -39,7 +41,7 @@ export default function AppLayout() {
           <div className="p-4 border-b dark:border-slate-700">
             <div className="flex items-center gap-2">
               <Wallet className="h-6 w-6 text-primary" />
-              <span className="font-semibold text-lg">账本</span>
+              <span className="font-semibold text-lg">{t('nav.appName')}</span>
             </div>
           </div>
           <div className="flex-1 py-4">
@@ -56,7 +58,7 @@ export default function AppLayout() {
                   }`}
                 >
                   <item.icon className="h-5 w-5" />
-                  <span>{item.label}</span>
+                  <span>{t(item.labelKey)}</span>
                 </button>
               )
             })}
@@ -90,7 +92,7 @@ export default function AppLayout() {
                 }`}
               >
                 <item.icon className="h-5 w-5" />
-                <span className="text-xs mt-1">{item.label}</span>
+                <span className="text-xs mt-1">{t(item.labelKey)}</span>
               </button>
             )
           })}

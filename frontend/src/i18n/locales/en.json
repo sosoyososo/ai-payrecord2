@@ -28,7 +28,9 @@
     "settings": "Settings",
     "categories": "Categories",
     "tags": "Tags",
-    "ledgers": "Ledgers"
+    "ledgers": "Ledgers",
+    "budget": "Budget",
+    "appName": "Ledger"
   },
   "home": {
     "monthlyExpense": "Monthly Expense",
@@ -56,7 +58,8 @@
     "notePlaceholder": "Add note...",
     "save": "Save Record",
     "expenseAmount": "Expense Amount",
-    "incomeAmount": "Income Amount"
+    "incomeAmount": "Income Amount",
+    "voiceInputPlaceholder": "Voice input: lunch cost 25 yuan"
   },
   "editRecord": {
     "title": "Edit Record",
@@ -147,7 +150,37 @@
     "reloadData": "Reload Data",
     "recordCount": "Record Count",
     "warning": "Exported data only contains records from current ledger",
-    "ledger": "Ledger"
+    "ledger": "Ledger",
+    "date": "Date",
+    "type": "Type",
+    "expense": "Expense",
+    "income": "Income",
+    "exportFilePrefix": "Ledger Export"
+  },
+  "iconPicker": {
+    "searchPlaceholder": "Search icons...",
+    "all": "All",
+    "noMatch": "No matching icons found",
+    "food": "Food",
+    "transport": "Transport",
+    "shopping": "Shopping",
+    "home": "Home",
+    "entertainment": "Entertainment",
+    "health": "Health",
+    "education": "Education",
+    "communication": "Communication",
+    "finance": "Finance",
+    "lifestyle": "Lifestyle",
+    "fashion": "Fashion",
+    "pets": "Pets"
+  },
+  "tagSelector": {
+    "collapseTags": "Collapse Tags",
+    "editTags": "Edit Tags",
+    "addTags": "Add Tags"
+  },
+  "ledgerSelector": {
+    "selectLedger": "Select Ledger"
   },
   "confirm": {
     "deleteRecord": "Are you sure you want to delete this record?",

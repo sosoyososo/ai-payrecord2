@@ -45,14 +45,14 @@ export default function ExportPage() {
     }
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    downloadFile(blob, `账本导出_${new Date().toISOString().split('T')[0]}.json`)
+    downloadFile(blob, `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.json`)
   }
 
   const exportToCSV = () => {
-    const headers = ['日期', '类型', '金额', '分类', '备注', '标签']
+    const headers = [t('export.date'), t('export.type'), t('addRecord.amount'), t('addRecord.category'), t('addRecord.note'), t('tag.title')]
     const rows = records.map((r) => [
-      new Date(r.date).toLocaleDateString('zh-CN'),
-      r.type === 1 ? '支出' : '收入',
+      new Date(r.date).toLocaleDateString(),
+      r.type === 1 ? t('export.expense') : t('export.income'),
       r.amount.toString(),
       r.category?.name || '',
       r.note || '',
@@ -62,7 +62,7 @@ export default function ExportPage() {
     const csv = [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n')
     const BOM = '\uFEFF'
     const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
-    downloadFile(blob, `账本导出_${new Date().toISOString().split('T')[0]}.csv`)
+    downloadFile(blob, `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.csv`)
   }
 
   const downloadFile = (blob: Blob, filename: string) => {

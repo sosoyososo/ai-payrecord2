@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Search, X } from 'lucide-react'
 import * as LucideIcons from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -48,21 +49,6 @@ const ICON_CATEGORIES: Record<string, string[]> = {
   'pets': ['Dog', 'Cat', 'Bird', 'Fish'],
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  'food': '餐饮',
-  'transport': '交通',
-  'shopping': '购物',
-  'home': '居住',
-  'entertainment': '娱乐',
-  'health': '健康',
-  'education': '教育',
-  'communication': '通讯',
-  'finance': '金融',
-  'lifestyle': '生活',
-  'fashion': '服饰',
-  'pets': '宠物',
-}
-
 interface IconPickerProps {
   selectedIcon: string
   onSelect: (icon: string) => void
@@ -70,6 +56,7 @@ interface IconPickerProps {
 }
 
 export function IconPicker({ selectedIcon, onSelect, className }: IconPickerProps) {
+  const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
@@ -96,7 +83,7 @@ export function IconPicker({ selectedIcon, onSelect, className }: IconPickerProp
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="搜索图标..."
+          placeholder={t('iconPicker.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-9 pr-9"
@@ -118,16 +105,16 @@ export function IconPicker({ selectedIcon, onSelect, className }: IconPickerProp
           size="sm"
           onClick={() => setActiveCategory(null)}
         >
-          全部
+          {t('iconPicker.all')}
         </Button>
-        {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+        {Object.entries(ICON_CATEGORIES).map(([key]) => (
           <Button
             key={key}
             variant={activeCategory === key ? 'default' : 'outline'}
             size="sm"
             onClick={() => setActiveCategory(key)}
           >
-            {label}
+            {t(`iconPicker.${key}`)}
           </Button>
         ))}
       </div>
@@ -159,7 +146,7 @@ export function IconPicker({ selectedIcon, onSelect, className }: IconPickerProp
 
       {filteredIcons.length === 0 && (
         <div className="text-center py-4 text-muted-foreground text-sm">
-          未找到匹配的图标
+          {t('iconPicker.noMatch')}
         </div>
       )}
     </div>

@@ -19,7 +19,7 @@ type EmailRequest struct {
 	Sender    Sender       `json:"sender"`
 	To        []Recipient `json:"to"`
 	Subject   string      `json:"subject"`
-	Text      string      `json:"text"`
+	TextContent string     `json:"textContent"`
 }
 
 type Sender struct {
@@ -52,8 +52,8 @@ func (c *Client) SendEmail(toEmail, toName, subject, text string) error {
 		To: []Recipient{
 			{Email: toEmail, Name: toName},
 		},
-		Subject: subject,
-		Text:    text,
+		Subject:    subject,
+		TextContent: text,
 	}
 
 	body, err := json.Marshal(req)
@@ -61,7 +61,7 @@ func (c *Client) SendEmail(toEmail, toName, subject, text string) error {
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	httpReq, err := http.NewRequest("POST", "https://api.brevo.com/api.v3/smtp/email", bytes.NewReader(body))
+	httpReq, err := http.NewRequest("POST", "https://api.brevo.com/v3/smtp/email", bytes.NewReader(body))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}

@@ -25,10 +25,13 @@ jobs:
             --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace/backend \
-            -e CGO_ENABLED=1 \
             ubuntu:18.04 \
             bash -c " \
-              apt-get update && apt-get install -y gcc libc6-dev && \
+              apt-get update && apt-get install -y gcc libc6-dev wget && \
+              wget -q https://go.dev/dl/go1.25.8.linux-amd64.tar.gz && \
+              tar -C /usr/local -xzf go1.25.8.linux-amd64.tar.gz && \
+              rm go1.25.8.linux-amd64.tar.gz && \
+              export PATH=/usr/local/go/bin:\$PATH && \
               go build -o bin/server ./cmd/server"
 
       - name: Setup SSH

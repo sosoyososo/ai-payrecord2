@@ -14,11 +14,9 @@ import (
 )
 
 var (
-	ErrUserExists     = errors.New("user already exists")
-	ErrInvalidCreds  = errors.New("invalid credentials")
-	ErrUserNotFound  = errors.New("user not found")
-	ErrTokenInvalid  = errors.New("invalid token")
-	ErrTokenExpired  = errors.New("token expired")
+	ErrUserExists    = errors.New("user already exists")
+	ErrInvalidCreds = errors.New("invalid credentials")
+	ErrUserNotFound = errors.New("user not found")
 )
 
 type RegisterRequest struct {

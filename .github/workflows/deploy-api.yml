@@ -28,11 +28,9 @@ jobs:
         run: go build -o bin/server ./cmd/server
 
       - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H $VPS_HOST 2>/dev/null >> ~/.ssh/known_hosts || true
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Create deployment directory
         run: |

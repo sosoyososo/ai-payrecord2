@@ -47,9 +47,9 @@ jobs:
       - name: Upload binary
         run: |
           scp -o StrictHostKeyChecking=no ./backend/bin/server \
-            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:/root/ai-payrecord/bin/server
+            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:/root/ai-payrecord/bin/server.new
 
-      - name: Restart service
+      - name: Deploy and restart service
         run: |
           ssh -o StrictHostKeyChecking=no ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }} \
-            "systemctl restart ai-payrecord || true"
+            "systemctl stop ai-payrecord || true; mv /root/ai-payrecord/bin/server.new /root/ai-payrecord/bin/server && systemctl start ai-payrecord"

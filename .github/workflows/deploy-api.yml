@@ -42,11 +42,6 @@ jobs:
           scp -o StrictHostKeyChecking=no ./backend/bin/server \
             ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:/root/ai-payrecord/bin/server
 
-      - name: Upload config
-        run: |
-          scp -o StrictHostKeyChecking=no ./backend/.env \
-            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:/root/ai-payrecord/config/.env
-
       - name: Restart service
         run: |
           ssh -o StrictHostKeyChecking=no ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }} \

@@ -32,6 +32,7 @@ func main() {
 		&model.Tag{},
 		&model.Record{},
 		&model.RefreshToken{},
+		&model.VerificationToken{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -66,6 +67,9 @@ func main() {
 			auth.POST("/register", authHandler.Register)
 			auth.POST("/login", authHandler.Login)
 			auth.POST("/refresh", authHandler.Refresh)
+			auth.POST("/forgot-password", authHandler.ForgotPassword)
+			auth.POST("/reset-password", authHandler.ResetPassword)
+			auth.POST("/verify-email", authHandler.VerifyEmail)
 		}
 
 		// Protected routes
@@ -74,6 +78,7 @@ func main() {
 		{
 			// Auth routes (protected)
 			protected.POST("/auth/logout", authHandler.Logout)
+			protected.POST("/auth/send-verification", authHandler.SendVerification)
 
 			// User routes
 			user := protected.Group("/user")

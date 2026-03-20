@@ -44,18 +44,18 @@ backend/
 
 ```go
 // 在 Config 结构体中添加:
-BreavoAPIKey       string
-BreavoSenderEmail  string
-BreavoSenderName   string
+BrevoAPIKey        string
+BrevoSenderEmail   string
+BrevoSenderName    string
 TokenEncryptionKey string  // 32字节十六进制字符串
 ```
 
 - [ ] **Step 2: 在 Load() 函数中添加环境变量读取**
 
 ```go
-BreavoAPIKey:       getEnv("BREVO_API_KEY", ""),
-BreavoSenderEmail:  getEnv("BREVO_SENDER_EMAIL", "noreply@example.com"),
-BreavoSenderName:   getEnv("BREVO_SENDER_NAME", "AI PayRecord"),
+BrevoAPIKey:        getEnv("BREVO_API_KEY", ""),
+BrevoSenderEmail:   getEnv("BREVO_SENDER_EMAIL", "noreply@example.com"),
+BrevoSenderName:    getEnv("BREVO_SENDER_NAME", "AI PayRecord"),
 TokenEncryptionKey: getEnv("TOKEN_ENCRYPTION_KEY", ""),
 ```
 
@@ -571,9 +571,9 @@ type EmailService struct {
 
 func NewEmailService(tokenSvc *TokenService) *EmailService {
     client := brevo.NewClient(
-        config.AppConfig.BreavoAPIKey,
-        config.AppConfig.BreavoSenderEmail,
-        config.AppConfig.BreavoSenderName,
+        config.AppConfig.BrevoAPIKey,
+        config.AppConfig.BrevoSenderEmail,
+        config.AppConfig.BrevoSenderName,
     )
     return &EmailService{
         client:   client,
@@ -581,8 +581,8 @@ func NewEmailService(tokenSvc *TokenService) *EmailService {
     }
 }
 
-func (s *EmailService) SendPasswordResetEmail(userEmail, userName string) (string, error) {
-    token, err := s.tokenSvc.GenerateAndStore(0, TokenTypePasswordReset, 15*time.Minute)
+func (s *EmailService) SendPasswordResetEmail(userID uint, userEmail, userName string) (string, error) {
+    token, err := s.tokenSvc.GenerateAndStore(userID, TokenTypePasswordReset, 15*time.Minute)
     if err != nil {
         return "", fmt.Errorf("failed to generate token: %w", err)
     }
@@ -662,13 +662,49 @@ git commit -m "service: add EmailService for Brevo email integration"
 
 **Files:**
 - Modify: `backend/internal/handler/auth.go`
+- Modify: `backend/internal/service/auth.go` (添加 GetUserByEmail 和 MarkEmailVerified)
 
-- [ ] **Step 1: 添加新请求结构体和方法**
+- [ ] **Step 1: 在 AuthService 添加 GetUserByEmail 方法**
 
 ```go
-// 在文件顶部添加:
-"time"
+// 在 backend/internal/service/auth.go 添加:
+func (s *AuthService) GetUserByEmail(email string) (*model.User, error) {
+    db := database.GetDB()
+    var user model.User
+    if err := db.Where("email = ?", email).First(&user).Error; err != nil {
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+            return nil, ErrUserNotFound
+        }
+        return nil, err
+    }
+    return &user, nil
+}
 
+func (s *AuthService) MarkEmailVerified(userID uint) error {
+    db := database.GetDB()
+    return db.Model(&model.User{}).Where("id = ?", userID).Update("email_verified", true).Error
+}
+
+func (s *AuthService) UpdatePassword(userID uint, newPassword string) error {
+    db := database.GetDB()
+    hashedPassword, err := utils.HashPassword(newPassword)
+    if err != nil {
+        return err
+    }
+    return db.Model(&model.User{}).Where("id = ?", userID).Update("password", hashedPassword).Error
+}
+```
+
+- [ ] **Step 2: 在 User 模型添加 email_verified 字段**
+
+```go
+// 在 backend/internal/model/user.go 的 User 结构体添加:
+EmailVerified bool `gorm:"default:false" json:"email_verified"`
+```
+
+- [ ] **Step 3: 修改 AuthHandler 添加新端点**
+
+```go
 // 添加请求结构体:
 type ForgotPasswordRequest struct {
     Email string `json:"email" binding:"required,email"`
@@ -685,18 +721,19 @@ type VerifyEmailRequest struct {
     Code  string `json:"code" binding:"required,len=8"`
 }
 
-type SendVerificationRequest struct {
-    Email string `json:"email" binding:"required,email"`
-}
-
 // 在 AuthHandler 结构体添加:
-emailService *service.EmailService
+tokenSvc *service.TokenService
 
-// 在 NewAuthHandler 添加:
+// 修改 NewAuthHandler:
 func NewAuthHandler() *AuthHandler {
+    tokenSvc, err := service.NewTokenService(config.AppConfig.TokenEncryptionKey)
+    if err != nil {
+        log.Fatalf("Failed to initialize TokenService: %v", err)
+    }
     return &AuthHandler{
         authService:  service.NewAuthService(),
-        emailService: service.NewEmailService(), // TODO: 需要传入 tokenSvc
+        tokenSvc:     tokenSvc,
+        emailService: service.NewEmailService(tokenSvc),
     }
 }
 
@@ -716,7 +753,7 @@ func (h *AuthHandler) ForgotPassword(c *gin.Context) {
         return
     }
 
-    _, err = h.emailService.SendPasswordResetEmail(user.Email, user.Nickname)
+    _, err = h.emailService.SendPasswordResetEmail(user.ID, user.Email, user.Nickname)
     if err != nil {
         response.InternalServerError(c, "Failed to send email")
         return
@@ -739,8 +776,8 @@ func (h *AuthHandler) ResetPassword(c *gin.Context) {
         return
     }
 
-    // 验证 token
-    token, err := h.emailService.ValidateToken(user.ID, service.TokenTypePasswordReset, req.Code)
+    // 验证 token - 直接调用 tokenSvc
+    token, err := h.tokenSvc.Validate(user.ID, service.TokenTypePasswordReset, req.Code)
     if err != nil {
         switch err {
         case service.ErrTokenNotFound, service.ErrTokenInvalid:
@@ -761,8 +798,8 @@ func (h *AuthHandler) ResetPassword(c *gin.Context) {
         return
     }
 
-    // 标记 token 已使用
-    h.emailService.MarkTokenUsed(token.ID)
+    // 标记 token 已使用 - 直接调用 tokenSvc
+    h.tokenSvc.MarkUsed(token.ID)
 
     response.SuccessWithMessage(c, "Password has been reset successfully.", nil)
 }
@@ -780,7 +817,7 @@ func (h *AuthHandler) VerifyEmail(c *gin.Context) {
         return
     }
 
-    token, err := h.emailService.ValidateToken(user.ID, service.TokenTypeEmailVerification, req.Code)
+    token, err := h.tokenSvc.Validate(user.ID, service.TokenTypeEmailVerification, req.Code)
     if err != nil {
         response.BadRequest(c, "Invalid code")
         return
@@ -791,18 +828,16 @@ func (h *AuthHandler) VerifyEmail(c *gin.Context) {
         return
     }
 
-    h.emailService.MarkTokenUsed(token.ID)
+    h.tokenSvc.MarkUsed(token.ID)
 
     response.SuccessWithMessage(c, "Email verified successfully.", nil)
 }
 ```
 
-> **注意**：实际实现需要调整 EmailService 接口和 AuthService 方法
-
-- [ ] **Step 2: 提交**
+- [ ] **Step 3: 提交**
 
 ```bash
-git add backend/internal/handler/auth.go
+git add backend/internal/handler/auth.go backend/internal/service/auth.go backend/internal/model/user.go
 git commit -m "handler: add forgot-password, reset-password, verify-email endpoints"
 ```
 
@@ -912,3 +947,10 @@ git commit -m "test: add email service integration tests"
 7. Task 7: Auth Handler 新端点
 8. Task 8: 路由注册
 9. Task 9: 集成测试
+
+---
+
+## 未来增强（不在本次范围内）
+
+- **限流**: 每个 IP 每分钟最多 5 次 `forgot-password` 请求，每个邮箱每 15 分钟最多 1 封密码重置邮件
+- **登录提醒触发**: 在 AuthService.Login() 中调用 `SendLoginAlert`

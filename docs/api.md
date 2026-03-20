@@ -116,6 +116,103 @@ POST /api/v1/auth/logout
 
 ---
 
+### 忘记密码 - 请求重置验证码
+```
+POST /api/v1/auth/forgot-password
+```
+
+**请求体:**
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**响应:**
+```json
+{
+  "code": 0,
+  "message": "If the email exists, a reset code has been sent.",
+  "data": null
+}
+```
+
+---
+
+### 重置密码
+```
+POST /api/v1/auth/reset-password
+```
+
+**请求体:**
+```json
+{
+  "email": "user@example.com",
+  "code": "12345678",
+  "new_password": "newPass123"
+}
+```
+
+**响应:**
+```json
+{
+  "code": 0,
+  "message": "Password has been reset successfully.",
+  "data": null
+}
+```
+
+---
+
+### 验证邮箱
+```
+POST /api/v1/auth/verify-email
+```
+
+**请求体:**
+```json
+{
+  "email": "user@example.com",
+  "code": "12345678"
+}
+```
+
+**响应:**
+```json
+{
+  "code": 0,
+  "message": "Email verified successfully.",
+  "data": null
+}
+```
+
+---
+
+### 重新发送验证邮件
+```
+POST /api/v1/auth/send-verification
+```
+
+**请求体:**
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**需要认证**
+
+**响应:**
+```json
+{
+  "code": 0,
+  "message": "Verification email sent.",
+  "data": null
+}
+```
+
+---
+
 ## 用户接口
 
 ### 获取用户资料

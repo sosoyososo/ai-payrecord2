@@ -19,9 +19,9 @@
 
 **Purpose**: Project initialization and configuration
 
-- [ ] T001 Add Brevo and token encryption config fields in `backend/internal/config/config.go`
-- [ ] T002 Create Brevo API client in `backend/pkg/brevo/client.go`
-- [ ] T003 Create AES encryption utility in `backend/pkg/crypto/aes.go`
+- [X] T001 Add Brevo and token encryption config fields in `backend/internal/config/config.go`
+- [X] T002 Create Brevo API client in `backend/pkg/brevo/client.go`
+- [X] T003 Create AES encryption utility in `backend/pkg/crypto/aes.go`
 
 ---
 
@@ -31,10 +31,10 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create VerificationToken model in `backend/internal/model/verification_token.go`
-- [ ] T005 Create TokenService in `backend/internal/service/token.go`
-- [ ] T006 Add GetUserByEmail, MarkEmailVerified, UpdatePassword methods in `backend/internal/service/auth.go`
-- [ ] T007 Add email_verified field to User model in `backend/internal/model/user.go`
+- [X] T004 Create VerificationToken model in `backend/internal/model/verification_token.go`
+- [X] T005 Create TokenService in `backend/internal/service/token.go`
+- [X] T006 Add GetUserByEmail, MarkEmailVerified, UpdatePassword methods in `backend/internal/service/auth.go`
+- [X] T007 Add email_verified field to User model in `backend/internal/model/user.go`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -48,11 +48,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 Create EmailService with SendPasswordResetEmail in `backend/internal/service/email.go`
-- [ ] T009 Add ForgotPassword handler in `backend/internal/handler/auth.go`
-- [ ] T010 Add ResetPassword handler in `backend/internal/handler/auth.go`
-- [ ] T011 Register routes in `backend/cmd/server/main.go`: `/api/auth/forgot-password`, `/api/auth/reset-password`
-- [ ] T012 Add VerificationToken to AutoMigrate in `backend/cmd/server/main.go`
+- [X] T008 Create EmailService with SendPasswordResetEmail in `backend/internal/service/email.go`
+- [X] T009 Add ForgotPassword handler in `backend/internal/handler/auth.go`
+- [X] T010 Add ResetPassword handler in `backend/internal/handler/auth.go`
+- [X] T011 Register routes in `backend/cmd/server/main.go`: `/api/auth/forgot-password`, `/api/auth/reset-password`
+- [X] T012 Add VerificationToken to AutoMigrate in `backend/cmd/server/main.go`
 
 **Checkpoint**: Password reset flow should be fully functional
 
@@ -66,10 +66,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 Add SendEmailVerification method to EmailService in `backend/internal/service/email.go`
-- [ ] T014 Add VerifyEmail handler in `backend/internal/handler/auth.go`
-- [ ] T015 Add SendVerification handler (protected) in `backend/internal/handler/auth.go`
-- [ ] T016 Register routes in `backend/cmd/server/main.go`: `/api/auth/verify-email`, `/api/auth/send-verification`
+- [X] T013 Add SendEmailVerification method to EmailService in `backend/internal/service/email.go`
+- [X] T014 Add VerifyEmail handler in `backend/internal/handler/auth.go`
+- [X] T015 Add SendVerification handler (protected) in `backend/internal/handler/auth.go`
+- [X] T016 Register routes in `backend/cmd/server/main.go`: `/api/auth/verify-email`, `/api/auth/send-verification`
 
 **Checkpoint**: Email verification flow should be fully functional
 
@@ -83,7 +83,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T017 Add SendLoginAlert method to EmailService in `backend/internal/service/email.go`
+- [X] T017 Add SendLoginAlert method to EmailService in `backend/internal/service/email.go`
 
 **Note**: Login alert triggering is not implemented - just the email sending capability
 
@@ -96,7 +96,7 @@
 **Purpose**: Improvements that affect multiple user stories
 
 - [ ] T018 Verify all imports and dependencies are correct
-- [ ] T019 Build and verify compilation: `cd backend && go build ./...`
+- [X] T019 Build and verify compilation: `cd backend && go build ./...`
 - [ ] T020 Update API documentation in `docs/api.md`
 
 ---
@@ -171,28 +171,28 @@ Task: T007 - Add email_verified field
 
 ## File Paths Summary
 
-| Task | File |
-|------|------|
-| T001 | `backend/internal/config/config.go` |
-| T002 | `backend/pkg/brevo/client.go` |
-| T003 | `backend/pkg/crypto/aes.go` |
-| T004 | `backend/internal/model/verification_token.go` |
-| T005 | `backend/internal/service/token.go` |
-| T006 | `backend/internal/service/auth.go` |
-| T007 | `backend/internal/model/user.go` |
-| T008 | `backend/internal/service/email.go` |
-| T009 | `backend/internal/handler/auth.go` |
-| T010 | `backend/internal/handler/auth.go` |
-| T011 | `backend/cmd/server/main.go` |
-| T012 | `backend/cmd/server/main.go` |
-| T013 | `backend/internal/service/email.go` |
-| T014 | `backend/internal/handler/auth.go` |
-| T015 | `backend/internal/handler/auth.go` |
-| T016 | `backend/cmd/server/main.go` |
-| T017 | `backend/internal/service/email.go` |
-| T018 | All files |
-| T019 | `backend/` |
-| T020 | `docs/api.md` |
+| Task | File | Status |
+|------|------|--------|
+| T001 | `backend/internal/config/config.go` | ✅ |
+| T002 | `backend/pkg/brevo/client.go` | ✅ |
+| T003 | `backend/pkg/crypto/aes.go` | ✅ |
+| T004 | `backend/internal/model/verification_token.go` | ✅ |
+| T005 | `backend/internal/service/token.go` | ✅ |
+| T006 | `backend/internal/service/auth.go` | ✅ |
+| T007 | `backend/internal/model/user.go` | ✅ |
+| T008 | `backend/internal/service/email.go` | ✅ |
+| T009 | `backend/internal/handler/auth.go` | ✅ |
+| T010 | `backend/internal/handler/auth.go` | ✅ |
+| T011 | `backend/cmd/server/main.go` | ✅ |
+| T012 | `backend/cmd/server/main.go` | ✅ |
+| T013 | `backend/internal/service/email.go` | ✅ |
+| T014 | `backend/internal/handler/auth.go` | ✅ |
+| T015 | `backend/internal/handler/auth.go` | ✅ |
+| T016 | `backend/cmd/server/main.go` | ✅ |
+| T017 | `backend/internal/service/email.go` | ✅ |
+| T018 | All files | ⏳ |
+| T019 | `backend/` | ✅ |
+| T020 | `docs/api.md` | ⏳ |
 
 ---
 

@@ -132,8 +132,15 @@ lego --http --http.port=:8888 --domains=api.payrecord.ai.karsa.info --path=/var/
 
 | 文件 | 操作 |
 |------|------|
-| `.github/workflows/deploy-api.yml` | 新建 |
+| `.github/workflows/deploy-api.yml` | ✅ 已创建 |
 | `backend/.env` | 需要创建生产配置 |
+
+### 部署状态
+
+✅ **GitHub Actions 工作流已创建**
+- push 到 main 分支（backend/ 目录）自动构建部署
+- 使用 Docker (Ubuntu 16.04) 交叉编译 Go binary
+- 通过 SSH 上传到 VPS 并重启服务
 
 ### VPS 端需要创建
 - `/etc/systemd/system/ai-payrecord.service`

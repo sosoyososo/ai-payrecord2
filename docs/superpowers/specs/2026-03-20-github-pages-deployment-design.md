@@ -51,10 +51,12 @@ VITE_API_URL=https://api.payrecord.ai.karsa.info/api/v1
 
 | 文件 | 操作 |
 |------|------|
-| `.github/workflows/deploy.yml` | 新建 |
+| `.github/workflows/deploy.yml` | ✅ 已创建 |
 | `frontend/.env` | 已存在，VITE_API_URL 配置正确 |
 
 ## 6. 部署流程
+
+✅ **已实现** - GitHub Actions 自动部署
 
 ```
 开发者 push 到 main 分支

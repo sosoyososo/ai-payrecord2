@@ -16,6 +16,9 @@ const TagPage = lazy(() => import('@/pages/TagPage'))
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'))
 const ExportPage = lazy(() => import('@/pages/ExportPage'))
 const BudgetPage = lazy(() => import('@/pages/BudgetPage'))
+const EmailVerificationPage = lazy(() => import('@/pages/EmailVerificationPage'))
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'))
 
 function Loading() {
   return (
@@ -49,6 +52,9 @@ function App() {
       <Suspense fallback={<Loading />}>
         <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/verify-email" element={<EmailVerificationPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route element={<AppLayout />}>
           <Route
             path="/"

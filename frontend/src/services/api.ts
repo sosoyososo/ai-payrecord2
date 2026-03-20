@@ -45,7 +45,7 @@ api.interceptors.response.use(
 // Auth API
 export const authApi = {
   register: (data: { username: string; email: string; password: string; nickname?: string }) =>
-    api.post<{ code: number; message: string; data: AuthResponse }>('/auth/register', data),
+    api.post<{ code: number; message: string; data: { email: string } }>('/auth/register', data),
 
   login: (data: { email: string; password: string }) =>
     api.post<{ code: number; message: string; data: AuthResponse }>('/auth/login', data),
@@ -57,6 +57,20 @@ export const authApi = {
 
   logout: (refreshToken?: string) =>
     api.post('/auth/logout', { refresh_token: refreshToken }),
+
+  // Email verification
+  verifyEmail: (data: { email: string; code: string }) =>
+    api.post<{ code: number; message: string; data: null }>('/auth/verify-email', data),
+
+  sendVerification: (data: { email: string }) =>
+    api.post<{ code: number; message: string; data: null }>('/auth/send-verification', data),
+
+  // Password reset
+  forgotPassword: (data: { email: string }) =>
+    api.post<{ code: number; message: string; data: null }>('/auth/forgot-password', data),
+
+  resetPassword: (data: { email: string; code: string; new_password: string }) =>
+    api.post<{ code: number; message: string; data: null }>('/auth/reset-password', data),
 }
 
 // User API

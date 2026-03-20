@@ -44,12 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const register = async (username: string, email: string, password: string, nickname?: string) => {
-    const response = await authApi.register({ username, email, password, nickname })
-    const { access_token, refresh_token, user: userData } = response.data.data
-
-    localStorage.setItem('access_token', access_token)
-    localStorage.setItem('refresh_token', refresh_token)
-    setUser(userData)
+    // Register returns { email: string } - user must verify email before logging in
+    await authApi.register({ username, email, password, nickname })
+    // Don't store tokens or set user - redirect to email verification page
   }
 
   const logout = async () => {

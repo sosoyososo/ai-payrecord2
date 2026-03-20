@@ -67,7 +67,13 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	response.Success(c, resp)
+	// Send verification email
+	user, err := h.authService.GetUserByEmail(req.Email)
+	if err == nil {
+		h.emailService.SendEmailVerification(user.ID, user.Email, user.Nickname)
+	}
+
+	response.SuccessWithMessage(c, "Verification email sent. Please check your inbox.", resp)
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -81,6 +87,11 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	if err != nil {
 		if errors.Is(err, service.ErrInvalidCreds) {
 			response.BadRequest(c, "Invalid email or password")
+			return
+		}
+		// Check for email not verified error
+		if err.Error() == "please verify your email before logging in" {
+			response.BadRequest(c, "please verify your email before logging in")
 			return
 		}
 		response.InternalServerError(c, err.Error())

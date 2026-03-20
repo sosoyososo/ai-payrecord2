@@ -25,11 +25,11 @@
 
 ### Implementation
 
-- [ ] T001 [P] [US1] Modify `AuthService.Register()` in `backend/internal/service/auth.go` to return `{ email }` only instead of tokens, send verification email via `EmailService.SendEmailVerification()`
-- [ ] T002 [P] [US1] Update Register handler in `backend/internal/handler/auth.go` to call `SendEmailVerification()` after successful user creation
-- [ ] T003 [P] [US1] Add `EmailVerified` check in `AuthService.Login()` in `backend/internal/service/auth.go` - block login if `user.EmailVerified == false`
-- [ ] T004 [US1] Update Login handler in `backend/internal/handler/auth.go` to return proper error message when email not verified
-- [ ] T005 [US2] Move `send-verification` endpoint from protected to public routes in `backend/cmd/server/main.go`
+- [x] T001 [P] [US1] Modify `AuthService.Register()` in `backend/internal/service/auth.go` to return `{ email }` only instead of tokens, send verification email via `EmailService.SendEmailVerification()`
+- [x] T002 [P] [US1] Update Register handler in `backend/internal/handler/auth.go` to call `SendEmailVerification()` after successful user creation
+- [x] T003 [P] [US1] Add `EmailVerified` check in `AuthService.Login()` in `backend/internal/service/auth.go` - block login if `user.EmailVerified == false`
+- [x] T004 [US1] Update Login handler in `backend/internal/handler/auth.go` to return proper error message when email not verified
+- [x] T005 [US2] Move `send-verification` endpoint from protected to public routes in `backend/cmd/server/main.go`
 
 ### Verification
 
@@ -46,9 +46,9 @@ Expected: Build succeeds
 
 ### Implementation
 
-- [ ] T006 [P] Add `verifyEmail`, `sendVerification`, `forgotPassword`, `resetPassword` API methods to `frontend/src/services/api.ts`
-- [ ] T007 [P] Add i18n translations for email verification flow in `frontend/src/i18n/locales/en.json` (auth.forgotPassword, auth.verifyEmail, auth.verificationCode, etc.)
-- [ ] T008 [P] Add i18n translations for email verification flow in `frontend/src/i18n/locales/zh.json`
+- [x] T006 [P] Add `verifyEmail`, `sendVerification`, `forgotPassword`, `resetPassword` API methods to `frontend/src/services/api.ts`
+- [x] T007 [P] Add i18n translations for email verification flow in `frontend/src/i18n/locales/en.json` (auth.forgotPassword, auth.verifyEmail, auth.verificationCode, etc.)
+- [x] T008 [P] Add i18n translations for email verification flow in `frontend/src/i18n/locales/zh.json`
 
 ### Verification
 
@@ -63,12 +63,12 @@ Expected: Build succeeds with new API methods
 
 ### Implementation
 
-- [ ] T009 [P] [US1] Create `EmailVerificationPage.tsx` in `frontend/src/pages/` with code input, verify button, resend button, and back to login link
-- [ ] T010 [P] [US2] Create `ForgotPasswordPage.tsx` in `frontend/src/pages/` with email input and submit button
-- [ ] T011 [P] [US2] Create `ResetPasswordPage.tsx` in `frontend/src/pages/` with code input, new password input, confirm password input
-- [ ] T012 [US1] Update `LoginPage.tsx` to add "Forgot password?" link after password input, redirect to `/forgot-password`
-- [ ] T013 [US1] Update `LoginPage.tsx` handleSubmit - after `register()` call, redirect to `/verify-email?email={email}` instead of auto-login
-- [ ] T014 [US1] Add routes for `/verify-email`, `/forgot-password`, `/reset-password` in `frontend/src/App.tsx`
+- [x] T009 [P] [US1] Create `EmailVerificationPage.tsx` in `frontend/src/pages/` with code input, verify button, resend button, and back to login link
+- [x] T010 [P] [US2] Create `ForgotPasswordPage.tsx` in `frontend/src/pages/` with email input and submit button
+- [x] T011 [P] [US2] Create `ResetPasswordPage.tsx` in `frontend/src/pages/` with code input, new password input, confirm password input
+- [x] T012 [US1] Update `LoginPage.tsx` to add "Forgot password?" link after password input, redirect to `/forgot-password`
+- [x] T013 [US1] Update `LoginPage.tsx` handleSubmit - after `register()` call, redirect to `/verify-email?email={email}` instead of auto-login
+- [x] T014 [US1] Add routes for `/verify-email`, `/forgot-password`, `/reset-password` in `frontend/src/App.tsx`
 
 ### Verification
 

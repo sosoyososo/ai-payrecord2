@@ -38,6 +38,11 @@ type AuthResponse struct {
 	ExpiresIn    int64       `json:"expires_in"`
 }
 
+// RegisterResponse is returned after registration (before email verification)
+type RegisterResponse struct {
+	Email string `json:"email"`
+}
+
 type RefreshRequest struct {
 	RefreshToken string `json:"refresh_token" binding:"required"`
 }
@@ -48,7 +53,7 @@ func NewAuthService() *AuthService {
 	return &AuthService{}
 }
 
-func (s *AuthService) Register(req *RegisterRequest) (*AuthResponse, error) {
+func (s *AuthService) Register(req *RegisterRequest) (*RegisterResponse, error) {
 	db := database.GetDB()
 
 	// Check if user exists
@@ -69,13 +74,14 @@ func (s *AuthService) Register(req *RegisterRequest) (*AuthResponse, error) {
 		return nil, err
 	}
 
-	// Create user
+	// Create user - email_verified defaults to false
 	user := &model.User{
 		Username: req.Username,
 		Email:    req.Email,
 		Password: hashedPassword,
 		Nickname: req.Nickname,
 		Status:   1,
+		EmailVerified: false,
 	}
 
 	if err := db.Create(user).Error; err != nil {
@@ -101,22 +107,10 @@ func (s *AuthService) Register(req *RegisterRequest) (*AuthResponse, error) {
 	// Seed default tags for user
 	s.seedDefaultTags(db, user.ID)
 
-	// Generate tokens
-	accessToken, err := middleware.GenerateToken(user.ID, user.Username)
-	if err != nil {
-		return nil, err
-	}
+	// NOTE: Don't generate tokens here - user must verify email first
 
-	refreshToken, _, err := s.generateRefreshToken(db, user.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &AuthResponse{
-		User:         user,
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-		ExpiresIn:    int64(config.AppConfig.JWTExpiryHours * 3600),
+	return &RegisterResponse{
+		Email: user.Email,
 	}, nil
 }
 
@@ -135,6 +129,11 @@ func (s *AuthService) Login(req *LoginRequest) (*AuthResponse, error) {
 	// Check password
 	if !utils.CheckPassword(req.Password, user.Password) {
 		return nil, ErrInvalidCreds
+	}
+
+	// Check if email is verified
+	if !user.EmailVerified {
+		return nil, errors.New("please verify your email before logging in")
 	}
 
 	// Check user status

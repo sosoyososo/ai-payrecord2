@@ -28,10 +28,12 @@ export default function LoginPage() {
     try {
       if (isLogin) {
         await login(email, password)
+        navigate('/')
       } else {
         await register(username, email, password, nickname)
+        // After register, redirect to email verification page
+        navigate(`/verify-email?email=${encodeURIComponent(email)}`)
       }
-      navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred')
     } finally {
@@ -100,6 +102,17 @@ export default function LoginPage() {
                 disabled={loading}
               />
             </div>
+            {isLogin && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  className="text-sm text-primary hover:underline"
+                  onClick={() => navigate('/forgot-password')}
+                >
+                  {t('auth.forgotPassword')}
+                </button>
+              </div>
+            )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={loading}>

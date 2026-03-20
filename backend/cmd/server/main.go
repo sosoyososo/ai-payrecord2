@@ -70,6 +70,7 @@ func main() {
 			auth.POST("/forgot-password", authHandler.ForgotPassword)
 			auth.POST("/reset-password", authHandler.ResetPassword)
 			auth.POST("/verify-email", authHandler.VerifyEmail)
+			auth.POST("/send-verification", authHandler.SendVerification)
 		}
 
 		// Protected routes
@@ -78,7 +79,6 @@ func main() {
 		{
 			// Auth routes (protected)
 			protected.POST("/auth/logout", authHandler.Logout)
-			protected.POST("/auth/send-verification", authHandler.SendVerification)
 
 			// User routes
 			user := protected.Group("/user")

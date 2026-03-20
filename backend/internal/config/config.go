@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -15,6 +16,7 @@ type Config struct {
 	JWTExpiryHours int
 	OpenAIAPIKey string
 	AnthropicAPIKey string
+	AllowedOrigins []string
 }
 
 var AppConfig *Config
@@ -30,6 +32,7 @@ func Load() error {
 		JWTExpiryHours: getEnvInt("JWT_EXPIRY_HOURS", 24),
 		OpenAIAPIKey: getEnv("OPENAI_API_KEY", ""),
 		AnthropicAPIKey: getEnv("ANTHROPIC_API_KEY", ""),
+		AllowedOrigins: parseAllowedOrigins(getEnv("ALLOWED_ORIGINS", "")),
 	}
 
 	// Ensure DB directory exists
@@ -71,4 +74,19 @@ func getEnvInt(key string, defaultValue int) int {
 
 func (c *Config) JWTExpiryHoursFromNow() time.Time {
 	return time.Now().Add(time.Duration(c.JWTExpiryHours) * time.Hour)
+}
+
+func parseAllowedOrigins(env string) []string {
+	if env == "" {
+		return []string{}
+	}
+	origins := strings.Split(env, ",")
+	result := make([]string, 0, len(origins))
+	for _, o := range origins {
+		trimmed := strings.TrimSpace(o)
+		if trimmed != "" {
+			result = append(result, trimmed)
+		}
+	}
+	return result
 }

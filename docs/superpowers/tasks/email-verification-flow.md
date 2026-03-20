@@ -85,9 +85,9 @@ Expected: All new pages compile without errors
 
 ### Implementation
 
-- [ ] T015 [P] Verify complete registration flow: register → verify-email page → email received → verify → login
-- [ ] T016 [P] Verify complete password reset flow: forgot-password → reset-password page → enter code + new password → login
-- [ ] T017 [P] Verify login is blocked for unverified users with proper error message
+- [x] T015 [P] Verify complete registration flow: register → verify-email page → email received → verify → login
+- [x] T016 [P] Verify complete password reset flow: forgot-password → reset-password page → enter code + new password → login
+- [x] T017 [P] Verify login is blocked for unverified users with proper error message
 
 ### Verification
 

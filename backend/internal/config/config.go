@@ -17,6 +17,10 @@ type Config struct {
 	OpenAIAPIKey string
 	AnthropicAPIKey string
 	AllowedOrigins []string
+	BrevoAPIKey        string
+	BrevoSenderEmail   string
+	BrevoSenderName    string
+	TokenEncryptionKey string
 }
 
 var AppConfig *Config
@@ -33,6 +37,10 @@ func Load() error {
 		OpenAIAPIKey: getEnv("OPENAI_API_KEY", ""),
 		AnthropicAPIKey: getEnv("ANTHROPIC_API_KEY", ""),
 		AllowedOrigins: parseAllowedOrigins(getEnv("ALLOWED_ORIGINS", "")),
+		BrevoAPIKey:        getEnv("BREVO_API_KEY", ""),
+		BrevoSenderEmail:   getEnv("BREVO_SENDER_EMAIL", "noreply@example.com"),
+		BrevoSenderName:    getEnv("BREVO_SENDER_NAME", "AI PayRecord"),
+		TokenEncryptionKey: getEnv("TOKEN_ENCRYPTION_KEY", ""),
 	}
 
 	// Ensure DB directory exists

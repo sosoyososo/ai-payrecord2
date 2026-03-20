@@ -14,11 +14,9 @@ import (
 )
 
 var (
-	ErrUserExists     = errors.New("user already exists")
-	ErrInvalidCreds  = errors.New("invalid credentials")
-	ErrUserNotFound  = errors.New("user not found")
-	ErrTokenInvalid  = errors.New("invalid token")
-	ErrTokenExpired  = errors.New("token expired")
+	ErrUserExists    = errors.New("user already exists")
+	ErrInvalidCreds = errors.New("invalid credentials")
+	ErrUserNotFound = errors.New("user not found")
 )
 
 type RegisterRequest struct {
@@ -320,4 +318,30 @@ func (s *AuthService) seedDefaultTags(db *gorm.DB, userID uint) {
 			Status:   1,
 		})
 	}
+}
+
+func (s *AuthService) GetUserByEmail(email string) (*model.User, error) {
+	db := database.GetDB()
+	var user model.User
+	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (s *AuthService) MarkEmailVerified(userID uint) error {
+	db := database.GetDB()
+	return db.Model(&model.User{}).Where("id = ?", userID).Update("email_verified", true).Error
+}
+
+func (s *AuthService) UpdatePassword(userID uint, newPassword string) error {
+	db := database.GetDB()
+	hashedPassword, err := utils.HashPassword(newPassword)
+	if err != nil {
+		return err
+	}
+	return db.Model(&model.User{}).Where("id = ?", userID).Update("password", hashedPassword).Error
 }

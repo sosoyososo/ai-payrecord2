@@ -4,10 +4,24 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    // GitHub Pages SPA fallback - redirect 404s to index.html
-    var path = window.location.pathname;
-    var search = window.location.search || '';
-    window.location.replace('/' + path + search);
+    // SPA fallback - redirect to index.html with original path
+    (function() {
+      var path = window.location.pathname;
+      var search = window.location.search || '';
+      var hash = window.location.hash || '';
+
+      // 构建目标路径 - 使用相对路径
+      var dest = 'index.html';
+      if (path !== '/' && path.length > 1) {
+        // 保留路径信息，但交给前端路由处理
+        dest = 'index.html';
+      }
+      // 追加原始查询参数和hash
+      if (search) dest += search;
+      if (hash) dest += hash;
+
+      window.location.replace(dest);
+    })();
   </script>
 </head>
 <body>

@@ -367,7 +367,35 @@
 
 ---
 
-## 10. Export
+## 10. SPA Routing
+
+### TC-UI-SPA-001: Login Page Refresh URL Preservation
+- **ID**: TC-UI-SPA-001
+- **Feature**: SPA Route Refresh
+- **Preconditions**: App running, at login page
+- **URL**: http://localhost:5173/login
+- **Test Steps**:
+  1. Navigate to /login
+  2. Refresh the page (F5)
+  3. Check the URL in browser address bar
+- **Expected**: URL remains /login (not https://login/ or other malformed URL)
+- **Status**: ✅ Tested (2026-03-23)
+
+### TC-UI-SPA-002: Protected Page Refresh URL Preservation
+- **ID**: TC-UI-SPA-002
+- **Feature**: SPA Route Refresh
+- **Preconditions**: Logged in, app running
+- **URL**: http://localhost:5173/add
+- **Test Steps**:
+  1. Navigate to /add
+  2. Refresh the page (F5)
+  3. Check the URL in browser address bar
+- **Expected**: URL remains /add
+- **Status**: ⏳ Not tested
+
+---
+
+## 11. Export
 
 ### TC-UI-EXPORT-001: Export Data
 - **ID**: TC-UI-EXPORT-001

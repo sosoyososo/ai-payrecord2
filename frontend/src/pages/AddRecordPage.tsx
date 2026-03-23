@@ -8,6 +8,22 @@ import { RecordForm } from '@/components/RecordForm'
 import type { Category, Ledger, Tag } from '@/types'
 import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react'
 
+interface LLMCategorySuggestion {
+  name: string
+  icon: string
+  color: string
+  type: number
+  confidence: number
+}
+
+// Helper to convert ISO8601 datetime to datetime-local format (YYYY-MM-DDTHH:mm)
+const convertToDateTimeLocal = (isoString: string): string => {
+  if (!isoString) return ''
+  const date = new Date(isoString)
+  if (isNaN(date.getTime())) return ''
+  return date.toISOString().slice(0, 16)
+}
+
 export default function AddRecordPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -29,6 +45,8 @@ export default function AddRecordPage() {
   // AI parsing
   const [aiInput, setAiInput] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState<string | null>(null)
+  const [suggestedCategories, setSuggestedCategories] = useState<LLMCategorySuggestion[]>([])
 
   useEffect(() => {
     loadData()
@@ -58,15 +76,49 @@ export default function AddRecordPage() {
     try {
       const response = await llmApi.parse(aiInput)
       const data = response.data.data
+
       if (data.amount) setAmount(data.amount.toString())
       if (data.type) setType(data.type as 1 | 2)
-      if (data.date) setDate(data.date)
+      if (data.date) setDate(convertToDateTimeLocal(data.date))
       if (data.note) setNote(data.note)
+
+      if (data.category_id && data.category_id > 0) {
+        setCategoryId(data.category_id)
+        setNewCategoryName(null)
+      } else if (data.category_name) {
+        const matched = categories.find(c => c.name === data.category_name)
+        if (matched) {
+          setCategoryId(matched.id)
+          setNewCategoryName(null)
+        } else {
+          setNewCategoryName(data.category_name)
+          setCategoryId(0)
+        }
+      }
+
+      if (data.tags && data.tags.length > 0) {
+        const matchedTagIds = tags
+          .filter(t => data.tags.includes(t.name))
+          .map(t => t.id)
+        setTagIds(matchedTagIds)
+      }
+
+      if (data.suggested_categories && data.suggested_categories.length > 0) {
+        setSuggestedCategories(data.suggested_categories)
+      }
+
+      setAiInput('')
     } catch (error) {
       console.error('AI parse failed:', error)
     } finally {
       setAiLoading(false)
     }
+  }
+
+  const handleAiInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAiInput(e.target.value)
+    if (newCategoryName) setNewCategoryName(null)
+    if (suggestedCategories.length > 0) setSuggestedCategories([])
   }
 
   const handleSubmit = async () => {
@@ -119,7 +171,7 @@ export default function AddRecordPage() {
           <Input
             placeholder={t('addRecord.voiceInputPlaceholder')}
             value={aiInput}
-            onChange={(e) => setAiInput(e.target.value)}
+            onChange={handleAiInputChange}
             onKeyDown={(e) => e.key === 'Enter' && handleAiParse()}
             className="pr-12"
           />
@@ -137,6 +189,83 @@ export default function AddRecordPage() {
             )}
           </Button>
         </div>
+        {/* New Category Suggestion */}
+        {newCategoryName && (
+          <div className="mt-3 p-3 bg-primary/10 rounded-lg flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm">
+                Create new category: <strong>"{newCategoryName}"</strong>?
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const res = await categoryApi.create({
+                      name: newCategoryName,
+                      type: type,
+                      icon: 'folder',
+                      color: '#666',
+                    })
+                    const newCat = res.data.data
+                    setCategories(prev => [...prev, newCat])
+                    setCategoryId(newCat.id)
+                    setNewCategoryName(null)
+                  } catch (error) {
+                    console.error('Failed to create category:', error)
+                  }
+                }}
+              >
+                Create
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setNewCategoryName(null)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+        {/* Suggested Categories */}
+        {suggestedCategories.length > 0 && !newCategoryName && (
+          <div className="mt-3 p-3 bg-primary/5 rounded-lg">
+            <div className="text-sm text-muted-foreground mb-2">Suggested categories:</div>
+            <div className="flex flex-wrap gap-2">
+              {suggestedCategories.map((suggestion, index) => (
+                <Button
+                  key={index}
+                  size="sm"
+                  variant="outline"
+                  onClick={async () => {
+                    const existing = categories.find(c => c.name === suggestion.name)
+                    if (existing) {
+                      setCategoryId(existing.id)
+                      setSuggestedCategories([])
+                    } else {
+                      try {
+                        const res = await categoryApi.create({
+                          name: suggestion.name,
+                          type: type,
+                          icon: suggestion.icon || 'folder',
+                          color: suggestion.color || '#666',
+                        })
+                        const newCat = res.data.data
+                        setCategories(prev => [...prev, newCat])
+                        setCategoryId(newCat.id)
+                        setSuggestedCategories([])
+                      } catch (error) {
+                        console.error('Failed to create suggested category:', error)
+                      }
+                    }
+                  }}
+                >
+                  {suggestion.name}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Form */}

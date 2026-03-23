@@ -44,15 +44,35 @@ type LLMStructuredRecord struct {
 	NewCategoryName string   `json:"new_category_name,omitempty"`
 }
 
-type LLMService struct{}
-
-func NewLLMService() *LLMService {
-	return &LLMService{}
+type LLMService struct {
+	llmClient *LLMClient
 }
 
-// Simple rule-based parser for natural language
-// In production, this would call OpenAI/Anthropic APIs
+func NewLLMService() *LLMService {
+	return &LLMService{
+		llmClient: NewLLMClient(),
+	}
+}
+
+// ParseNaturalLanguage uses DeepSeek LLM to parse natural language
+// Falls back to rule-based parsing if LLM is unavailable
 func (s *LLMService) ParseNaturalLanguage(userID uint, text string) (*LLMParsedRecord, error) {
+	// Try LLM first if configured
+	if s.llmClient != nil && s.llmClient.IsConfigured() {
+		result, err := s.llmClient.ParseWithLLM(userID, text)
+		if err == nil && result != nil {
+			return result, nil
+		}
+		// Log error but continue to fallback
+		fmt.Printf("LLM parsing failed, using fallback: %v\n", err)
+	}
+
+	// Fallback to rule-based parsing
+	return s.ruleBasedParse(userID, text)
+}
+
+// ruleBasedParse is the original rule-based parser used as fallback
+func (s *LLMService) ruleBasedParse(userID uint, text string) (*LLMParsedRecord, error) {
 	result := &LLMParsedRecord{
 		Date: time.Now(),
 		Tags: []string{},

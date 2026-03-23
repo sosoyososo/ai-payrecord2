@@ -21,6 +21,9 @@ type Config struct {
 	BrevoSenderEmail   string
 	BrevoSenderName    string
 	TokenEncryptionKey string
+	DeepSeekAPIKey string
+	DeepSeekAPIUrl string
+	DeepSeekModel string
 }
 
 var AppConfig *Config
@@ -41,6 +44,9 @@ func Load() error {
 		BrevoSenderEmail:   getEnv("BREVO_SENDER_EMAIL", "noreply@example.com"),
 		BrevoSenderName:    getEnv("BREVO_SENDER_NAME", "AI PayRecord"),
 		TokenEncryptionKey: getEnv("TOKEN_ENCRYPTION_KEY", ""),
+		DeepSeekAPIKey: getEnv("DEEPSEEK_API_KEY", ""),
+		DeepSeekAPIUrl: getEnv("DEEPSEEK_API_URL", "https://api.deepseek.com/v1/chat/completions"),
+		DeepSeekModel: getEnv("DEEPSEEK_MODEL", "deepseek-chat"),
 	}
 
 	// Ensure DB directory exists

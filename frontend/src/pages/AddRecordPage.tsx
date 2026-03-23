@@ -79,7 +79,10 @@ export default function AddRecordPage() {
 
       if (data.amount) setAmount(data.amount.toString())
       if (data.type) setType(data.type as 1 | 2)
-      if (data.date) setDate(convertToDateTimeLocal(data.date))
+      if (data.date) {
+        const converted = convertToDateTimeLocal(data.date)
+        if (converted) setDate(converted)
+      }
       if (data.note) setNote(data.note)
 
       if (data.category_id && data.category_id > 0) {

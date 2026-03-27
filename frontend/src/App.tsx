@@ -46,6 +46,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+function UnknownRoute() {
+  const { user } = useAuth()
+  return <Navigate to={user ? '/' : '/login'} replace />
+}
+
 function App() {
   return (
     <ThemeProvider>
@@ -156,6 +161,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<UnknownRoute />} />
         </Route>
       </Routes>
       </Suspense>

@@ -51,20 +51,23 @@ export default function HomePage() {
 
   useEffect(() => {
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      const filtered = records.filter(
-        (r) =>
-          r.note?.toLowerCase().includes(query) ||
-          r.category?.name.toLowerCase().includes(query) ||
-          r.tags?.some((t) => t.name.toLowerCase().includes(query))
-      )
-      setFilteredRecords(filtered)
+      setFilteredRecords(filterRecords(records, searchQuery))
     } else {
       setFilteredRecords(records)
     }
   }, [searchQuery, records])
 
-  const loadData = async (targetLedgerId?: number) => {
+  const filterRecords = (recs: Record[], query: string) => {
+    const q = query.toLowerCase()
+    return recs.filter(
+      (r) =>
+        r.note?.toLowerCase().includes(q) ||
+        r.category?.name.toLowerCase().includes(q) ||
+        r.tags?.some((t) => t.name.toLowerCase().includes(q))
+    )
+  }
+
+  const loadData = async (targetLedgerId?: number, page: number = 1) => {
     try {
       const [ledgersRes, currentRes] = await Promise.all([
         ledgerApi.list(),
@@ -72,7 +75,7 @@ export default function HomePage() {
       ])
       const currentLedgerId = targetLedgerId ?? currentRes.data.data?.id
       const [recordsRes, summaryRes] = await Promise.all([
-        recordApi.list({ ledger_id: currentLedgerId, page: 1, page_size: 100 }),
+        recordApi.list({ ledger_id: currentLedgerId, page: page, page_size: 20 }),
         statsApi.getSummary(new Date().getFullYear(), currentLedgerId),
       ])
 
@@ -80,14 +83,27 @@ export default function HomePage() {
       setCurrentLedger(currentRes.data.data || null)
 
       const recordsData = recordsRes.data.data
-      setRecords(recordsData?.data || [])
-      setFilteredRecords(recordsData?.data || [])
+      const newRecords = recordsData?.data || []
+
+      if (page === 1) {
+        setRecords(newRecords)
+        setFilteredRecords(searchQuery ? filterRecords(newRecords, searchQuery) : newRecords)
+      } else {
+        setRecords(prev => [...prev, ...newRecords])
+        setFilteredRecords(prev => searchQuery ? filterRecords([...prev, ...newRecords], searchQuery) : [...prev, ...newRecords])
+      }
+
+      setCurrentPage(page)
+      const total = recordsData?.total || 0
+      setHasMore(recordsData?.data?.length > 0 && (page * 20) < total)
 
       setSummary(summaryRes.data.data || null)
       setLoading(false)
+      setLoadingMore(false)
     } catch (error) {
       console.error('Failed to load data:', error)
       setLoading(false)
+      setLoadingMore(false)
     }
   }
 

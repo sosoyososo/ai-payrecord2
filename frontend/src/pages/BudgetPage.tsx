@@ -5,6 +5,7 @@ import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import SafeAreaView from '@/components/SafeAreaView'
 import { ArrowLeft, Save, AlertTriangle } from 'lucide-react'
 
 export default function BudgetPage() {
@@ -55,6 +56,7 @@ export default function BudgetPage() {
   }
 
   return (
+    <SafeAreaView edges={['top']}>
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
       {/* 顶部标题栏 */}
       <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
@@ -142,5 +144,6 @@ export default function BudgetPage() {
         </Card>
       </div>
     </div>
+    </SafeAreaView>
   )
 }

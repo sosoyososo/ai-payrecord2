@@ -75,7 +75,7 @@ export default function HomePage() {
       ])
       const currentLedgerId = targetLedgerId ?? currentRes.data.data?.id
       const [recordsRes, summaryRes] = await Promise.all([
-        recordApi.list({ ledger_id: currentLedgerId, page: page, page_size: 20 }),
+        recordApi.list({ ledger_id: currentLedgerId, page: page, page_size: 100 }),
         statsApi.getSummary(new Date().getFullYear(), currentLedgerId),
       ])
 
@@ -95,7 +95,7 @@ export default function HomePage() {
 
       setCurrentPage(page)
       const total = recordsData?.total || 0
-      setHasMore(recordsData?.data?.length > 0 && (page * 20) < total)
+      setHasMore(recordsData?.data?.length > 0 && (page * 100) < total)
 
       setSummary(summaryRes.data.data || null)
       setLoading(false)

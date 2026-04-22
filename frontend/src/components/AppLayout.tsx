@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Home, BarChart3, PiggyBank, Settings, Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
+import SafeAreaView from './SafeAreaView'
 
 const navItems = [
   { path: '/', icon: Home, labelKey: 'nav.home' },
@@ -76,10 +77,10 @@ export default function AppLayout() {
 
   // 手机/平板: 底部导航 + 内容区
   return (
-    <div className="min-h-screen pb-16 dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100">
+    <SafeAreaView edges={['top']} className="min-h-screen pb-16 dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100">
       <Outlet />
       {/* 底部导航栏 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t dark:border-slate-700 safe-area-bottom">
+      <SafeAreaView edges={['bottom']} className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t dark:border-slate-700">
         <div className="flex justify-around items-center h-14">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path
@@ -97,7 +98,7 @@ export default function AppLayout() {
             )
           })}
         </div>
-      </nav>
-    </div>
+      </SafeAreaView>
+    </SafeAreaView>
   )
 }

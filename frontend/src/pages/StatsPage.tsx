@@ -1,3 +1,4 @@
+import SafeAreaView from '@/components/SafeAreaView'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -96,6 +97,7 @@ export default function StatsPage() {
   }
 
   return (
+    <SafeAreaView edges={['top']}>
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
       {/* 顶部标题栏 */}
       <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
@@ -305,5 +307,6 @@ export default function StatsPage() {
         )}
       </div>
     </div>
+    </SafeAreaView>
   )
 }

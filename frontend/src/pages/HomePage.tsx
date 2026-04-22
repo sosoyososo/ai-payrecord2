@@ -293,6 +293,26 @@ const switchLedger = async (ledgerId: number) => {
             </Card>
           ))}
 
+          {!loading && filteredRecords.length > 0 && hasMore && (
+          <div className="flex justify-center py-4">
+            <Button
+              variant="outline"
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="w-full"
+            >
+              {loadingMore ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+                  加载中...
+                </span>
+              ) : (
+                '加载更多'
+              )}
+            </Button>
+          </div>
+        )}
+
           {!loading && filteredRecords.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
               <p>{searchQuery ? t('home.noMatchRecords') : t('home.noRecords')}</p>

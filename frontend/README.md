@@ -7,6 +7,32 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
+## iOS 开发
+
+### 同步并运行到模拟器
+```bash
+npm run build                    # 构建 Web 到 dist/
+npx cap sync ios                 # 同步到 iOS 项目
+npx cap run ios                  # 构建并运行到模拟器
+```
+
+### 列出可用模拟器目标
+```bash
+npx cap run ios --list
+```
+
+### 指定目标运行
+```bash
+npx cap run ios --target "iPhone 16 Pro"
+```
+
+### 仅打开 Xcode（不运行）
+```bash
+npx cap open ios
+```
+
+---
+
 ## React Compiler
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).

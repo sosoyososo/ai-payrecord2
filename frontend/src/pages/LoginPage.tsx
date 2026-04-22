@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import SafeAreaView from '@/components/SafeAreaView'
 import { Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
@@ -42,6 +43,7 @@ export default function LoginPage() {
   }
 
   return (
+    <SafeAreaView edges={['top']}>
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 p-4">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-1 text-center">
@@ -133,5 +135,6 @@ export default function LoginPage() {
         </form>
       </Card>
     </div>
+    </SafeAreaView>
   )
 }

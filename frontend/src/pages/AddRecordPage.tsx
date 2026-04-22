@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, categoryApi, ledgerApi, tagApi, llmApi } from '@/services/api'
+import SafeAreaView from '@/components/SafeAreaView'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { RecordForm } from '@/components/RecordForm'
@@ -157,7 +158,8 @@ export default function AddRecordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
+    <SafeAreaView edges={['top']}>
+      <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
       {/* Header */}
       <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
@@ -304,7 +306,6 @@ export default function AddRecordPage() {
             tags: t('tag.title'),
           }}
         />
-      </div>
-    </div>
+      </SafeAreaView>
   )
 }

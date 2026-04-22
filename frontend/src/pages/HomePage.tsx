@@ -10,6 +10,7 @@ import { LedgerSelector } from '@/components/LedgerSelector'
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
+import SafeAreaView from '@/components/SafeAreaView'
 import { Plus, TrendingUp, TrendingDown, Search, X, Wallet, Pencil, Trash2 } from 'lucide-react'
 import PullToRefresh from 'react-pull-to-refresh'
 
@@ -105,6 +106,7 @@ export default function HomePage() {
   }
 
   return (
+    <SafeAreaView edges={['top']}>
     <PullToRefresh
       onRefresh={loadData}
       distanceToRefresh={80}
@@ -292,5 +294,6 @@ export default function HomePage() {
       />
     </div>
     </PullToRefresh>
+    </SafeAreaView>
   )
 }

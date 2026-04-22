@@ -107,12 +107,21 @@ export default function HomePage() {
     }
   }
 
-  const switchLedger = async (ledgerId: number) => {
-    await ledgerApi.setCurrent(ledgerId)
-    const newLedger = ledgers.find(l => l.id === ledgerId)
-    setCurrentLedger(newLedger || null)
-    loadData(ledgerId)
+  const loadMore = () => {
+  if (!loadingMore && hasMore) {
+    setLoadingMore(true)
+    loadData(currentLedger?.id, currentPage + 1)
   }
+}
+
+const switchLedger = async (ledgerId: number) => {
+  await ledgerApi.setCurrent(ledgerId)
+  const newLedger = ledgers.find(l => l.id === ledgerId)
+  setCurrentLedger(newLedger || null)
+  setCurrentPage(1)
+  setHasMore(true)
+  loadData(ledgerId, 1)
+}
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)

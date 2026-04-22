@@ -7,6 +7,7 @@ import { userApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import SafeAreaView from '@/components/SafeAreaView'
 import { ArrowLeft, User, Lock, Save, Loader2, Download, Moon, Sun, Monitor, Wallet, Globe, LogOut, Tags, Layers } from 'lucide-react'
 
 export default function SettingsPage() {
@@ -77,6 +78,7 @@ export default function SettingsPage() {
   }
 
   return (
+    <SafeAreaView edges={['top']}>
     <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
       {/* 顶部标题栏 */}
       <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
@@ -314,5 +316,6 @@ export default function SettingsPage() {
         </Card>
       </div>
     </div>
+    </SafeAreaView>
   )
 }

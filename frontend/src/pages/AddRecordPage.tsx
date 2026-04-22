@@ -306,6 +306,8 @@ export default function AddRecordPage() {
             tags: t('tag.title'),
           }}
         />
-      </SafeAreaView>
+      </div>
+      </div>
+    </SafeAreaView>
   )
 }

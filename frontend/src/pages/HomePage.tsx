@@ -12,7 +12,6 @@ import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import SafeAreaView from '@/components/SafeAreaView'
 import { Plus, TrendingUp, TrendingDown, Search, X, Wallet, Pencil, Trash2 } from 'lucide-react'
-import PullToRefresh from 'react-pull-to-refresh'
 
 export default function HomePage() {
   const { t } = useTranslation()
@@ -135,11 +134,6 @@ const switchLedger = async (ledgerId: number) => {
 
   return (
     <SafeAreaView edges={['top']}>
-    <PullToRefresh
-      onRefresh={loadData}
-      distanceToRefresh={80}
-      className="min-h-screen"
-    >
       <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
 
       {/* 顶部标题栏 */}
@@ -341,7 +335,6 @@ const switchLedger = async (ledgerId: number) => {
         cancelText={t('confirm.cancel')}
       />
     </div>
-    </PullToRefresh>
     </SafeAreaView>
   )
 }

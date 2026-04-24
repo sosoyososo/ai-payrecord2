@@ -435,6 +435,70 @@
 
 ---
 
+## 12. Page Layout Framework
+
+### TC-UI-LAYOUT-001: iOS Simulator Scroll Behavior
+- **ID**: TC-UI-LAYOUT-001
+- **Feature**: Single Scroll Container
+- **Preconditions**: Logged in, iOS Simulator running
+- **Test Steps**:
+  1. Navigate to home page
+  2. Scroll the content
+- **Expected**: Single smooth scroll, no double-scroll or choppy behavior
+- **Status**: ⏳ Not tested
+
+### TC-UI-LAYOUT-002: Android Device Scroll Behavior
+- **ID**: TC-UI-LAYOUT-002
+- **Feature**: Single Scroll Container
+- **Preconditions**: Logged in, Android device connected
+- **Test Steps**:
+  1. Navigate to home page
+  2. Scroll the content
+- **Expected**: Single smooth scroll, no double-scroll or choppy behavior
+- **Status**: ⏳ Not tested
+
+### TC-UI-LAYOUT-003: Swipe Back Gesture
+- **ID**: TC-UI-LAYOUT-003
+- **Feature**: iOS Swipe Back
+- **Preconditions**: Logged in, on a sub-page (not home)
+- **Test Steps**:
+  1. Navigate to /add
+  2. Swipe from left edge toward right
+- **Expected**: Returns to previous page
+- **Status**: ⏳ Not tested
+
+### TC-UI-LAYOUT-004: Header Display
+- **ID**: TC-UI-LAYOUT-004
+- **Feature**: Unified Header
+- **Preconditions**: Logged in
+- **Test Steps**:
+  1. Navigate to /settings
+  2. Check header shows title and back button
+- **Expected**: Header correctly shows "设置" title and back button
+- **Status**: ⏳ Not tested
+
+### TC-UI-LAYOUT-005: FAB Position
+- **ID**: TC-UI-LAYOUT-005
+- **Feature**: FAB Placement
+- **Preconditions**: Logged in, on home page
+- **Test Steps**:
+  1. Navigate to home page
+  2. Check FAB position
+- **Expected**: FAB positioned above TabBar, not overlapping
+- **Status**: ⏳ Not tested
+
+### TC-UI-LAYOUT-006: Safe Area Margins
+- **ID**: TC-UI-LAYOUT-006
+- **Feature**: Safe Area Handling
+- **Preconditions**: Logged in, device with notch (iPhone X+)
+- **Test Steps**:
+  1. Navigate through all pages
+  2. Check top and bottom margins
+- **Expected**: Content not covered by notch or home indicator
+- **Status**: ⏳ Not tested
+
+---
+
 ## Test Environment
 
 - **Frontend**: http://localhost:5173

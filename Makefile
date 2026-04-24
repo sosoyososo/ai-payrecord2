@@ -39,8 +39,11 @@ sync-ios: ## 同步 Web 资源到 iOS 项目
 open-ios: ## 在 Xcode 中打开 iOS 项目
 	cd frontend && npx cap open ios
 
-run-ios: ## 构建并运行到 iOS 模拟器
-	cd frontend && npx cap run ios$(if $(TARGET), --target "$(TARGET)",)
+# iOS 模拟器 ID (iPhone 16 Pro)
+IOS_SIMULATOR_ID := 9089CB1B-25C2-4D56-AB5A-BB65DAFBF434
+
+run-ios: ## 构建并运行到 iOS 模拟器 (默认使用 iPhone 16 Pro)
+	cd frontend && npx cap run ios --target "$(IOS_SIMULATOR_ID)"
 
 dev-ios: build sync-ios run-ios ## 完整开发流程: 构建 + 同步 + 运行 iOS
 

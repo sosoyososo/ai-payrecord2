@@ -22,17 +22,7 @@ export default function AppLayout() {
   const { user, loading } = useAuth()
   const [isDesktop, setIsDesktop] = useState(false)
 
-  // Handle loading state
-  if (loading) {
-    return <Loading />
-  }
-
-  // Handle not authenticated - redirect to login
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
-
-  // Check screen size
+  // Screen size check - must be called on every render before conditionals
   useEffect(() => {
     const checkScreen = () => {
       setIsDesktop(window.innerWidth > 1024)
@@ -41,6 +31,16 @@ export default function AppLayout() {
     window.addEventListener('resize', checkScreen)
     return () => window.removeEventListener('resize', checkScreen)
   }, [])
+
+  // Handle loading state - after all hooks
+  if (loading) {
+    return <Loading />
+  }
+
+  // Handle not authenticated - after all hooks
+  if (!user) {
+    return <Navigate to="/login" replace />
+  }
 
   // Desktop layout with sidebar nav
   if (isDesktop) {

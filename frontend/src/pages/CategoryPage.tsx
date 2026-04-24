@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { categoryApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
@@ -8,8 +7,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import { IconPicker } from '@/components/IconPicker'
 import { CategoryIcon } from '@/components/CategoryIcon'
+import PageContainer from '@/components/PageContainer'
 import type { Category } from '@/types'
-import { ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
 const DEFAULT_COLORS = [
   '#FF5722', '#2196F3', '#E91E63', '#9C27B0', '#795548',
@@ -18,7 +18,6 @@ const DEFAULT_COLORS = [
 
 export default function CategoryPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -107,17 +106,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* 顶部标题栏 */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('category.title')}</span>
-        </div>
-      </header>
-
+    <PageContainer title={t('category.title')} showBackButton>
       <div className="max-w-md mx-auto px-4 py-4 space-y-6">
         {/* Income Categories */}
         <div>
@@ -305,18 +294,18 @@ export default function CategoryPage() {
             {t('category.addCategory')}
           </Button>
         )}
-      </div>
 
-      {/* Delete Confirmation Dialog */}
-      <DeleteConfirmDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        onConfirm={confirmDelete}
-        title={t('confirm.deleteCategory')}
-        description={t('confirm.deleteCategoryDesc')}
-        confirmText={t('confirm.delete')}
-        cancelText={t('confirm.cancel')}
-      />
-    </div>
+        {/* Delete Confirmation Dialog */}
+        <DeleteConfirmDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          onConfirm={confirmDelete}
+          title={t('confirm.deleteCategory')}
+          description={t('confirm.deleteCategoryDesc')}
+          confirmText={t('confirm.delete')}
+          cancelText={t('confirm.cancel')}
+        />
+      </div>
+    </PageContainer>
   )
 }

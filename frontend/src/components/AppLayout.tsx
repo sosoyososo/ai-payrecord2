@@ -4,6 +4,8 @@ import { Home, BarChart3, PiggyBank, Settings, Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import SafeAreaView from './SafeAreaView'
+import AppHeader from './AppHeader'
+import { HeaderProvider } from '@/contexts/HeaderContext'
 
 const navItems = [
   { path: '/', icon: Home, labelKey: 'nav.home' },
@@ -11,6 +13,34 @@ const navItems = [
   { path: '/budget', icon: PiggyBank, labelKey: 'nav.budget' },
   { path: '/settings', icon: Settings, labelKey: 'nav.settings' },
 ]
+
+function TabBar() {
+  const { t } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  return (
+    <SafeAreaView edges={['bottom']} className="bg-white dark:bg-slate-900 border-t dark:border-slate-700">
+      <div className="flex justify-around items-center h-14">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
+                isActive ? 'text-primary' : 'text-muted-foreground'
+              }`}
+            >
+              <item.icon className="h-5 w-5" />
+              <span className="text-xs mt-1">{t(item.labelKey)}</span>
+            </button>
+          )
+        })}
+      </div>
+    </SafeAreaView>
+  )
+}
 
 export default function AppLayout() {
   const { t } = useTranslation()
@@ -77,28 +107,16 @@ export default function AppLayout() {
 
   // 手机/平板: 底部导航 + 内容区
   return (
-    <SafeAreaView edges={['top']} className="min-h-screen pb-16 dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100">
-      <Outlet />
-      {/* 底部导航栏 */}
-      <SafeAreaView edges={['bottom']} className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t dark:border-slate-700">
-        <div className="flex justify-around items-center h-14">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path
-            return (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                  isActive ? 'text-primary' : 'text-muted-foreground'
-                }`}
-              >
-                <item.icon className="h-5 w-5" />
-                <span className="text-xs mt-1">{t(item.labelKey)}</span>
-              </button>
-            )
-          })}
+    <HeaderProvider>
+      <div className="h-screen dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 flex flex-col">
+        <SafeAreaView edges={['top']} className="contents">
+          <AppHeader />
+        </SafeAreaView>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <Outlet />
         </div>
-      </SafeAreaView>
-    </SafeAreaView>
+        <TabBar />
+      </div>
+    </HeaderProvider>
   )
 }

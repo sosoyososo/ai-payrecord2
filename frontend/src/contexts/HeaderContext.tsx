@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 
 interface HeaderConfig {
   title?: string
@@ -26,13 +26,13 @@ const HeaderContext = createContext<HeaderContextType>({
 export function HeaderProvider({ children }: { children: ReactNode }) {
   const [config, setConfigState] = useState<HeaderConfig>(defaultConfig)
 
-  const setConfig = (newConfig: HeaderConfig) => {
+  const setConfig = useCallback((newConfig: HeaderConfig) => {
     setConfigState(newConfig)
-  }
+  }, [])
 
-  const clearConfig = () => {
+  const clearConfig = useCallback(() => {
     setConfigState(defaultConfig)
-  }
+  }, [])
 
   return (
     <HeaderContext.Provider value={{ config, setConfig, clearConfig }}>

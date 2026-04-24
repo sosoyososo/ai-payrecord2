@@ -1,13 +1,11 @@
-import SafeAreaView from '@/components/SafeAreaView'
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { statsApi, ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import type { SummaryStats, CategoryStats, Ledger } from '@/types'
 import { LedgerSelector } from '@/components/LedgerSelector'
-import { ArrowLeft } from 'lucide-react'
+import PageContainer from '@/components/PageContainer'
 import {
   Select,
   SelectContent,
@@ -37,7 +35,6 @@ const COLORS = [
 
 export default function StatsPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [year, setYear] = useState(new Date().getFullYear())
@@ -97,18 +94,7 @@ export default function StatsPage() {
   }
 
   return (
-    <SafeAreaView edges={['top']}>
-    <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* 顶部标题栏 */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('stats.title')}</span>
-        </div>
-      </header>
-
+    <PageContainer title={t('stats.title')} showBackButton>
       {/* Year Selector */}
       <div className="max-w-md mx-auto px-4 py-2 flex items-center gap-2">
         <span className="text-sm text-muted-foreground">{t('stats.year')}</span>
@@ -306,7 +292,6 @@ export default function StatsPage() {
           </Card>
         )}
       </div>
-    </div>
-    </SafeAreaView>
+    </PageContainer>
   )
 }

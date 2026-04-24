@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ledgerApi } from '@/services/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
+import PageContainer from '@/components/PageContainer'
 import type { Ledger } from '@/types'
-import { ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
 export default function LedgerPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [ledgers, setLedgers] = useState<Ledger[]>([])
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -81,24 +80,16 @@ export default function LedgerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
+      <PageContainer title={t('ledger.title')} showBackButton>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </PageContainer>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* 顶部标题栏 */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('ledger.title')}</span>
-        </div>
-      </header>
-
+    <PageContainer title={t('ledger.title')} showBackButton>
       <div className="max-w-md mx-auto px-4 py-4 space-y-3">
         {ledgers.map((ledger) => (
           <Card key={ledger.id}>
@@ -176,6 +167,6 @@ export default function LedgerPage() {
         confirmText={t('confirm.delete')}
         cancelText={t('confirm.cancel')}
       />
-    </div>
+    </PageContainer>
   )
 }

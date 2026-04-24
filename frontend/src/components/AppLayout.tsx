@@ -1,44 +1,17 @@
 import { useState, useEffect } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Home, BarChart3, PiggyBank, Settings, Wallet } from 'lucide-react'
+import { Outlet, useLocation, useNavigate, Navigate } from 'react-router-dom'
+import { Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
-import SafeAreaView from './SafeAreaView'
+import { navItems } from '@/config/navigation'
 import AppHeader from './AppHeader'
 import { HeaderProvider } from '@/contexts/HeaderContext'
 
-const navItems = [
-  { path: '/', icon: Home, labelKey: 'nav.home' },
-  { path: '/stats', icon: BarChart3, labelKey: 'nav.stats' },
-  { path: '/budget', icon: PiggyBank, labelKey: 'nav.budget' },
-  { path: '/settings', icon: Settings, labelKey: 'nav.settings' },
-]
-
-function TabBar() {
-  const { t } = useTranslation()
-  const location = useLocation()
-  const navigate = useNavigate()
-
+function Loading() {
   return (
-    <SafeAreaView edges={['bottom']} className="bg-white dark:bg-slate-900 border-t dark:border-slate-700">
-      <div className="flex justify-around items-center h-14">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                isActive ? 'text-primary' : 'text-muted-foreground'
-              }`}
-            >
-              <item.icon className="h-5 w-5" />
-              <span className="text-xs mt-1">{t(item.labelKey)}</span>
-            </button>
-          )
-        })}
-      </div>
-    </SafeAreaView>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
   )
 }
 
@@ -46,9 +19,20 @@ export default function AppLayout() {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const [isDesktop, setIsDesktop] = useState(false)
 
+  // Handle loading state
+  if (loading) {
+    return <Loading />
+  }
+
+  // Handle not authenticated - redirect to login
+  if (!user) {
+    return <Navigate to="/login" replace />
+  }
+
+  // Check screen size
   useEffect(() => {
     const checkScreen = () => {
       setIsDesktop(window.innerWidth > 1024)
@@ -58,16 +42,10 @@ export default function AppLayout() {
     return () => window.removeEventListener('resize', checkScreen)
   }, [])
 
-  // 如果未登录，显示登录页面
-  if (!user) {
-    return <Outlet />
-  }
-
-  // PC: 左侧导航栏
+  // Desktop layout with sidebar nav
   if (isDesktop) {
     return (
       <div className="flex min-h-screen dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100">
-        {/* 左侧导航 */}
         <nav className="fixed left-0 top-0 h-full w-56 bg-white dark:bg-slate-900 border-r dark:border-slate-700 flex flex-col">
           <div className="p-4 border-b dark:border-slate-700">
             <div className="flex items-center gap-2">
@@ -95,7 +73,6 @@ export default function AppLayout() {
             })}
           </div>
         </nav>
-        {/* 主内容区 */}
         <div className="flex-1 ml-56">
           <div className="max-w-3xl mx-auto p-6">
             <Outlet />
@@ -105,17 +82,35 @@ export default function AppLayout() {
     )
   }
 
-  // 手机/平板: 底部导航 + 内容区
+  // Mobile layout with TabBar
   return (
     <HeaderProvider>
       <div className="h-screen dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 flex flex-col">
-        <SafeAreaView edges={['top']} className="contents">
+        <div className="pt-[env(safe-area-inset-top)] bg-white dark:bg-slate-900 shadow-sm">
           <AppHeader />
-        </SafeAreaView>
+        </div>
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
           <Outlet />
         </div>
-        <TabBar />
+        <div className="pb-[env(safe-area-inset-bottom)] bg-white dark:bg-slate-900 border-t dark:border-slate-700">
+          <div className="flex justify-around items-center h-14">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
+                    isActive ? 'text-primary' : 'text-muted-foreground'
+                  }`}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="text-xs mt-1">{t(item.labelKey)}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </HeaderProvider>
   )

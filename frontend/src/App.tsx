@@ -28,24 +28,6 @@ function Loading() {
   )
 }
 
-function AnimatedPage({ children }: { children: React.ReactNode }) {
-  return <div className="page-enter">{children}</div>
-}
-
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
-
-  if (loading) {
-    return <Loading />
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
-
-  return <>{children}</>
-}
-
 function UnknownRoute() {
   const { user } = useAuth()
   return <Navigate to={user ? '/' : '/login'} replace />
@@ -56,114 +38,28 @@ function App() {
     <ThemeProvider>
       <Suspense fallback={<Loading />}>
         <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/verify-email" element={<EmailVerificationPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route element={<AppLayout />}>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <HomePage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <AddRecordPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/edit/:id"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <EditRecordPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/stats"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <StatsPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/ledgers"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <LedgerPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/categories"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <CategoryPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/tags"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <TagPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <SettingsPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/export"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <ExportPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/budget"
-            element={
-              <ProtectedRoute>
-                <AnimatedPage>
-                  <BudgetPage />
-                </AnimatedPage>
-              </ProtectedRoute>
-            }
-          />
+          {/* Public routes - no layout */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+          {/* Protected routes - wrapped in AppLayout */}
+          <Route element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="add" element={<AddRecordPage />} />
+            <Route path="edit/:id" element={<EditRecordPage />} />
+            <Route path="stats" element={<StatsPage />} />
+            <Route path="ledgers" element={<LedgerPage />} />
+            <Route path="categories" element={<CategoryPage />} />
+            <Route path="tags" element={<TagPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="export" element={<ExportPage />} />
+            <Route path="budget" element={<BudgetPage />} />
+          </Route>
+
           <Route path="*" element={<UnknownRoute />} />
-        </Route>
-      </Routes>
+        </Routes>
       </Suspense>
     </ThemeProvider>
   )

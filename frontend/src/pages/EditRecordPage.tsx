@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, categoryApi, ledgerApi, tagApi } from '@/services/api'
-import { Button } from '@/components/ui/button'
 import { RecordForm } from '@/components/RecordForm'
+import PageContainer from '@/components/PageContainer'
 import type { Category, Ledger, Tag } from '@/types'
-import { ArrowLeft } from 'lucide-react'
 
 export default function EditRecordPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const recordId = parseInt(id || '0', 10)
 
@@ -100,18 +98,7 @@ export default function EditRecordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-      {/* Header */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold text-lg">{t('editRecord.title')}</span>
-        </div>
-      </header>
-
-      {/* Form */}
+    <PageContainer title={t('editRecord.title')} showBackButton>
       <div className="max-w-md mx-auto px-4">
         <RecordForm
           type={type}
@@ -145,6 +132,6 @@ export default function EditRecordPage() {
           }}
         />
       </div>
-    </div>
+    </PageContainer>
   )
 }

@@ -11,13 +11,11 @@ import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import PageContainer from '@/components/PageContainer'
-import { useHeader } from '@/contexts/HeaderContext'
 import { TrendingUp, TrendingDown, Search, X, Pencil, Trash2 } from 'lucide-react'
 
 export default function HomePage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { setConfig } = useHeader()
   const [records, setRecords] = useState<Record[]>([])
   const [filteredRecords, setFilteredRecords] = useState<Record[]>([])
   const [ledgers, setLedgers] = useState<Ledger[]>([])
@@ -30,11 +28,6 @@ export default function HomePage() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
-
-  useEffect(() => {
-    setConfig({ title: currentLedger?.name || t('nav.ledgers'), showBackButton: false })
-    return () => setConfig({})
-  }, [currentLedger, t, setConfig])
 
   const handleDelete = async (id: number) => {
     setPendingDeleteId(id)
@@ -140,7 +133,7 @@ const switchLedger = async (ledgerId: number) => {
   }
 
   return (
-    <PageContainer fab={{ to: '/add' }}>
+    <PageContainer title={currentLedger?.name || t('nav.ledgers')} fab={{ to: '/add' }}>
       {/* Ledger Selector */}
       <div className="max-w-md mx-auto px-4 py-3">
         <LedgerSelector

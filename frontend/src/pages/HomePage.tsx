@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, ledgerApi, statsApi } from '@/services/api'
 import { Card, CardContent } from '@/components/ui/card'
@@ -10,12 +10,14 @@ import { LedgerSelector } from '@/components/LedgerSelector'
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
-import SafeAreaView from '@/components/SafeAreaView'
-import { Plus, TrendingUp, TrendingDown, Search, X, Wallet, Pencil, Trash2 } from 'lucide-react'
+import PageContainer from '@/components/PageContainer'
+import { useHeader } from '@/contexts/HeaderContext'
+import { TrendingUp, TrendingDown, Search, X, Pencil, Trash2 } from 'lucide-react'
 
 export default function HomePage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { setConfig } = useHeader()
   const [records, setRecords] = useState<Record[]>([])
   const [filteredRecords, setFilteredRecords] = useState<Record[]>([])
   const [ledgers, setLedgers] = useState<Ledger[]>([])
@@ -28,6 +30,11 @@ export default function HomePage() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
+
+  useEffect(() => {
+    setConfig({ title: currentLedger?.name || t('nav.ledgers'), showBackButton: false })
+    return () => setConfig({})
+  }, [currentLedger, t, setConfig])
 
   const handleDelete = async (id: number) => {
     setPendingDeleteId(id)
@@ -133,19 +140,7 @@ const switchLedger = async (ledgerId: number) => {
   }
 
   return (
-    <SafeAreaView edges={['top']}>
-      <div className="min-h-screen bg-gradient-to-b dark:from-slate-950 dark:to-slate-900 from-slate-50 to-slate-100 pb-24">
-
-      {/* 顶部标题栏 */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center">
-          <div className="flex items-center gap-2">
-            <Wallet className="h-6 w-6 text-primary" />
-            <span className="font-semibold text-lg">{currentLedger?.name || t('nav.ledgers')}</span>
-          </div>
-        </div>
-      </header>
-
+    <PageContainer fab={{ to: '/add' }}>
       {/* Ledger Selector */}
       <div className="max-w-md mx-auto px-4 py-3">
         <LedgerSelector
@@ -214,7 +209,7 @@ const switchLedger = async (ledgerId: number) => {
       </div>
 
       {/* Records List */}
-      <div className="max-w-md mx-auto px-4 pb-24">
+      <div className="max-w-md mx-auto px-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">
             {searchQuery ? `${t('home.searchResults')} (${filteredRecords.length})` : t('home.recentRecords')}
@@ -316,14 +311,6 @@ const switchLedger = async (ledgerId: number) => {
         </div>
       </div>
 
-      {/* FAB */}
-      <Link
-        to="/add"
-        className="fixed bottom-24 right-6 w-14 h-14 bg-accent text-white rounded-full shadow-lg flex items-center justify-center btn-press fab-pulse safe-area-bottom"
-      >
-        <Plus className="h-6 w-6" />
-      </Link>
-
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmDialog
         open={deleteDialogOpen}
@@ -334,7 +321,6 @@ const switchLedger = async (ledgerId: number) => {
         confirmText={t('confirm.delete')}
         cancelText={t('confirm.cancel')}
       />
-    </div>
-    </SafeAreaView>
+    </PageContainer>
   )
 }

@@ -262,19 +262,6 @@ func (s *LLMService) extractTags(text string) []string {
 	return tags
 }
 
-func (s *LLMService) isIncome(text string) bool {
-	text = strings.ToLower(text)
-	incomeKeywords := []string{"收入", "工资", "奖金", "分红", "利息", "赚钱", "到账"}
-
-	for _, kw := range incomeKeywords {
-		if strings.Contains(text, kw) {
-			return true
-		}
-	}
-
-	return false
-}
-
 // GetCategories returns available categories for the user
 func (s *LLMService) GetCategories(userID uint) ([]model.Category, error) {
 	db := database.GetDB()

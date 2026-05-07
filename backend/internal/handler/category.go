@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/karsa/ai-payrecord2/backend/internal/middleware"
-	"github.com/karsa/ai-payrecord2/backend/internal/model"
 	"github.com/karsa/ai-payrecord2/backend/internal/response"
 	"github.com/karsa/ai-payrecord2/backend/internal/service"
 )
@@ -25,17 +24,7 @@ func NewCategoryHandler() *CategoryHandler {
 func (h *CategoryHandler) ListCategories(c *gin.Context) {
 	userID := middleware.GetUserID(c)
 
-	// Parse type query param
-	var categoryType *model.CategoryType
-	if typeStr := c.Query("type"); typeStr != "" {
-		typeInt, err := strconv.Atoi(typeStr)
-		if err == nil {
-			ct := model.CategoryType(typeInt)
-			categoryType = &ct
-		}
-	}
-
-	categories, err := h.categoryService.List(userID, categoryType)
+	categories, err := h.categoryService.List(userID)
 	if err != nil {
 		response.InternalServerError(c, err.Error())
 		return

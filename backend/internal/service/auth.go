@@ -258,38 +258,12 @@ func (s *AuthService) seedDefaultCategories(db *gorm.DB, userID uint) {
 		{"其他", "MoreHorizontal", "#9E9E9E"},
 	}
 
-	// Income categories
-	incomeCategories := []struct {
-		Name string
-		Icon string
-		Color string
-	}{
-		{"工资", "Briefcase", "#4CAF50"},
-		{"奖金", "Gift", "#8BC34A"},
-		{"投资", "TrendingUp", "#CDDC39"},
-		{"兑换", "Repeat", "#FFEB3B"},
-		{"其他", "MoreHorizontal", "#9E9E9E"},
-	}
-
 	for _, cat := range expenseCategories {
 		db.Create(&model.Category{
 			UserID:   userID,
 			Name:     cat.Name,
 			Icon:     cat.Icon,
 			Color:    cat.Color,
-			Type:     model.CategoryTypeExpense,
-			IsSystem: true,
-			Status:   1,
-		})
-	}
-
-	for _, cat := range incomeCategories {
-		db.Create(&model.Category{
-			UserID:   userID,
-			Name:     cat.Name,
-			Icon:     cat.Icon,
-			Color:    cat.Color,
-			Type:     model.CategoryTypeIncome,
 			IsSystem: true,
 			Status:   1,
 		})

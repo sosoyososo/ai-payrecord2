@@ -266,7 +266,7 @@ func (s *LLMService) extractTags(text string) []string {
 func (s *LLMService) GetCategories(userID uint) ([]model.Category, error) {
 	db := database.GetDB()
 	var categories []model.Category
-	if err := db.Where("user_id = ? AND status = 1", userID).Order("type, name").Find(&categories).Error; err != nil {
+	if err := db.Where("user_id = ? AND status = 1", userID).Order("name").Find(&categories).Error; err != nil {
 		return nil, err
 	}
 	return categories, nil
@@ -299,7 +299,6 @@ func (s *LLMService) ConfirmRecord(userID uint, req *LLMStructuredRecord) (*mode
 	if req.NewCategoryName != "" {
 		catReq := &CreateCategoryRequest{
 			Name: req.NewCategoryName,
-			Type: model.CategoryType(req.Type),
 		}
 		categoryService := NewCategoryService()
 		newCat, err := categoryService.Create(userID, catReq)

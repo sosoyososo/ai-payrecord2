@@ -14,10 +14,9 @@ var (
 )
 
 type CreateCategoryRequest struct {
-	Name     string        `json:"name" binding:"required,min=1,max=50"`
-	Icon     string        `json:"icon"`
-	Color    string        `json:"color"`
-	Type     model.CategoryType `json:"type" binding:"required"`
+	Name  string `json:"name" binding:"required,min=1,max=50"`
+	Icon  string `json:"icon"`
+	Color string `json:"color"`
 }
 
 type UpdateCategoryRequest struct {
@@ -34,16 +33,11 @@ func NewCategoryService() *CategoryService {
 	return &CategoryService{}
 }
 
-func (s *CategoryService) List(userID uint, categoryType *model.CategoryType) ([]model.Category, error) {
+func (s *CategoryService) List(userID uint) ([]model.Category, error) {
 	db := database.GetDB()
 
-	query := db.Where("user_id = ? AND status = 1", userID)
-	if categoryType != nil {
-		query = query.Where("type = ?", *categoryType)
-	}
-
 	var categories []model.Category
-	if err := query.Order("is_system DESC, sort_order ASC, id ASC").Find(&categories).Error; err != nil {
+	if err := db.Where("user_id = ? AND status = 1", userID).Order("is_system DESC, sort_order ASC, id ASC").Find(&categories).Error; err != nil {
 		return nil, err
 	}
 
@@ -72,7 +66,6 @@ func (s *CategoryService) Create(userID uint, req *CreateCategoryRequest) (*mode
 		Name:     req.Name,
 		Icon:     req.Icon,
 		Color:    req.Color,
-		Type:     req.Type,
 		IsSystem: false,
 		Status:   1,
 	}

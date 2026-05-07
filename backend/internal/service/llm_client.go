@@ -125,11 +125,7 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 	var categoryContext strings.Builder
 	categoryContext.WriteString("用户已有的分类:\n")
 	for _, cat := range categories {
-		typeStr := "支出"
-		if cat.Type == 2 {
-			typeStr = "收入"
-		}
-		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s(%s)\n", cat.ID, cat.Name, typeStr))
+		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s(支出)\\n", cat.ID, cat.Name))
 	}
 
 	// Build the prompt

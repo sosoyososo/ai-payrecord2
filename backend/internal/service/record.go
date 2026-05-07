@@ -160,7 +160,6 @@ func (s *RecordService) Create(userID uint, req *CreateRecordRequest) (*model.Re
 		LedgerID:   ledgerID,
 		CategoryID: req.CategoryID,
 		Amount:     req.Amount,
-		Type:       req.Type,
 		Date:       req.Date,
 		Note:       req.Note,
 		ImageURL:   req.ImageURL,

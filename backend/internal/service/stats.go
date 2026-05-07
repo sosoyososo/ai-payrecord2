@@ -19,18 +19,14 @@ type CategoryStats struct {
 }
 
 type MonthlyStats struct {
-	Month      string  `json:"month"`
-	Income     float64 `json:"income"`
+	Month       string  `json:"month"`
 	Expense    float64 `json:"expense"`
-	IncomeCount  int64   `json:"income_count"`
 	ExpenseCount int64   `json:"expense_count"`
 }
 
 type DailyStats struct {
 	Date       string  `json:"date"`
-	Income     float64 `json:"income"`
 	Expense    float64 `json:"expense"`
-	IncomeCount  int64   `json:"income_count"`
 	ExpenseCount int64   `json:"expense_count"`
 }
 
@@ -43,11 +39,8 @@ type TagStats struct {
 }
 
 type SummaryStats struct {
-	TotalIncome    float64      `json:"total_income"`
 	TotalExpense   float64      `json:"total_expense"`
-	IncomeCount   int64        `json:"income_count"`
 	ExpenseCount   int64        `json:"expense_count"`
-	Balance        float64      `json:"balance"`
 	MonthlyStats   []MonthlyStats `json:"monthly_stats"`
 }
 
@@ -76,32 +69,22 @@ func (s *StatsService) GetSummary(userID uint, ledgerID *uint, year int) (*Summa
 		ledgerFilterArgs = []interface{}{*ledgerID}
 	}
 
-	// Get total income
-	var totalIncome float64
-	db.Model(&model.Record{}).Select("COALESCE(SUM(amount), 0)").
-		Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeIncome, startDate, endDate}, ledgerFilterArgs...)...).
-		Scan(&totalIncome)
-
 	// Get total expense
 	var totalExpense float64
 	db.Model(&model.Record{}).Select("COALESCE(SUM(amount), 0)").
-		Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeExpense, startDate, endDate}, ledgerFilterArgs...)...).
+		Where("user_id = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, startDate, endDate}, ledgerFilterArgs...)...).
 		Scan(&totalExpense)
 
-	// Get counts
-	var incomeCount, expenseCount int64
-	db.Model(&model.Record{}).Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeIncome, startDate, endDate}, ledgerFilterArgs...)...).Count(&incomeCount)
-	db.Model(&model.Record{}).Where("user_id = ? AND type = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, model.RecordTypeExpense, startDate, endDate}, ledgerFilterArgs...)...).Count(&expenseCount)
+	// Get count
+	var expenseCount int64
+	db.Model(&model.Record{}).Where("user_id = ? AND date >= ? AND date <= ? AND status = 1"+ledgerFilter, append([]interface{}{userID, startDate, endDate}, ledgerFilterArgs...)...).Count(&expenseCount)
 
 	// Get monthly stats
 	monthlyStats := s.getMonthlyStats(userID, ledgerID, year)
 
 	return &SummaryStats{
-		TotalIncome:   totalIncome,
 		TotalExpense:  totalExpense,
-		IncomeCount:   incomeCount,
 		ExpenseCount:  expenseCount,
-		Balance:       totalIncome - totalExpense,
 		MonthlyStats:  monthlyStats,
 	}, nil
 }
@@ -110,16 +93,15 @@ func (s *StatsService) getMonthlyStats(userID uint, ledgerID *uint, year int) []
 	db := database.GetDB()
 
 	var results []struct {
-		Month  int
-		Type   int
-		Total  float64
-		Count  int64
+		Month int
+		Total float64
+		Count int64
 	}
 
 	query := db.Model(&model.Record{}).
-		Select("strftime('%m', date) as month, type, SUM(amount) as total, COUNT(*) as count").
+		Select("strftime('%m', date) as month, SUM(amount) as total, COUNT(*) as count").
 		Where("user_id = ? AND strftime('%Y', date) = ? AND status = 1", userID, strconv.Itoa(year)).
-		Group("strftime('%m', date), type")
+		Group("strftime('%m', date)")
 
 	if ledgerID != nil && *ledgerID > 0 {
 		query = query.Where("ledger_id = ?", *ledgerID)
@@ -137,13 +119,8 @@ func (s *StatsService) getMonthlyStats(userID uint, ledgerID *uint, year int) []
 	for _, r := range results {
 		monthIdx := r.Month - 1
 		if monthIdx >= 0 && monthIdx < 12 {
-			if r.Type == int(model.RecordTypeIncome) {
-				monthly[monthIdx].Income = r.Total
-				monthly[monthIdx].IncomeCount = r.Count
-			} else if r.Type == int(model.RecordTypeExpense) {
-				monthly[monthIdx].Expense = r.Total
-				monthly[monthIdx].ExpenseCount = r.Count
-			}
+			monthly[monthIdx].Expense = r.Total
+			monthly[monthIdx].ExpenseCount = r.Count
 		}
 	}
 
@@ -154,9 +131,9 @@ func (s *StatsService) GetDailyStats(userID uint, ledgerID *uint, startDate, end
 	db := database.GetDB()
 
 	query := db.Model(&model.Record{}).
-		Select("date(date) as date, type, SUM(amount) as total, COUNT(*) as count").
+		Select("date(date) as date, SUM(amount) as total, COUNT(*) as count").
 		Where("user_id = ? AND date >= ? AND date <= ? AND status = 1", userID, startDate, endDate).
-		Group("date(date), type")
+		Group("date(date)")
 
 	if ledgerID != nil && *ledgerID > 0 {
 		query = query.Where("ledger_id = ?", *ledgerID)
@@ -164,7 +141,6 @@ func (s *StatsService) GetDailyStats(userID uint, ledgerID *uint, startDate, end
 
 	var results []struct {
 		Date  string
-		Type  int
 		Total float64
 		Count int64
 	}
@@ -178,13 +154,8 @@ func (s *StatsService) GetDailyStats(userID uint, ledgerID *uint, startDate, end
 		if dailyMap[dateStr] == nil {
 			dailyMap[dateStr] = &DailyStats{Date: dateStr}
 		}
-		if r.Type == int(model.RecordTypeIncome) {
-			dailyMap[dateStr].Income = r.Total
-			dailyMap[dateStr].IncomeCount = r.Count
-		} else if r.Type == int(model.RecordTypeExpense) {
-			dailyMap[dateStr].Expense = r.Total
-			dailyMap[dateStr].ExpenseCount = r.Count
-		}
+		dailyMap[dateStr].Expense = r.Total
+		dailyMap[dateStr].ExpenseCount = r.Count
 	}
 
 	daily := make([]DailyStats, 0, len(dailyMap))

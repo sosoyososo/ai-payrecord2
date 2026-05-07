@@ -9,9 +9,7 @@ import (
 type RecordType int
 
 const (
-	RecordTypeExpense  RecordType = 1 // Expense
-	RecordTypeIncome   RecordType = 2 // Income
-	RecordTypeTransfer RecordType = 3 // Transfer
+	RecordTypeExpense RecordType = 1 // Expense
 )
 
 type Record struct {
@@ -23,7 +21,6 @@ type Record struct {
 	LedgerID    uint           `gorm:"index;not null" json:"ledger_id"`
 	CategoryID  uint           `gorm:"index;not null" json:"category_id"`
 	Amount      float64        `gorm:"type:decimal(12,2);not null" json:"amount"`
-	Type        RecordType     `gorm:"type:tinyint;not null;default:1" json:"type"` // 1: expense, 2: income, 3: transfer
 	Date        time.Time      `gorm:"index;not null" json:"date"`
 	Note        string         `gorm:"type:text" json:"note"`
 	ImageURL    string         `gorm:"size:255" json:"image_url"`

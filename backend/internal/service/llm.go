@@ -111,11 +111,6 @@ func (s *LLMService) ruleBasedParse(userID uint, text string) (*LLMParsedRecord,
 	// Match tags
 	result.Tags = s.extractTags(textWithoutAmount)
 
-	// Determine type based on category or keywords
-	if s.isIncome(textWithoutAmount) {
-		result.Type = model.RecordTypeIncome
-	}
-
 	return result, nil
 }
 

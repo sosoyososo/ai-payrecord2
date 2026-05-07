@@ -107,7 +107,7 @@ func (c *LLMClient) CallChatAPI(messages []chatMessage) (string, error) {
 func (c *LLMClient) GetUserCategories(userID uint) ([]model.Category, error) {
 	db := database.GetDB()
 	var categories []model.Category
-	if err := db.Where("user_id = ? AND status = 1", userID).Order("type, name").Find(&categories).Error; err != nil {
+	if err := db.Where("user_id = ? AND status = 1", userID).Order("name").Find(&categories).Error; err != nil {
 		return nil, err
 	}
 	return categories, nil
@@ -125,11 +125,11 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 	var categoryContext strings.Builder
 	categoryContext.WriteString("用户已有的分类:\n")
 	for _, cat := range categories {
-		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s(支出)\\n", cat.ID, cat.Name))
+		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s\\n", cat.ID, cat.Name))
 	}
 
 	// Build the prompt
-	systemPrompt := `你是一个记账助手。用户会输入自然语言描述消费或收入，你需要提取结构化信息。
+	systemPrompt := `你是一个记账助手。用户会输入自然语言描述消费，你需要提取结构化信息。
 
 ` + categoryContext.String() + `
 
@@ -138,7 +138,6 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 只返回JSON格式，不要包含其他文字。格式如下：
 {
   "amount": 金额数字,
-  "type": 1或2 (1=支出, 2=收入),
   "category_id": 分类ID数字,
   "category_name": "分类名称",
   "date": "日期YYYY-MM-DD格式",

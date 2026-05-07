@@ -140,7 +140,6 @@
   ```json
   {
     "name": "Test Category",
-    "type": 1,
     "color": "#FF0000"
   }
   ```
@@ -234,7 +233,6 @@
     "ledger_id": 1,
     "category_id": 1,
     "amount": 100,
-    "type": 1,
     "date": "2026-03-17T10:00:00Z"
   }
   ```
@@ -250,7 +248,6 @@
   {
     "category_id": 1,
     "amount": 50,
-    "type": 1,
     "date": "2026-03-17T10:00:00Z"
   }
   ```
@@ -305,7 +302,7 @@
 
 ### TC-API-STATS-003: Get Category Stats
 - **ID**: TC-API-STATS-003
-- **Endpoint**: GET /api/v1/stats/by-category?type=1
+- **Endpoint**: GET /api/v1/stats/by-category
 - **Preconditions**: Valid access_token
 - **Expected**: 200 OK, returns category breakdown
 - **Status**: ✅ Tested

@@ -9,39 +9,39 @@ import (
 )
 
 type CategoryStats struct {
-	CategoryID   uint    `json:"category_id"`
-	CategoryName string  `json:"category_name"`
-	CategoryIcon string  `json:"category_icon"`
-	CategoryColor string `json:"category_color"`
-	TotalAmount  float64 `json:"total_amount"`
-	Count        int64   `json:"count"`
-	Percentage   float64 `json:"percentage"`
+	CategoryID    uint    `json:"category_id"`
+	CategoryName  string  `json:"category_name"`
+	CategoryIcon  string  `json:"category_icon"`
+	CategoryColor string  `json:"category_color"`
+	TotalAmount   float64 `json:"total_amount"`
+	Count         int64   `json:"count"`
+	Percentage    float64 `json:"percentage"`
 }
 
 type MonthlyStats struct {
-	Month       string  `json:"month"`
-	Expense    float64 `json:"expense"`
+	Month        string  `json:"month"`
+	Expense      float64 `json:"expense"`
 	ExpenseCount int64   `json:"expense_count"`
 }
 
 type DailyStats struct {
-	Date       string  `json:"date"`
-	Expense    float64 `json:"expense"`
+	Date         string  `json:"date"`
+	Expense      float64 `json:"expense"`
 	ExpenseCount int64   `json:"expense_count"`
 }
 
 type TagStats struct {
-	TagID      uint    `json:"tag_id"`
-	TagName    string  `json:"tag_name"`
-	TagColor   string  `json:"tag_color"`
+	TagID       uint    `json:"tag_id"`
+	TagName     string  `json:"tag_name"`
+	TagColor    string  `json:"tag_color"`
 	TotalAmount float64 `json:"total_amount"`
-	Count      int64   `json:"count"`
+	Count       int64   `json:"count"`
 }
 
 type SummaryStats struct {
-	TotalExpense   float64      `json:"total_expense"`
-	ExpenseCount   int64        `json:"expense_count"`
-	MonthlyStats   []MonthlyStats `json:"monthly_stats"`
+	TotalExpense float64        `json:"total_expense"`
+	ExpenseCount int64          `json:"expense_count"`
+	MonthlyStats []MonthlyStats `json:"monthly_stats"`
 }
 
 type StatsService struct{}
@@ -83,9 +83,9 @@ func (s *StatsService) GetSummary(userID uint, ledgerID *uint, year int) (*Summa
 	monthlyStats := s.getMonthlyStats(userID, ledgerID, year)
 
 	return &SummaryStats{
-		TotalExpense:  totalExpense,
-		ExpenseCount:  expenseCount,
-		MonthlyStats:  monthlyStats,
+		TotalExpense: totalExpense,
+		ExpenseCount: expenseCount,
+		MonthlyStats: monthlyStats,
 	}, nil
 }
 
@@ -166,7 +166,7 @@ func (s *StatsService) GetDailyStats(userID uint, ledgerID *uint, startDate, end
 	return daily, nil
 }
 
-func (s *StatsService) GetCategoryStats(userID uint, ledgerID *uint, startDate, endDate time.Time, recordType *model.RecordType) ([]CategoryStats, error) {
+func (s *StatsService) GetCategoryStats(userID uint, ledgerID *uint, startDate, endDate time.Time) ([]CategoryStats, error) {
 	db := database.GetDB()
 
 	query := db.Model(&model.Record{}).
@@ -177,10 +177,6 @@ func (s *StatsService) GetCategoryStats(userID uint, ledgerID *uint, startDate, 
 
 	if ledgerID != nil && *ledgerID > 0 {
 		query = query.Where("records.ledger_id = ?", *ledgerID)
-	}
-
-	if recordType != nil {
-		query = query.Where("records.type = ?", *recordType)
 	}
 
 	var results []struct {
@@ -224,7 +220,7 @@ func (s *StatsService) GetMonthlyDetail(userID uint, ledgerID *uint, year, month
 	startDate := time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.Local)
 	endDate := startDate.AddDate(0, 1, -1)
 
-	return s.GetCategoryStats(userID, ledgerID, startDate, endDate, nil)
+	return s.GetCategoryStats(userID, ledgerID, startDate, endDate)
 }
 
 func (s *StatsService) GetTagStats(userID uint, ledgerID *uint, startDate, endDate time.Time) ([]TagStats, error) {
@@ -242,11 +238,11 @@ func (s *StatsService) GetTagStats(userID uint, ledgerID *uint, startDate, endDa
 	}
 
 	var results []struct {
-		TagID      uint
-		TagName    string
-		TagColor   string
+		TagID       uint
+		TagName     string
+		TagColor    string
 		TotalAmount float64
-		Count      int64
+		Count       int64
 	}
 
 	query.Scan(&results)

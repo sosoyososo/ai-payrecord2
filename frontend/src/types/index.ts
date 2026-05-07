@@ -35,15 +35,12 @@ export interface Category {
   name: string
   icon?: string
   color?: string
-  type: CategoryType
   is_system: boolean
   sort_order: number
   status: number
   created_at: string
   updated_at: string
 }
-
-export type CategoryType = 1 | 2 | 3 // 1=income, 2=expense, 3=transfer
 
 export interface Tag {
   id: number
@@ -63,7 +60,6 @@ export interface Record {
   ledger_id: number
   category_id: number
   amount: number
-  type: RecordType
   date: string
   note?: string
   image_url?: string
@@ -75,8 +71,6 @@ export interface Record {
   created_at: string
   updated_at: string
 }
-
-export type RecordType = 1 | 2 | 3 // 1=expense, 2=income, 3=transfer
 
 export interface PageResponse<T> {
   total: number
@@ -92,19 +86,14 @@ export interface ApiResponse<T> {
 }
 
 export interface SummaryStats {
-  total_income: number
   total_expense: number
-  income_count: number
   expense_count: number
-  balance: number
   monthly_stats: MonthlyStats[]
 }
 
 export interface MonthlyStats {
   month: string
-  income: number
   expense: number
-  income_count: number
   expense_count: number
 }
 

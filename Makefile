@@ -42,8 +42,8 @@ open-ios: ## 在 Xcode 中打开 iOS 项目
 # iOS 模拟器 ID (iPhone 16 Pro)
 IOS_SIMULATOR_ID := 9089CB1B-25C2-4D56-AB5A-BB65DAFBF434
 
-run-ios: ## 构建并运行到 iOS 模拟器 (默认使用 iPhone 16 Pro)
-	cd frontend && npx cap run ios --target "$(IOS_SIMULATOR_ID)"
+run-ios: ## 构建并运行到 iOS 模拟器/设备 (默认使用 iPhone 16 Pro 模拟器)
+	cd frontend && npx cap run ios --target "$(or $(TARGET),$(IOS_SIMULATOR_ID))" -- -allowProvisioningUpdates
 
 dev-ios: build sync-ios run-ios ## 完整开发流程: 构建 + 同步 + 运行 iOS
 

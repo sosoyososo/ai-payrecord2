@@ -12,7 +12,6 @@ interface LLMCategorySuggestion {
   name: string
   icon: string
   color: string
-  type: number
   confidence: number
 }
 
@@ -34,7 +33,6 @@ export default function AddRecordPage() {
   const [saving, setSaving] = useState(false)
 
   // Form state
-  const [type, setType] = useState<1 | 2>(1)
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [date, setDate] = useState(new Date().toISOString().slice(0, 16))
@@ -77,7 +75,6 @@ export default function AddRecordPage() {
       const data = response.data.data
 
       if (data.amount) setAmount(data.amount.toString())
-      if (data.type) setType(data.type as 1 | 2)
       if (data.date) {
         const converted = convertToDateTimeLocal(data.date)
         if (converted) setDate(converted)
@@ -134,7 +131,6 @@ export default function AddRecordPage() {
         ledger_id: currentLedger.id,
         category_id: categoryId,
         amount: parseFloat(amount),
-        type,
         date: dateTime,
         note: note || undefined,
         tag_ids: tagIds.length > 0 ? tagIds : undefined,
@@ -198,7 +194,6 @@ export default function AddRecordPage() {
                   try {
                     const res = await categoryApi.create({
                       name: newCategoryName,
-                      type: type,
                       icon: 'folder',
                       color: '#666',
                     })
@@ -238,7 +233,6 @@ export default function AddRecordPage() {
                       try {
                         const res = await categoryApi.create({
                           name: suggestion.name,
-                          type: type,
                           icon: suggestion.icon || 'folder',
                           color: suggestion.color || '#666',
                         })
@@ -263,8 +257,6 @@ export default function AddRecordPage() {
       {/* Form */}
       <div className="max-w-md mx-auto px-4">
         <RecordForm
-          type={type}
-          onTypeChange={setType}
           amount={amount}
           onAmountChange={setAmount}
           date={date}
@@ -282,10 +274,8 @@ export default function AddRecordPage() {
           isSubmitDisabled={!amount || !categoryId}
           submitText={t('addRecord.save')}
           translations={{
-            expense: t('addRecord.expense'),
-            income: t('addRecord.income'),
+            amount: t('addRecord.amount'),
             expenseAmount: t('addRecord.expenseAmount'),
-            incomeAmount: t('addRecord.incomeAmount'),
             date: t('addRecord.date'),
             category: t('addRecord.category'),
             note: t('addRecord.note'),

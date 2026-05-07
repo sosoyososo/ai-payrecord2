@@ -87,21 +87,8 @@
 - **Expected**: Redirect to home, record appears in list
 - **Status**: ✅ Tested
 
-### TC-UI-ADD-002: Add Income Record
+### TC-UI-ADD-002: Add Record with Note
 - **ID**: TC-UI-ADD-002
-- **Feature**: Add Record (Income)
-- **Preconditions**: Logged in
-- **Test Steps**:
-  1. Navigate to /add
-  2. Click "收入" button
-  3. Enter amount: 1000
-  4. Select category: 工资
-  5. Click "保存记录"
-- **Expected**: Record created as income
-- **Status**: ✅ Tested
-
-### TC-UI-ADD-003: Add Record with Note
-- **ID**: TC-UI-ADD-003
 - **Feature**: Add Record with Note
 - **Preconditions**: Logged in
 - **Test Steps**:
@@ -111,7 +98,32 @@
   4. Enter note: "Test note"
   5. Click "保存记录"
 - **Expected**: Note saved with record
+- **Status**: ⏳ 待测试
+
+### TC-UI-ADD-003: Add Record with Note (Deprecated - merged into ADD-002)
+- **ID**: TC-UI-ADD-003
+- **Status**: ❌ 删除 - 由 TC-UI-ADD-002 覆盖
+- **Preconditions**: Logged in
+- **Test Steps**:
+  1. Navigate to /add
+  2. Enter amount
+  3. Select category
+  4. Enter note: "Test note"
+  5. Click "保存记录"
+- **Expected**: Note saved with record
 - **Status**: ✅ Tested
+
+### TC-UI-ADD-004: Add Record with Voice Input
+- **ID**: TC-UI-ADD-004
+- **Feature**: AI Voice Input
+- **Preconditions**: Logged in
+- **URL**: http://localhost:5173/add
+- **Test Steps**:
+  1. Navigate to /add
+  2. Enter text in voice input: "lunch 25 yuan"
+  3. Press Enter
+- **Expected**: Amount and category auto-filled
+- **Status**: ⏳ 待测试
 
 ---
 
@@ -169,7 +181,7 @@
 - **URL**: http://localhost:5173/categories
 - **Test Steps**:
   1. Navigate to /categories
-- **Expected**: Shows income and expense categories
+- **Expected**: Shows expense categories
 - **Status**: ✅ Tested
 
 ### TC-UI-CATEGORY-002: Add Category
@@ -180,10 +192,9 @@
   1. Navigate to /categories
   2. Click "添加分类"
   3. Enter name: "Test Category"
-  4. Select type: 支出
-  5. Click "保存"
+  4. Click "保存"
 - **Expected**: New category appears in list
-- **Status**: ✅ Tested
+- **Status**: ⏳ 待测试
 
 ### TC-UI-CATEGORY-003: Edit Category
 - **ID**: TC-UI-CATEGORY-003
@@ -329,45 +340,7 @@
 
 ---
 
-## 9. Budget
-
-### TC-UI-BUDGET-001: View Budget
-- **ID**: TC-UI-BUDGET-001
-- **Feature**: Budget Display
-- **Preconditions**: Logged in
-- **URL**: http://localhost:5173/budget
-- **Test Steps**:
-  1. Navigate to /settings
-  2. Click "预算设置"
-- **Expected**: Shows budget, spent, remaining
-- **Status**: ✅ Tested
-
-### TC-UI-BUDGET-002: Set Budget
-- **ID**: TC-UI-BUDGET-002
-- **Feature**: Budget Setting
-- **Preconditions**: Logged in
-- **Test Steps**:
-  1. Navigate to /budget
-  2. Enter budget amount
-  3. Click "保存预算"
-- **Expected**: Budget saved, shows remaining
-- **Status**: ✅ Tested
-
-### TC-UI-BUDGET-003: Switch Ledger - Budget Stats Change
-- **ID**: TC-UI-BUDGET-003
-- **Feature**: Ledger Switching - Budget
-- **Preconditions**: Logged in, multiple ledgers with different expenses
-- **URL**: http://localhost:5173/budget
-- **Test Steps**:
-  1. Select ledger A - note expense amount
-  2. Switch to ledger B
-  3. Note expense amount
-- **Expected**: Expense amounts differ between ledgers
-- **Status**: ✅ Tested
-
----
-
-## 10. SPA Routing
+## 9. SPA Routing
 
 ### TC-UI-SPA-001: Login Page Refresh URL Preservation
 - **ID**: TC-UI-SPA-001
@@ -395,7 +368,7 @@
 
 ---
 
-## 11. Export
+## 10. Export
 
 ### TC-UI-EXPORT-001: Export Data
 - **ID**: TC-UI-EXPORT-001
@@ -435,7 +408,7 @@
 
 ---
 
-## 12. Page Layout Framework
+## 11. Page Layout Framework
 
 ### TC-UI-LAYOUT-001: iOS Simulator Scroll Behavior
 - **ID**: TC-UI-LAYOUT-001

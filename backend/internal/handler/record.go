@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/karsa/ai-payrecord2/backend/internal/middleware"
-	"github.com/karsa/ai-payrecord2/backend/internal/model"
 	"github.com/karsa/ai-payrecord2/backend/internal/response"
 	"github.com/karsa/ai-payrecord2/backend/internal/service"
 )
@@ -47,13 +46,6 @@ func (h *RecordHandler) ListRecords(c *gin.Context) {
 	if endDate := c.Query("end_date"); endDate != "" {
 		if t, err := time.Parse("2006-01-02", endDate); err == nil {
 			query.EndDate = &t
-		}
-	}
-
-	if recordType := c.Query("type"); recordType != "" {
-		if t, err := strconv.Atoi(recordType); err == nil {
-			rt := model.RecordType(t)
-			query.Type = &rt
 		}
 	}
 

@@ -6,12 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type RecordType int
-
-const (
-	RecordTypeExpense RecordType = 1 // Expense
-)
-
 type Record struct {
 	ID          uint           `gorm:"primarykey" json:"id"`
 	CreatedAt   time.Time      `json:"created_at"`

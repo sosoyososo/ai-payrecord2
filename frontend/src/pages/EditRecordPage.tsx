@@ -18,7 +18,6 @@ export default function EditRecordPage() {
   const [saving, setSaving] = useState(false)
 
   // Form state
-  const [type, setType] = useState<1 | 2>(1)
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [date, setDate] = useState(new Date().toISOString().slice(0, 16))
@@ -48,7 +47,6 @@ export default function EditRecordPage() {
         const record = recordRes.data.data
         const recordDate = new Date(record.date).toISOString().slice(0, 16)
         setAmount(record.amount.toString())
-        setType(record.type as 1 | 2)
         setCategoryId(record.category_id)
         setDate(recordDate)
         setOriginalDate(recordDate)
@@ -76,7 +74,6 @@ export default function EditRecordPage() {
         ledger_id: currentLedger.id,
         category_id: categoryId,
         amount: parseFloat(amount),
-        type,
         ...(dateChanged ? { date: newDateTime } : {}),
         note: note || undefined,
         tag_ids: tagIds.length > 0 ? tagIds : undefined,
@@ -101,8 +98,6 @@ export default function EditRecordPage() {
     <PageContainer title={t('editRecord.title')} showBackButton>
       <div className="max-w-md mx-auto px-4">
         <RecordForm
-          type={type}
-          onTypeChange={setType}
           amount={amount}
           onAmountChange={setAmount}
           date={date}
@@ -120,10 +115,8 @@ export default function EditRecordPage() {
           isSubmitDisabled={!amount || !categoryId}
           submitText={t('editRecord.save')}
           translations={{
-            expense: t('addRecord.expense'),
-            income: t('addRecord.income'),
+            amount: t('addRecord.amount'),
             expenseAmount: t('addRecord.expenseAmount'),
-            incomeAmount: t('addRecord.incomeAmount'),
             date: t('addRecord.date'),
             category: t('addRecord.category'),
             note: t('addRecord.note'),

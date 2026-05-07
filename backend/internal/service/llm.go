@@ -15,29 +15,26 @@ type ParseNaturalLanguageRequest struct {
 }
 
 type LLMCategorySuggestion struct {
-	Name     string  `json:"name"`
-	Icon     string  `json:"icon"`
-	Color    string  `json:"color"`
-	Type     int     `json:"type"`
+	Name       string  `json:"name"`
+	Icon       string  `json:"icon"`
+	Color      string  `json:"color"`
 	Confidence float64 `json:"confidence"`
 }
 
 type LLMParsedRecord struct {
-	Amount      float64              `json:"amount"`
-	CategoryID  uint                 `json:"category_id,omitempty"`
-	CategoryName string              `json:"category_name,omitempty"`
-	Type        model.RecordType     `json:"type"`
-	Date        time.Time            `json:"date"`
-	Note        string               `json:"note"`
-	Tags        []string             `json:"tags"`
+	Amount              float64                `json:"amount"`
+	CategoryID          uint                   `json:"category_id,omitempty"`
+	CategoryName        string                 `json:"category_name,omitempty"`
+	Date                time.Time              `json:"date"`
+	Note                string                 `json:"note"`
+	Tags                []string               `json:"tags"`
 	SuggestedCategories []LLMCategorySuggestion `json:"suggested_categories,omitempty"`
-	NewCategoryName string            `json:"new_category_name,omitempty"`
+	NewCategoryName     string                 `json:"new_category_name,omitempty"`
 }
 
 type LLMStructuredRecord struct {
 	Amount         float64   `json:"amount"`
 	CategoryID     uint      `json:"category_id"`
-	Type           model.RecordType `json:"type"`
 	Date           time.Time `json:"date"`
 	Note           string    `json:"note"`
 	TagIDs         []uint    `json:"tag_ids"`
@@ -76,7 +73,6 @@ func (s *LLMService) ruleBasedParse(userID uint, text string) (*LLMParsedRecord,
 	result := &LLMParsedRecord{
 		Date: time.Now(),
 		Tags: []string{},
-		Type: model.RecordTypeExpense, // Default to expense
 	}
 
 	// Extract amount
@@ -194,10 +190,10 @@ func (s *LLMService) matchCategory(userID uint, text string) (uint, string, stri
 func (s *LLMService) suggestCategories(text string) []LLMCategorySuggestion {
 	// Provide suggestions based on common expense categories
 	return []LLMCategorySuggestion{
-		{Name: "餐饮", Icon: "restaurant", Color: "#FF5722", Type: 2, Confidence: 0.8},
-		{Name: "交通", Icon: "directions_car", Color: "#2196F3", Type: 2, Confidence: 0.7},
-		{Name: "购物", Icon: "shopping_bag", Color: "#E91E63", Type: 2, Confidence: 0.6},
-		{Name: "娱乐", Icon: "movie", Color: "#9C27B0", Type: 2, Confidence: 0.5},
+		{Name: "餐饮", Icon: "restaurant", Color: "#FF5722", Confidence: 0.8},
+		{Name: "交通", Icon: "directions_car", Color: "#2196F3", Confidence: 0.7},
+		{Name: "购物", Icon: "shopping_bag", Color: "#E91E63", Confidence: 0.6},
+		{Name: "娱乐", Icon: "movie", Color: "#9C27B0", Confidence: 0.5},
 	}
 }
 
@@ -277,10 +273,9 @@ func (s *LLMService) ConfirmRecord(userID uint, req *LLMStructuredRecord) (*mode
 	recordService := NewRecordService()
 
 	createReq := &CreateRecordRequest{
-		LedgerID: 0, // Will use default
+		LedgerID:   0, // Will use default
 		CategoryID: req.CategoryID,
 		Amount:     req.Amount,
-		Type:       req.Type,
 		Date:       req.Date,
 		Note:       req.Note,
 		Source:     "llm",

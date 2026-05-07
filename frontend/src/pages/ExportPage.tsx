@@ -35,7 +35,6 @@ export default function ExportPage() {
       records: records.map((r) => ({
         id: r.id,
         date: r.date,
-        type: r.type,
         amount: r.amount,
         category: r.category?.name,
         note: r.note,
@@ -48,10 +47,9 @@ export default function ExportPage() {
   }
 
   const exportToCSV = () => {
-    const headers = [t('export.date'), t('export.type'), t('addRecord.amount'), t('addRecord.category'), t('addRecord.note'), t('tag.title')]
+    const headers = [t('export.date'), t('addRecord.amount'), t('addRecord.category'), t('addRecord.note'), t('tag.title')]
     const rows = records.map((r) => [
       new Date(r.date).toLocaleDateString(),
-      r.type === 1 ? t('export.expense') : t('export.income'),
       r.amount.toString(),
       r.category?.name || '',
       r.note || '',
@@ -59,7 +57,7 @@ export default function ExportPage() {
     ])
 
     const csv = [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n')
-    const BOM = '\uFEFF'
+    const BOM = '﻿'
     const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
     downloadFile(blob, `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.csv`)
   }

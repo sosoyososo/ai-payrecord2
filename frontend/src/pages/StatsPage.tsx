@@ -57,7 +57,6 @@ export default function StatsPage() {
         statsApi.getSummary(year, targetLedgerId),
         statsApi.getByCategory({
           ledger_id: targetLedgerId,
-          type: 1, // expense
         }),
       ])
 
@@ -151,28 +150,12 @@ export default function StatsPage() {
         {activeTab === 'overview' && summary && summary.monthly_stats && summary.monthly_stats.length > 0 && (
           <>
             {/* Summary Cards */}
-            <div className="grid grid-cols-3 gap-3">
-              <Card className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
-                <CardContent className="p-3 text-center">
-                  <div className="text-xs text-green-600 dark:text-green-400 mb-1">{t('home.income')}</div>
-                  <div className="text-lg font-bold text-green-700 dark:text-green-300">
-                    ¥{formatAmount(summary.total_income)}
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="grid grid-cols-1 gap-3">
               <Card className="bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800">
                 <CardContent className="p-3 text-center">
                   <div className="text-xs text-red-600 dark:text-red-400 mb-1">{t('addRecord.expense')}</div>
                   <div className="text-lg font-bold text-red-700 dark:text-red-300">
                     ¥{formatAmount(summary.total_expense)}
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
-                <CardContent className="p-3 text-center">
-                  <div className="text-xs text-blue-600 dark:text-blue-400 mb-1">{t('home.balance')}</div>
-                  <div className="text-lg font-bold text-blue-700 dark:text-blue-300">
-                    ¥{formatAmount(summary.balance)}
                   </div>
                 </CardContent>
               </Card>
@@ -193,14 +176,6 @@ export default function StatsPage() {
                       <Tooltip
                         formatter={(value) => `¥${formatAmount(Number(value) || 0)}`}
                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="income"
-                        stroke="#10B981"
-                        strokeWidth={2}
-                        dot={{ fill: '#10B981' }}
-                        name={t('home.income')}
                       />
                       <Line
                         type="monotone"
@@ -284,7 +259,6 @@ export default function StatsPage() {
                       contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
                     />
                     <Bar dataKey="expense" fill="#EF4444" name={t('addRecord.expense')} radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="income" fill="#10B981" name={t('home.income')} radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

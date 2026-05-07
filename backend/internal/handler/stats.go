@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/karsa/ai-payrecord2/backend/internal/middleware"
-	"github.com/karsa/ai-payrecord2/backend/internal/model"
 	"github.com/karsa/ai-payrecord2/backend/internal/response"
 	"github.com/karsa/ai-payrecord2/backend/internal/service"
 )
@@ -135,16 +134,7 @@ func (h *StatsHandler) GetCategoryStats(c *gin.Context) {
 		}
 	}
 
-	// Parse type
-	var recordType *model.RecordType
-	if typeStr := c.Query("type"); typeStr != "" {
-		if t, err := strconv.Atoi(typeStr); err == nil {
-			rt := model.RecordType(t)
-			recordType = &rt
-		}
-	}
-
-	stats, err := h.statsService.GetCategoryStats(userID, ledgerID, startDate, endDate, recordType)
+	stats, err := h.statsService.GetCategoryStats(userID, ledgerID, startDate, endDate)
 	if err != nil {
 		response.InternalServerError(c, err.Error())
 		return

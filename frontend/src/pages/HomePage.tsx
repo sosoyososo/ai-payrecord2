@@ -11,7 +11,7 @@ import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import PageContainer from '@/components/PageContainer'
-import { TrendingUp, TrendingDown, Search, X, Pencil, Trash2 } from 'lucide-react'
+import { TrendingDown, Search, X, Pencil, Trash2 } from 'lucide-react'
 
 export default function HomePage() {
   const { t } = useTranslation()
@@ -127,9 +127,8 @@ const switchLedger = async (ledgerId: number) => {
     return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
   }
 
-  const formatAmount = (amount: number, type: number) => {
-    const prefix = type === 2 ? '+' : '-'
-    return `${prefix}¥${amount.toFixed(2)}`
+  const formatAmount = (amount: number) => {
+    return `-¥${amount.toFixed(2)}`
   }
 
   return (
@@ -171,10 +170,6 @@ const switchLedger = async (ledgerId: number) => {
             <CardContent className="p-6">
               <Skeleton className="h-4 w-24 mb-1 bg-white/20" />
               <Skeleton className="h-8 w-32 mb-4 bg-white/20" />
-              <div className="flex justify-between">
-                <Skeleton className="h-4 w-20 bg-white/20" />
-                <Skeleton className="h-4 w-20 bg-white/20" />
-              </div>
             </CardContent>
           </Card>
         ) : (
@@ -186,14 +181,8 @@ const switchLedger = async (ledgerId: number) => {
               </div>
               <div className="flex justify-between text-sm">
                 <div className="flex items-center gap-1">
-                  <TrendingUp className="h-4 w-4 opacity-80" />
-                  <span className="opacity-80">{t('home.income')}</span>
-                  <span className="font-medium">¥{(summary?.total_income || 0).toFixed(2)}</span>
-                </div>
-                <div className="flex items-center gap-1">
                   <TrendingDown className="h-4 w-4 opacity-80" />
-                  <span className="opacity-80">{t('home.balance')}</span>
-                  <span className="font-medium">¥{(summary?.balance || 0).toFixed(2)}</span>
+                  <span className="font-medium">¥{(summary?.total_expense || 0).toFixed(2)}</span>
                 </div>
               </div>
             </CardContent>
@@ -249,12 +238,8 @@ const switchLedger = async (ledgerId: number) => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <div
-                    className={`font-semibold amount-animate ${
-                      record.type === 2 ? 'text-green-600' : 'text-red-600'
-                    }`}
-                  >
-                    {formatAmount(record.amount, record.type)}
+                  <div className="font-semibold amount-animate text-red-600">
+                    {formatAmount(record.amount)}
                   </div>
                   <Button
                     variant="ghost"

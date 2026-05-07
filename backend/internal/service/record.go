@@ -18,7 +18,6 @@ type CreateRecordRequest struct {
 	LedgerID   uint            `json:"ledger_id"`
 	CategoryID uint            `json:"category_id" binding:"required"`
 	Amount     float64         `json:"amount" binding:"required,gt=0"`
-	Type       model.RecordType `json:"type" binding:"required"`
 	Date       time.Time       `json:"date" binding:"required"`
 	Note       string          `json:"note"`
 	ImageURL   string          `json:"image_url"`
@@ -28,23 +27,21 @@ type CreateRecordRequest struct {
 }
 
 type UpdateRecordRequest struct {
-	CategoryID uint     `json:"category_id"`
-	Amount     float64  `json:"amount"`
-	Type       model.RecordType `json:"type"`
+	CategoryID uint       `json:"category_id"`
+	Amount     float64    `json:"amount"`
 	Date       *time.Time `json:"date"`
-	Note       string    `json:"note"`
-	ImageURL   string    `json:"image_url"`
-	Location   string    `json:"location"`
-	Source     string    `json:"source"`
-	Status     int       `json:"status"`
-	TagIDs     []uint    `json:"tag_ids"`
+	Note       string     `json:"note"`
+	ImageURL   string     `json:"image_url"`
+	Location   string     `json:"location"`
+	Source     string     `json:"source"`
+	Status     int        `json:"status"`
+	TagIDs     []uint     `json:"tag_ids"`
 }
 
 type RecordListQuery struct {
 	LedgerID  uint
 	StartDate *time.Time
 	EndDate   *time.Time
-	Type      *model.RecordType
 	Page      int
 	PageSize  int
 }
@@ -71,10 +68,6 @@ func (s *RecordService) List(userID uint, query RecordListQuery) ([]model.Record
 
 	if query.EndDate != nil {
 		q = q.Where("date <= ?", query.EndDate)
-	}
-
-	if query.Type != nil {
-		q = q.Where("type = ?", *query.Type)
 	}
 
 	// Get total count
@@ -229,9 +222,6 @@ func (s *RecordService) Update(userID, recordID uint, req *UpdateRecordRequest) 
 	}
 	if req.Amount > 0 {
 		updates["amount"] = req.Amount
-	}
-	if req.Type != 0 {
-		updates["type"] = req.Type
 	}
 	if req.Date != nil {
 		updates["date"] = req.Date

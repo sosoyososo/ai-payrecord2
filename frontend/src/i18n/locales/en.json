@@ -46,13 +46,10 @@
     "categories": "Categories",
     "tags": "Tags",
     "ledgers": "Ledgers",
-    "budget": "Budget",
     "appName": "Ledger"
   },
   "home": {
     "monthlyExpense": "Monthly Expense",
-    "income": "Income",
-    "balance": "Balance",
     "recentRecords": "Recent Records",
     "searchPlaceholder": "Search records...",
     "noRecords": "No records yet",
@@ -67,7 +64,6 @@
   "addRecord": {
     "title": "Add Record",
     "expense": "Expense",
-    "income": "Income",
     "amount": "Amount",
     "date": "Date",
     "category": "Category",
@@ -75,7 +71,6 @@
     "notePlaceholder": "Add note...",
     "save": "Save Record",
     "expenseAmount": "Expense Amount",
-    "incomeAmount": "Income Amount",
     "voiceInputPlaceholder": "Voice input: lunch cost 25 yuan"
   },
   "editRecord": {
@@ -87,17 +82,14 @@
     "overview": "Overview",
     "byCategory": "Category",
     "monthly": "Monthly",
-    "yearly": "Yearly",
     "monthlyTrend": "Monthly Trend"
   },
   "category": {
     "title": "Category Management",
-    "incomeCategory": "Income Categories",
     "expenseCategory": "Expense Categories",
     "addCategory": "Add Category",
     "namePlaceholder": "Category name",
     "systemCategory": "(System)",
-    "type": "Type",
     "color": "Color",
     "selectIcon": "Select Icon",
     "iconSearch": "Search icons..."
@@ -133,7 +125,6 @@
     "newPasswordPlaceholder": "Enter new password",
     "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Enter new password again",
-    "budgetSettings": "Budget Settings",
     "exportData": "Export Data",
     "language": "Language",
     "profileUpdated": "Profile updated",
@@ -145,19 +136,6 @@
     "logout": "Logout",
     "zh": "Chinese",
     "en": "English"
-  },
-  "budget": {
-    "title": "Budget Settings",
-    "monthlyBudget": "Monthly Budget",
-    "budgetAmount": "Budget Amount",
-    "saveBudget": "Save Budget",
-    "thisMonthExpense": "This Month Expense",
-    "used": "Used",
-    "remaining": "Remaining",
-    "description": "Setting a monthly budget helps you control spending. You'll be notified when you reach 80% of your budget.",
-    "saved": "Budget saved",
-    "overBudget": "Over budget ¥{{amount}}",
-    "budgetRemaining": "Budget remaining ¥{{amount}}"
   },
   "export": {
     "title": "Data Export",
@@ -171,9 +149,7 @@
     "warning": "Exported data only contains records from current ledger",
     "ledger": "Ledger",
     "date": "Date",
-    "type": "Type",
-    "expense": "Expense",
-    "income": "Income",
+    "expenseAmount": "Amount",
     "exportFilePrefix": "Ledger Export"
   },
   "iconPicker": {

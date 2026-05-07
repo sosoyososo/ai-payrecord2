@@ -58,14 +58,12 @@ export const authApi = {
   logout: (refreshToken?: string) =>
     api.post('/auth/logout', { refresh_token: refreshToken }),
 
-  // Email verification
   verifyEmail: (data: { email: string; code: string }) =>
     api.post<{ code: number; message: string; data: null }>('/auth/verify-email', data),
 
   sendVerification: (data: { email: string }) =>
     api.post<{ code: number; message: string; data: null }>('/auth/send-verification', data),
 
-  // Password reset
   forgotPassword: (data: { email: string }) =>
     api.post<{ code: number; message: string; data: null }>('/auth/forgot-password', data),
 
@@ -104,12 +102,10 @@ export const ledgerApi = {
 
 // Category API
 export const categoryApi = {
-  list: (type?: number) =>
-    api.get<{ code: number; message: string; data: Category[] }>('/categories', {
-      params: type ? { type } : undefined,
-    }),
+  list: () =>
+    api.get<{ code: number; message: string; data: Category[] }>('/categories'),
 
-  create: (data: { name: string; icon?: string; color?: string; type: number }) =>
+  create: (data: { name: string; icon?: string; color?: string }) =>
     api.post<{ code: number; message: string; data: Category }>('/categories', data),
 
   update: (id: number, data: Partial<Category>) =>
@@ -137,7 +133,6 @@ export const recordApi = {
     ledger_id?: number
     start_date?: string
     end_date?: string
-    type?: number
     page?: number
     page_size?: number
   }) =>
@@ -152,7 +147,6 @@ export const recordApi = {
     ledger_id: number
     category_id: number
     amount: number
-    type: number
     date: string
     note?: string
     tag_ids?: number[]
@@ -171,7 +165,7 @@ export const statsApi = {
       params: { year, ledger_id },
     }),
 
-  getByCategory: (params: { start_date?: string; end_date?: string; ledger_id?: number; type?: number }) =>
+  getByCategory: (params: { start_date?: string; end_date?: string; ledger_id?: number }) =>
     api.get<{ code: number; message: string; data: CategoryStats[] }>('/stats/by-category', {
       params,
     }),
@@ -190,7 +184,6 @@ export const llmApi = {
   confirmRecord: (data: {
     amount: number
     category_id: number
-    type: number
     date: string
     note?: string
     tag_ids?: number[]

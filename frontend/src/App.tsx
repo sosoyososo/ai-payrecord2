@@ -15,7 +15,6 @@ const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const TagPage = lazy(() => import('@/pages/TagPage'))
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'))
 const ExportPage = lazy(() => import('@/pages/ExportPage'))
-const BudgetPage = lazy(() => import('@/pages/BudgetPage'))
 const EmailVerificationPage = lazy(() => import('@/pages/EmailVerificationPage'))
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'))
 const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'))
@@ -55,7 +54,6 @@ function App() {
             <Route path="tags" element={<TagPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="export" element={<ExportPage />} />
-            <Route path="budget" element={<BudgetPage />} />
           </Route>
 
           <Route path="*" element={<UnknownRoute />} />

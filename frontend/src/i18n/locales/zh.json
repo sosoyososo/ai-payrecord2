@@ -46,13 +46,10 @@
     "categories": "分类",
     "tags": "标签",
     "ledgers": "账本",
-    "budget": "预算",
     "appName": "账本"
   },
   "home": {
     "monthlyExpense": "本月支出",
-    "income": "收入",
-    "balance": "结余",
     "recentRecords": "最近记录",
     "searchPlaceholder": "搜索记录...",
     "noRecords": "暂无记录",
@@ -67,7 +64,6 @@
   "addRecord": {
     "title": "添加记录",
     "expense": "支出",
-    "income": "收入",
     "amount": "金额",
     "date": "日期",
     "category": "分类",
@@ -75,7 +71,6 @@
     "notePlaceholder": "添加备注...",
     "save": "保存记录",
     "expenseAmount": "支出金额",
-    "incomeAmount": "收入金额",
     "voiceInputPlaceholder": "语音输入：午餐花费 25 元"
   },
   "editRecord": {
@@ -87,17 +82,14 @@
     "overview": "概览",
     "byCategory": "分类",
     "monthly": "月度",
-    "yearly": "年度",
     "monthlyTrend": "月度趋势"
   },
   "category": {
     "title": "分类管理",
-    "incomeCategory": "收入分类",
     "expenseCategory": "支出分类",
     "addCategory": "添加分类",
     "namePlaceholder": "分类名称",
     "systemCategory": "(系统)",
-    "type": "类型",
     "color": "颜色",
     "selectIcon": "选择图标",
     "iconSearch": "搜索图标..."
@@ -133,7 +125,6 @@
     "newPasswordPlaceholder": "输入新密码",
     "confirmPassword": "确认新密码",
     "confirmPasswordPlaceholder": "再次输入新密码",
-    "budgetSettings": "预算设置",
     "exportData": "导出数据",
     "language": "语言",
     "profileUpdated": "个人信息已更新",
@@ -145,19 +136,6 @@
     "logout": "退出登录",
     "zh": "中文",
     "en": "English"
-  },
-  "budget": {
-    "title": "预算设置",
-    "monthlyBudget": "月度预算",
-    "budgetAmount": "预算金额",
-    "saveBudget": "保存预算",
-    "thisMonthExpense": "本月支出",
-    "used": "已使用",
-    "remaining": "剩余",
-    "description": "设置月度预算可以帮助您更好地控制支出。当支出达到预算的 80% 时会提醒您。",
-    "saved": "预算已保存",
-    "overBudget": "已超出预算 ¥{{amount}}",
-    "budgetRemaining": "预算剩余 ¥{{amount}}"
   },
   "export": {
     "title": "数据导出",
@@ -171,9 +149,7 @@
     "warning": "导出的数据仅包含您当前的账本记录",
     "ledger": "账本",
     "date": "日期",
-    "type": "类型",
-    "expense": "支出",
-    "income": "收入",
+    "expenseAmount": "金额",
     "exportFilePrefix": "账本导出"
   },
   "iconPicker": {

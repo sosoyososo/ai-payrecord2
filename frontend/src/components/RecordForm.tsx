@@ -7,8 +7,6 @@ import type { Category, Tag } from '@/types'
 import { Check, Loader2 } from 'lucide-react'
 
 interface RecordFormProps {
-  type: 1 | 2
-  onTypeChange: (type: 1 | 2) => void
   amount: string
   onAmountChange: (amount: string) => void
   date: string
@@ -26,10 +24,8 @@ interface RecordFormProps {
   isSubmitDisabled?: boolean
   submitText: string
   translations: {
-    expense: string
-    income: string
+    amount: string
     expenseAmount: string
-    incomeAmount: string
     date: string
     category: string
     note: string
@@ -39,8 +35,6 @@ interface RecordFormProps {
 }
 
 export function RecordForm({
-  type,
-  onTypeChange,
   amount,
   onAmountChange,
   date,
@@ -59,45 +53,13 @@ export function RecordForm({
   submitText,
   translations,
 }: RecordFormProps) {
-  // Map form type to category type: form 1=expense -> category 2, form 2=income -> category 1
-  const categoryTypeFilter = type === 1 ? 2 : 1
-  const filteredCategories = categories.filter(
-    (c) => c.type === categoryTypeFilter || c.type === 3
-  )
-
   return (
     <div className="space-y-4">
-      {/* Type Selector */}
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          variant={type === 1 ? 'default' : 'outline'}
-          className="flex-1"
-          onClick={() => {
-            onTypeChange(1)
-            onCategoryChange(0)
-          }}
-        >
-          {translations.expense}
-        </Button>
-        <Button
-          type="button"
-          variant={type === 2 ? 'default' : 'outline'}
-          className="flex-1"
-          onClick={() => {
-            onTypeChange(2)
-            onCategoryChange(0)
-          }}
-        >
-          {translations.income}
-        </Button>
-      </div>
-
       {/* Amount */}
       <Card>
         <CardContent className="p-4">
           <div className="text-sm text-muted-foreground mb-1">
-            {type === 1 ? translations.expenseAmount : translations.incomeAmount}
+            {translations.expenseAmount}
           </div>
           <div className="flex items-center gap-1 text-3xl font-bold">
             <span>¥</span>
@@ -132,7 +94,7 @@ export function RecordForm({
         <CardContent className="p-4">
           <div className="text-sm text-muted-foreground mb-2">{translations.category}</div>
           <div className="grid grid-cols-4 gap-2">
-            {filteredCategories.map((category) => (
+            {categories.map((category) => (
               <button
                 key={category.id}
                 type="button"

@@ -69,7 +69,7 @@ export function TagSelector({
                   'flex items-center gap-1.5 px-2 py-1.5 rounded-full text-xs transition-all',
                   isSelected
                     ? 'ring-2 ring-primary ring-offset-1'
-                    : 'hover:opacity-80'
+                    : 'hover:opacity-80 hover:brightness-110 hover:saturate-150'
                 )}
                 style={{
                   backgroundColor: tag.color || '#666',

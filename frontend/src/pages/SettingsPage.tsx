@@ -245,7 +245,7 @@ export default function SettingsPage() {
           <CardContent className="p-4 space-y-1">
             <Link
               to="/categories"
-              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-muted transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Layers className="h-4 w-4 text-muted-foreground" />
@@ -254,7 +254,7 @@ export default function SettingsPage() {
             </Link>
             <Link
               to="/tags"
-              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-muted transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Tags className="h-4 w-4 text-muted-foreground" />
@@ -263,7 +263,7 @@ export default function SettingsPage() {
             </Link>
             <Link
               to="/export"
-              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-muted transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Download className="h-4 w-4 text-muted-foreground" />
@@ -275,7 +275,7 @@ export default function SettingsPage() {
                 await logout()
                 navigate('/login')
               }}
-              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-slate-50 w-full text-left text-red-600"
+              className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-muted transition-colors w-full text-left text-red-600"
             >
               <div className="flex items-center gap-3">
                 <LogOut className="h-4 w-4" />

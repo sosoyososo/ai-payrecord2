@@ -94,7 +94,7 @@ export default function ExportPage() {
 
             {records.length > 0 && (
               <>
-                <div className="p-3 bg-slate-50 rounded-lg">
+                <div className="p-3 bg-muted rounded-lg">
                   <p className="text-sm">
                     <span className="font-medium">{t('export.ledger')}:</span> {currentLedger?.name}
                   </p>

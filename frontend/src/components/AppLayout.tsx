@@ -63,7 +63,7 @@ export default function AppLayout() {
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     isActive
                       ? 'bg-primary/10 text-primary border-r-2 border-primary'
-                      : 'text-foreground hover:bg-slate-100 dark:hover:bg-slate-800'
+                      : 'text-foreground hover:bg-accent hover:text-accent-foreground'
                   }`}
                 >
                   <item.icon className="h-5 w-5" />

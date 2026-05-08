@@ -102,7 +102,7 @@ export function RecordForm({
                 className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
                   categoryId === category.id
                     ? 'bg-primary/10 ring-2 ring-primary'
-                    : 'hover:bg-slate-100'
+                    : 'hover:bg-accent'
                 }`}
               >
                 <div

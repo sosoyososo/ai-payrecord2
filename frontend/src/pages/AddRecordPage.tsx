@@ -44,6 +44,8 @@ export default function AddRecordPage() {
   const [aiLoading, setAiLoading] = useState(false)
   const [newCategoryName, setNewCategoryName] = useState<string | null>(null)
   const [suggestedCategories, setSuggestedCategories] = useState<LLMCategorySuggestion[]>([])
+  const [newTags, setNewTags] = useState<string[]>([])
+  const [creatingTag, setCreatingTag] = useState<string | null>(null)
 
   useEffect(() => {
     loadData()
@@ -102,6 +104,10 @@ export default function AddRecordPage() {
         setTagIds(matchedTagIds)
       }
 
+      if (data.new_tags && data.new_tags.length > 0) {
+        setNewTags(data.new_tags)
+      }
+
       if (data.suggested_categories && data.suggested_categories.length > 0) {
         setSuggestedCategories(data.suggested_categories)
       }
@@ -118,6 +124,7 @@ export default function AddRecordPage() {
     setAiInput(e.target.value)
     if (newCategoryName) setNewCategoryName(null)
     if (suggestedCategories.length > 0) setSuggestedCategories([])
+    if (newTags.length > 0) setNewTags([])
   }
 
   const handleSubmit = async () => {
@@ -248,6 +255,43 @@ export default function AddRecordPage() {
                 >
                   {suggestion.name}
                 </Button>
+              ))}
+            </div>
+          </div>
+        )}
+        {/* New Tags */}
+        {newTags.length > 0 && (
+          <div className="mt-3 p-3 bg-primary/5 rounded-lg">
+            <div className="text-sm text-muted-foreground mb-2">New tags:</div>
+            <div className="flex flex-wrap gap-2">
+              {newTags.map((tagName) => (
+                <button
+                  key={tagName}
+                  type="button"
+                  disabled={creatingTag === tagName}
+                  onClick={async () => {
+                    setCreatingTag(tagName)
+                    try {
+                      const res = await tagApi.create({ name: tagName })
+                      const newTag = res.data.data
+                      setTags(prev => [...prev, newTag])
+                      setTagIds(prev => [...prev, newTag.id])
+                      setNewTags(prev => prev.filter(t => t !== tagName))
+                    } catch (error) {
+                      console.error('Failed to create tag:', error)
+                    } finally {
+                      setCreatingTag(null)
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs border border-input bg-background hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  {creatingTag === tagName ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <span className="text-primary font-medium">+</span>
+                  )}
+                  <span>{tagName}</span>
+                </button>
               ))}
             </div>
           </div>

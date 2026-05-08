@@ -113,6 +113,16 @@ func (c *LLMClient) GetUserCategories(userID uint) ([]model.Category, error) {
 	return categories, nil
 }
 
+// GetUserTags returns user tags for prompt building
+func (c *LLMClient) GetUserTags(userID uint) ([]model.Tag, error) {
+	db := database.GetDB()
+	var tags []model.Tag
+	if err := db.Where("user_id = ? AND status = 1", userID).Order("name").Find(&tags).Error; err != nil {
+		return nil, err
+	}
+	return tags, nil
+}
+
 // ParseWithLLM uses DeepSeek to parse natural language into structured record
 func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, error) {
 	// Get user categories for context
@@ -121,11 +131,17 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 		return nil, fmt.Errorf("failed to get categories: %w", err)
 	}
 
-	// Build category context for the prompt
-	var categoryContext strings.Builder
-	categoryContext.WriteString("用户已有的分类:\n")
+	// Build tag context for the prompt
+	var tagContext strings.Builder
+	tagContext.WriteString("用户已有的分类:\n")
 	for _, cat := range categories {
-		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s\n", cat.ID, cat.Name))
+		tagContext.WriteString(fmt.Sprintf("- ID:%d %s\n", cat.ID, cat.Name))
+	}
+
+	tagContext.WriteString("\n用户已有的标签:\n")
+	tags, _ := c.GetUserTags(userID)
+	for _, t := range tags {
+		tagContext.WriteString(fmt.Sprintf("- ID:%d %s\n", t.ID, t.Name))
 	}
 
 	// Build date context
@@ -161,6 +177,8 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 
 ### 标签
 - 标签是有意义的实体词：商家名（永辉、星巴克）、地点（机场、北京）、用途（报销、礼物）、品类（书籍、日用品）等
+- 优先使用已有标签（根据上面"用户已有的标签"列表匹配）
+- 如果提取的标签不在已有列表中，同时放入 tags 和 new_tags 数组
 - 不要重复分类名作为标签
 - 不要包含金额、数字
 - 如果无法提取有意义的标签，返回空数组
@@ -178,6 +196,7 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
   "date": "ISO8601完整日期时间",
   "note": "备注文字",
   "tags": ["标签1", "标签2"],
+  "new_tags": ["新标签1", "新标签2"],
   "new_category_name": "新分类名(仅在category_id=0时填写)"
 }
 
@@ -212,9 +231,10 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
   "date": "%sT00:00:00+08:00",
   "note": "永辉买了些日用品",
   "tags": ["永辉", "日用品"],
+  "new_tags": ["永辉", "日用品"],
   "new_category_name": "日用"
 }`,
-		dateStr, weekdayStr, categoryContext.String(),
+		dateStr, weekdayStr, tagContext.String(),
 		now.AddDate(0, 0, -1).Format("2006-01-02"),
 		now.AddDate(0, 0, -3).Format("2006-01-02"),
 		dateStr)

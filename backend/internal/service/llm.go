@@ -28,6 +28,7 @@ type LLMParsedRecord struct {
 	Date                time.Time              `json:"date"`
 	Note                string                 `json:"note"`
 	Tags                []string               `json:"tags"`
+	NewTags             []string               `json:"new_tags,omitempty"`
 	SuggestedCategories []LLMCategorySuggestion `json:"suggested_categories,omitempty"`
 	NewCategoryName     string                 `json:"new_category_name,omitempty"`
 }

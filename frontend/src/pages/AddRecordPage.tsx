@@ -16,11 +16,23 @@ interface LLMCategorySuggestion {
 }
 
 // Helper to convert ISO8601 datetime to datetime-local format (YYYY-MM-DDTHH:mm)
+// Parses date parts directly from the ISO string to avoid timezone shift from Date/toISOString
 const convertToDateTimeLocal = (isoString: string): string => {
   if (!isoString) return ''
-  const date = new Date(isoString)
-  if (isNaN(date.getTime())) return ''
-  return date.toISOString().slice(0, 16)
+  const match = isoString.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/)
+  if (!match) {
+    const date = new Date(isoString)
+    if (isNaN(date.getTime())) return ''
+    return date.toISOString().slice(0, 16)
+  }
+  // If no specific time was extracted (midnight), use current time instead
+  if (match[2] === '00:00') {
+    const now = new Date()
+    const hh = String(now.getHours()).padStart(2, '0')
+    const mm = String(now.getMinutes()).padStart(2, '0')
+    return `${match[1]}T${hh}:${mm}`
+  }
+  return `${match[1]}T${match[2]}`
 }
 
 export default function AddRecordPage() {

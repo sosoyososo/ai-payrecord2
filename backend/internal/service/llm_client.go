@@ -125,7 +125,7 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 	var categoryContext strings.Builder
 	categoryContext.WriteString("用户已有的分类:\n")
 	for _, cat := range categories {
-		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s\\n", cat.ID, cat.Name))
+		categoryContext.WriteString(fmt.Sprintf("- ID:%d %s\n", cat.ID, cat.Name))
 	}
 
 	// Build date context
@@ -248,7 +248,7 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 
 	// Set default date to today if not provided
 	if result.Date.IsZero() {
-		result.Date = time.Now()
+		result.Date = now
 	}
 
 	return &result, nil
@@ -272,7 +272,7 @@ func extractJSON(s string) string {
 }
 
 // fixDateFormat ensures date-only strings are converted to full ISO8601 format
-// e.g., "2023-10-27" -> "2023-10-27T00:00:00Z"
+// e.g., "2026-05-08" -> "2026-05-08T00:00:00+08:00"
 func fixDateFormat(jsonStr string) string {
 	// Match date-only patterns and add time component
 	re := regexp.MustCompile(`"date"\s*:\s*"(\d{4}-\d{2}-\d{2})"`)
@@ -291,6 +291,6 @@ func fixDateFormat(jsonStr string) string {
 	}
 
 	// Replace with full datetime format
-	replacement := fmt.Sprintf(`"date": "%sT00:00:00Z"`, dateMatched)
+	replacement := fmt.Sprintf(`"date": "%sT00:00:00+08:00"`, dateMatched)
 	return strings.Replace(jsonStr, `"date": "`+dateMatched+`"`, replacement, 1)
 }

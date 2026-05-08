@@ -79,7 +79,7 @@ export default function SettingsPage() {
 
   return (
     <PageContainer title={t('settings.title')} showBackButton>
-    <div className="pb-24">
+      <div className="max-w-md mx-auto px-4 py-4 space-y-3">
         {/* Theme Section */}
         <Card>
           <CardHeader className="pb-3">

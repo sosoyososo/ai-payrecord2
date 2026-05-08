@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import type { SummaryStats, CategoryStats, Ledger } from '@/types'
 import { LedgerSelector } from '@/components/LedgerSelector'
 import PageContainer from '@/components/PageContainer'
+import { Inbox } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -57,6 +58,8 @@ export default function StatsPage() {
         statsApi.getSummary(year, targetLedgerId),
         statsApi.getByCategory({
           ledger_id: targetLedgerId,
+          start_date: `${year}-01-01`,
+          end_date: `${year}-12-31`,
         }),
       ])
 
@@ -264,6 +267,29 @@ export default function StatsPage() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Empty State */}
+        {activeTab === 'overview' && (!summary || !summary.monthly_stats || summary.monthly_stats.length === 0) && (
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <Inbox className="h-12 w-12 mb-3 opacity-40" />
+            <p className="text-sm">{t('stats.noData')}</p>
+            <p className="text-xs mt-1">{t('stats.noDataDesc')}</p>
+          </div>
+        )}
+        {activeTab === 'category' && (!categoryStats || categoryStats.length === 0) && (
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <Inbox className="h-12 w-12 mb-3 opacity-40" />
+            <p className="text-sm">{t('stats.noData')}</p>
+            <p className="text-xs mt-1">{t('stats.noDataDesc')}</p>
+          </div>
+        )}
+        {activeTab === 'monthly' && (!summary || !summary.monthly_stats || summary.monthly_stats.length === 0) && (
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <Inbox className="h-12 w-12 mb-3 opacity-40" />
+            <p className="text-sm">{t('stats.noData')}</p>
+            <p className="text-xs mt-1">{t('stats.noDataDesc')}</p>
+          </div>
         )}
       </div>
     </PageContainer>

@@ -82,7 +82,9 @@
     "overview": "概览",
     "byCategory": "分类",
     "monthly": "月度",
-    "monthlyTrend": "月度趋势"
+    "monthlyTrend": "月度趋势",
+    "noData": "该年份暂无数据",
+    "noDataDesc": "切换年份或添加新的记账记录"
   },
   "category": {
     "title": "分类管理",

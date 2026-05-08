@@ -82,7 +82,9 @@
     "overview": "Overview",
     "byCategory": "Category",
     "monthly": "Monthly",
-    "monthlyTrend": "Monthly Trend"
+    "monthlyTrend": "Monthly Trend",
+    "noData": "No data for this year",
+    "noDataDesc": "Switch to another year or add new records"
   },
   "category": {
     "title": "Category Management",

@@ -150,7 +150,7 @@ export default function StatsPage() {
 
       {/* Content */}
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
-        {activeTab === 'overview' && summary && summary.monthly_stats && summary.monthly_stats.length > 0 && (
+        {activeTab === 'overview' && summary && summary.total_expense > 0 && (
           <>
             {/* Summary Cards */}
             <div className="grid grid-cols-1 gap-3">
@@ -245,7 +245,7 @@ export default function StatsPage() {
           </Card>
         )}
 
-        {activeTab === 'monthly' && summary && summary.monthly_stats && summary.monthly_stats.length > 0 && (
+        {activeTab === 'monthly' && summary && summary.total_expense > 0 && (
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">{t('stats.monthly')} {t('stats.overview')}</CardTitle>
@@ -270,7 +270,7 @@ export default function StatsPage() {
         )}
 
         {/* Empty State */}
-        {activeTab === 'overview' && (!summary || !summary.monthly_stats || summary.monthly_stats.length === 0) && (
+        {activeTab === 'overview' && (!summary || summary.total_expense <= 0) && (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <Inbox className="h-12 w-12 mb-3 opacity-40" />
             <p className="text-sm">{t('stats.noData')}</p>
@@ -284,7 +284,7 @@ export default function StatsPage() {
             <p className="text-xs mt-1">{t('stats.noDataDesc')}</p>
           </div>
         )}
-        {activeTab === 'monthly' && (!summary || !summary.monthly_stats || summary.monthly_stats.length === 0) && (
+        {activeTab === 'monthly' && (!summary || summary.total_expense <= 0) && (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <Inbox className="h-12 w-12 mb-3 opacity-40" />
             <p className="text-sm">{t('stats.noData')}</p>

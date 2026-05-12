@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react'
 interface PageContainerProps {
   title?: string
   showBackButton?: boolean
+  headerRight?: React.ReactNode
   fab?: { to: string }
   children: React.ReactNode
 }
@@ -13,6 +14,7 @@ interface PageContainerProps {
 export default function PageContainer({
   title,
   showBackButton = false,
+  headerRight,
   fab,
   children,
 }: PageContainerProps) {
@@ -22,9 +24,10 @@ export default function PageContainer({
     setConfig({
       title,
       showBackButton,
+      customRight: headerRight,
     })
     return () => setConfig({})
-  }, [title, showBackButton, setConfig])
+  }, [title, showBackButton, headerRight, setConfig])
 
   // 底部 padding：TabBar 高度 3.5rem + 安全区
   const bottomPadding = 'pb-[calc(3.5rem+env(safe-area-inset-bottom))]'

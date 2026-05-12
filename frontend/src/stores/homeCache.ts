@@ -39,3 +39,12 @@ export function clear(): void {
   cache = null
   stale = false
 }
+
+export const homeCache = {
+  getCache,
+  setCache,
+  invalidate,
+  isStale,
+  isValid,
+  clear,
+}

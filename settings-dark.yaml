@@ -1,0 +1,96 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e6]:
+        - img [ref=e7]
+        - generic [ref=e10]: Ledger
+      - generic [ref=e11]:
+        - button "Home" [ref=e12] [cursor=pointer]:
+          - img [ref=e13]
+          - generic [ref=e16]: Home
+        - button "Stats" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+          - generic [ref=e20]: Stats
+        - button "Settings" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+          - generic [ref=e25]: Settings
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - heading "Appearance" [level=3] [ref=e33]:
+          - img [ref=e34]
+          - text: Appearance
+        - generic [ref=e37]:
+          - button "Light" [ref=e38] [cursor=pointer]:
+            - img
+            - text: Light
+          - button "Dark" [ref=e39] [cursor=pointer]:
+            - img
+            - text: Dark
+          - button "System" [ref=e40] [cursor=pointer]:
+            - img
+            - text: System
+      - generic [ref=e41]:
+        - heading "Language" [level=3] [ref=e43]:
+          - img [ref=e44]
+          - text: Language
+        - generic [ref=e48]:
+          - button "Chinese" [ref=e49] [cursor=pointer]
+          - button "English" [active] [ref=e50] [cursor=pointer]
+      - generic [ref=e51]:
+        - heading "Profile" [level=3] [ref=e53]:
+          - img [ref=e54]
+          - text: Profile
+        - generic [ref=e58]:
+          - generic [ref=e59]:
+            - text: Username
+            - textbox [disabled] [ref=e60]: test
+          - generic [ref=e61]:
+            - text: Email
+            - textbox [disabled] [ref=e62]: test@test.com
+          - generic [ref=e63]:
+            - text: Nickname
+            - textbox "Set nickname" [ref=e64]
+          - button "Save" [ref=e65] [cursor=pointer]:
+            - img
+            - text: Save
+      - generic [ref=e66]:
+        - heading "Change Password" [level=3] [ref=e68]:
+          - img [ref=e69]
+          - text: Change Password
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - text: Current Password
+            - textbox "Enter current password" [ref=e75]
+          - generic [ref=e76]:
+            - text: New Password
+            - textbox "Enter new password" [ref=e77]
+          - generic [ref=e78]:
+            - text: Confirm Password
+            - textbox "Enter new password again" [ref=e79]: x
+          - button "Change Password" [disabled]:
+            - img
+            - text: Change Password
+      - generic [ref=e81]:
+        - link "Category Management" [ref=e82] [cursor=pointer]:
+          - /url: /categories
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - generic [ref=e88]: Category Management
+        - link "Tag Management" [ref=e89] [cursor=pointer]:
+          - /url: /tags
+          - generic [ref=e90]:
+            - img [ref=e91]
+            - generic [ref=e95]: Tag Management
+        - link "Export Data" [ref=e96] [cursor=pointer]:
+          - /url: /export
+          - generic [ref=e97]:
+            - img [ref=e98]
+            - generic [ref=e101]: Export Data
+        - button "Logout" [ref=e102] [cursor=pointer]:
+          - generic [ref=e103]:
+            - img [ref=e104]
+            - generic [ref=e107]: Logout
+      - generic [ref=e110]:
+        - paragraph [ref=e111]: Ledger App
+        - paragraph [ref=e112]: Version 1.0.0
+  - generic [ref=e113]: "0"

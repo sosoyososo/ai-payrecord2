@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recordApi, categoryApi, ledgerApi, tagApi } from '@/services/api'
 import { RecordForm } from '@/components/RecordForm'
 import PageContainer from '@/components/PageContainer'
 import type { Category, Ledger, Tag } from '@/types'
+import { homeCache } from '@/stores/homeCache'
 
 export default function EditRecordPage() {
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const recordId = parseInt(id || '0', 10)
@@ -78,7 +80,8 @@ export default function EditRecordPage() {
         note: note || undefined,
         tag_ids: tagIds.length > 0 ? tagIds : undefined,
       })
-      window.location.href = '/'
+      homeCache.invalidate()
+      navigate('/')
     } catch (error) {
       console.error('Failed to update record:', error)
     } finally {

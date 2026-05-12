@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { recordApi, categoryApi, ledgerApi, tagApi, llmApi } from '@/services/api'
+import { homeCache } from '@/stores/homeCache'
 import PageContainer from '@/components/PageContainer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -37,6 +39,7 @@ const convertToDateTimeLocal = (isoString: string): string => {
 
 export default function AddRecordPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const [currentLedger, setCurrentLedger] = useState<Ledger | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
@@ -154,7 +157,8 @@ export default function AddRecordPage() {
         note: note || undefined,
         tag_ids: tagIds.length > 0 ? tagIds : undefined,
       })
-      window.location.href = '/'
+      homeCache.invalidate()
+      navigate('/')
     } catch (error) {
       console.error('Failed to create record:', error)
     } finally {

@@ -11,7 +11,8 @@ import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog'
 import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Record, Ledger, SummaryStats } from '@/types'
 import PageContainer from '@/components/PageContainer'
-import { TrendingDown, Search, X, Pencil, Trash2 } from 'lucide-react'
+import { TrendingDown, Search, X, Pencil, Trash2, RefreshCw } from 'lucide-react'
+import { homeCache } from '@/stores/homeCache'
 
 export default function HomePage() {
   const { t } = useTranslation()
@@ -28,6 +29,14 @@ export default function HomePage() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    homeCache.clear()
+    await loadData()
+    setRefreshing(false)
+  }
 
   const handleDelete = async (id: number) => {
     setPendingDeleteId(id)
@@ -36,16 +45,35 @@ export default function HomePage() {
 
   const confirmDelete = async () => {
     if (!pendingDeleteId) return
+    const id = pendingDeleteId
+    setPendingDeleteId(null)
+    setDeleteDialogOpen(false)
     try {
-      await recordApi.delete(pendingDeleteId)
-      loadData()
+      await recordApi.delete(id)
+      await loadData()
     } catch (error) {
       console.error('Failed to delete record:', error)
     }
   }
 
   useEffect(() => {
-    loadData()
+    const cached = homeCache.getCache()
+    if (cached) {
+      setRecords(cached.records)
+      setFilteredRecords(cached.filteredRecords)
+      setLedgers(cached.ledgers)
+      setCurrentLedger(cached.currentLedger)
+      setSummary(cached.summary)
+      setSearchQuery(cached.searchQuery)
+      setCurrentPage(cached.currentPage)
+      setHasMore(cached.hasMore)
+      setLoading(false)
+      if (homeCache.isStale()) {
+        loadData()
+      }
+    } else {
+      loadData()
+    }
   }, [])
 
   useEffect(() => {
@@ -97,6 +125,21 @@ export default function HomePage() {
       setHasMore(recordsData?.data?.length > 0 && (page * 100) < total)
 
       setSummary(summaryRes.data.data || null)
+
+      // Cache successful first-page loads
+      if (page === 1) {
+        homeCache.setCache({
+          records: newRecords,
+          filteredRecords: searchQuery ? filterRecords(newRecords, searchQuery) : newRecords,
+          ledgers: ledgersRes.data.data || [],
+          currentLedger: currentRes.data.data || null,
+          summary: summaryRes.data.data || null,
+          searchQuery,
+          currentPage: 1,
+          hasMore: hasMore,
+        })
+      }
+
       setLoading(false)
       setLoadingMore(false)
     } catch (error) {
@@ -132,7 +175,19 @@ const switchLedger = async (ledgerId: number) => {
   }
 
   return (
-    <PageContainer title={currentLedger?.name || t('nav.ledgers')} fab={{ to: '/add' }}>
+    <PageContainer
+      title={currentLedger?.name || t('nav.ledgers')}
+      fab={{ to: '/add' }}
+      headerRight={
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="p-1 rounded-md hover:bg-accent transition-colors"
+        >
+          <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
+        </button>
+      }
+    >
       {/* Ledger Selector */}
       <div className="max-w-md mx-auto px-4 py-3">
         <LedgerSelector

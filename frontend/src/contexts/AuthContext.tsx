@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { authApi, userApi } from '@/services/api'
 import type { User } from '@/types'
+import { homeCache } from '@/stores/homeCache'
 
 interface AuthContextType {
   user: User | null
@@ -59,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
     setUser(null)
+    homeCache.clear()
   }
 
   return (

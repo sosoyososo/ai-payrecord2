@@ -34,8 +34,11 @@ export default function HomePage() {
   const handleRefresh = async () => {
     setRefreshing(true)
     homeCache.clear()
-    await loadData()
-    setRefreshing(false)
+    try {
+      await loadData()
+    } finally {
+      setRefreshing(false)
+    }
   }
 
   const handleDelete = async (id: number) => {
@@ -122,7 +125,8 @@ export default function HomePage() {
 
       setCurrentPage(page)
       const total = recordsData?.total || 0
-      setHasMore(recordsData?.data?.length > 0 && (page * 100) < total)
+      const hasMoreData = (recordsData?.data?.length ?? 0) > 0 && (page * 100) < total
+      setHasMore(hasMoreData)
 
       setSummary(summaryRes.data.data || null)
 
@@ -136,7 +140,7 @@ export default function HomePage() {
           summary: summaryRes.data.data || null,
           searchQuery,
           currentPage: 1,
-          hasMore: hasMore,
+          hasMore: hasMoreData,
         })
       }
 

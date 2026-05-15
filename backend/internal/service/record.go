@@ -83,8 +83,8 @@ func (s *RecordService) List(userID uint, query RecordListQuery) ([]model.Record
 	if query.PageSize < 1 {
 		query.PageSize = 20
 	}
-	if query.PageSize > 100 {
-		query.PageSize = 100
+	if query.PageSize > 10000 {
+		query.PageSize = 10000
 	}
 
 	offset := (query.Page - 1) * query.PageSize

@@ -152,7 +152,8 @@
     "ledger": "账本",
     "date": "日期",
     "expenseAmount": "金额",
-    "exportFilePrefix": "账本导出"
+    "exportFilePrefix": "账本导出",
+    "loadFailed": "加载数据失败，请重试"
   },
   "iconPicker": {
     "searchPlaceholder": "搜索图标...",

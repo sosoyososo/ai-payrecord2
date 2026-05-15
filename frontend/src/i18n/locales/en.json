@@ -152,7 +152,8 @@
     "ledger": "Ledger",
     "date": "Date",
     "expenseAmount": "Amount",
-    "exportFilePrefix": "Ledger Export"
+    "exportFilePrefix": "Ledger Export",
+    "loadFailed": "Failed to load data. Please try again."
   },
   "iconPicker": {
     "searchPlaceholder": "Search icons...",

@@ -71,7 +71,9 @@
     "notePlaceholder": "添加备注...",
     "save": "保存记录",
     "expenseAmount": "支出金额",
-    "voiceInputPlaceholder": "语音输入：午餐花费 25 元"
+    "voiceInputPlaceholder": "语音输入：午餐花费 25 元",
+    "listening": "正在聆听...",
+    "correcting": "正在纠正..."
   },
   "editRecord": {
     "title": "编辑记录",

@@ -143,6 +143,7 @@ func main() {
 			{
 				llm.GET("/categories", llmHandler.GetCategories)
 				llm.POST("/parse", llmHandler.ParseNaturalLanguage)
+				llm.POST("/correct-speech", llmHandler.CorrectSpeech)
 				llm.POST("/records", llmHandler.ConfirmRecord)
 			}
 		}

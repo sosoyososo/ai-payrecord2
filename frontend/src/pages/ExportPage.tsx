@@ -108,13 +108,15 @@ export default function ExportPage() {
       const a = document.createElement('a')
       a.href = url
       a.download = filename
-      a.style.display = 'none'
+      a.style.position = 'fixed'
+      a.style.left = '-9999px'
+      a.style.top = '-9999px'
       document.body.appendChild(a)
       a.click()
       setTimeout(() => {
         document.body.removeChild(a)
         URL.revokeObjectURL(url)
-      }, 100)
+      }, 200)
     }
   }
 

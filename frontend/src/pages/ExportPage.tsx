@@ -33,7 +33,7 @@ export default function ExportPage() {
       const ledgerId = ledgerRes.data.data?.id
       const recordsRes = await recordApi.list({ ledger_id: ledgerId, page: 1, page_size: 10000 })
       setCurrentLedger(ledgerRes.data.data)
-      setRecords(recordsRes.data.data.data || [])
+      setRecords(recordsRes.data?.data?.data || [])
     } catch (err) {
       setError(t('export.loadFailed'))
       console.error('Failed to load data:', err)
@@ -57,27 +57,37 @@ export default function ExportPage() {
   })
 
   const exportToJSON = async () => {
-    const data = buildExportData()
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const filename = `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.json`
-    await downloadFile(blob, filename)
+    try {
+      const data = buildExportData()
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const filename = `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.json`
+      await downloadFile(blob, filename)
+    } catch (err) {
+      setError(t('export.loadFailed'))
+      console.error('Failed to export JSON:', err)
+    }
   }
 
   const exportToCSV = async () => {
-    const headers = [t('export.date'), t('addRecord.amount'), t('addRecord.category'), t('addRecord.note'), t('tag.title')]
-    const rows = records.map((r) => [
-      new Date(r.date).toLocaleDateString(),
-      r.amount.toString(),
-      r.category?.name || '',
-      r.note || '',
-      r.tags?.map((t: any) => t.name).join(', ') || '',
-    ])
+    try {
+      const headers = [t('export.date'), t('addRecord.amount'), t('addRecord.category'), t('addRecord.note'), t('tag.title')]
+      const rows = records.map((r) => [
+        new Date(r.date).toLocaleDateString(),
+        r.amount.toString(),
+        r.category?.name || '',
+        r.note || '',
+        r.tags?.map((t: any) => t.name).join(', ') || '',
+      ])
 
-    const csv = [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n')
-    const BOM = '﻿'
-    const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
-    const filename = `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.csv`
-    await downloadFile(blob, filename)
+      const csv = [headers, ...rows].map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n')
+      const BOM = '﻿'
+      const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
+      const filename = `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.csv`
+      await downloadFile(blob, filename)
+    } catch (err) {
+      setError(t('export.loadFailed'))
+      console.error('Failed to export CSV:', err)
+    }
   }
 
   const downloadFile = async (blob: Blob, filename: string) => {

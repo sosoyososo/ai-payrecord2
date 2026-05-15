@@ -61,7 +61,7 @@ export default function ExportPage() {
       const data = buildExportData()
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
       const filename = `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.json`
-      await downloadFile(blob, filename)
+      await downloadFile(blob, filename, 'application/json')
     } catch (err) {
       setError(t('export.loadFailed'))
       console.error('Failed to export JSON:', err)
@@ -83,14 +83,14 @@ export default function ExportPage() {
       const BOM = '﻿'
       const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' })
       const filename = `${t('export.exportFilePrefix')}_${new Date().toISOString().split('T')[0]}.csv`
-      await downloadFile(blob, filename)
+      await downloadFile(blob, filename, 'text/csv')
     } catch (err) {
       setError(t('export.loadFailed'))
       console.error('Failed to export CSV:', err)
     }
   }
 
-  const downloadFile = async (blob: Blob, filename: string) => {
+  const downloadFile = async (blob: Blob, filename: string, mimeType: string) => {
     if (Capacitor.isNativePlatform()) {
       const base64Data = await blobToBase64(blob)
       const result = await Filesystem.writeFile({
@@ -104,19 +104,35 @@ export default function ExportPage() {
         dialogTitle: t('export.title'),
       })
     } else {
+      // Try File System Access API first (Chrome/Edge) — opens native Save As dialog
+      if ('showSaveFilePicker' in window) {
+        try {
+          const ext = mimeType === 'text/csv' ? '.csv' : '.json'
+          const handle = await window.showSaveFilePicker({
+            suggestedName: filename,
+            types: [{
+              description: ext === '.json' ? 'JSON File' : 'CSV File',
+              accept: { [mimeType]: [ext] as string[] },
+            }],
+          })
+          const writable = await handle.createWritable()
+          await writable.write(blob)
+          await writable.close()
+          return
+        } catch (err) {
+          // User cancelled or API failed — fall through to anchor download
+          if ((err as DOMException).name === 'AbortError') return
+        }
+      }
+      // Fallback: anchor download for Firefox/Safari
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = filename
-      a.style.position = 'fixed'
-      a.style.left = '-9999px'
-      a.style.top = '-9999px'
       document.body.appendChild(a)
       a.click()
-      setTimeout(() => {
-        document.body.removeChild(a)
-        URL.revokeObjectURL(url)
-      }, 200)
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
     }
   }
 

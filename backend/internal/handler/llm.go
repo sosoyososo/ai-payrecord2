@@ -72,3 +72,21 @@ func (h *LLMHandler) ConfirmRecord(c *gin.Context) {
 
 	response.Success(c, record)
 }
+
+func (h *LLMHandler) CorrectSpeech(c *gin.Context) {
+	var req struct {
+		RawText string `json:"raw_text" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.BadRequest(c, err.Error())
+		return
+	}
+
+	corrected, err := h.llmService.CorrectSpeech(req.RawText)
+	if err != nil {
+		response.InternalServerError(c, err.Error())
+		return
+	}
+
+	response.Success(c, gin.H{"corrected_text": corrected})
+}

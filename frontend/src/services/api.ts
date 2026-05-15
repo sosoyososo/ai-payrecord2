@@ -178,6 +178,12 @@ export const statsApi = {
 
 // LLM API
 export const llmApi = {
+  correctSpeech: (rawText: string) =>
+    api.post<{ code: number; message: string; data: { corrected_text: string } }>(
+      '/llm/correct-speech',
+      { raw_text: rawText }
+    ),
+
   parse: (text: string) =>
     api.post<{ code: number; message: string; data: any }>('/llm/parse', { text }),
 

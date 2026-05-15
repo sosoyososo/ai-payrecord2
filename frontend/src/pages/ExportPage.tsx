@@ -9,6 +9,20 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import PageContainer from '@/components/PageContainer'
 import { Download, FileJson, FileSpreadsheet, Loader2, AlertCircle } from 'lucide-react'
 
+declare global {
+  interface Window {
+    showSaveFilePicker?: (options?: {
+      suggestedName?: string
+      types?: Array<{
+        description?: string
+        accept: Record<string, string[]>
+      }>
+    }) => Promise<{
+      createWritable(): Promise<{ write(data: Blob): Promise<void>; close(): Promise<void> }>
+    }>
+  }
+}
+
 function blobToBase64(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -105,7 +119,7 @@ export default function ExportPage() {
       })
     } else {
       // Try File System Access API first (Chrome/Edge) — opens native Save As dialog
-      if ('showSaveFilePicker' in window) {
+      if (window.showSaveFilePicker) {
         try {
           const ext = mimeType === 'text/csv' ? '.csv' : '.json'
           const handle = await window.showSaveFilePicker({

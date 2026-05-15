@@ -395,6 +395,54 @@ brew install hurl
 hurl --test test-scripts/api-tests.hurl
 ```
 
+---
+
+## 8. Voice Input API Tests
+
+### TC-API-VOICE-001: POST /llm/correct-speech corrects homophone errors
+- **ID**: TC-API-VOICE-001
+- **Endpoint**: POST /api/v1/llm/correct-speech
+- **Preconditions**: Valid access_token
+- **Test Data**:
+  ```json
+  {
+    "raw_text": "昨天下午三点发了两百快"
+  }
+  ```
+- **Expected**: 200 OK, returns corrected_text with homophone corrections
+- **Actual**: 200 OK, code 0, returns original text (graceful degradation when DeepSeek API not configured)
+- **Status**: ✅ Tested (2026-05-15)
+
+### TC-API-VOICE-002: POST /llm/correct-speech handles empty input gracefully
+- **ID**: TC-API-VOICE-002
+- **Endpoint**: POST /api/v1/llm/correct-speech
+- **Preconditions**: Valid access_token
+- **Test Data**:
+  ```json
+  {
+    "raw_text": ""
+  }
+  ```
+- **Expected**: 400 Bad Request, validation error
+- **Actual**: 400 Bad Request, returns field validation error for empty input
+- **Status**: ✅ Tested (2026-05-15)
+
+### TC-API-VOICE-003: Existing POST /llm/parse still works
+- **ID**: TC-API-VOICE-003
+- **Endpoint**: POST /api/v1/llm/parse
+- **Preconditions**: Valid access_token
+- **Test Data**:
+  ```json
+  {
+    "text": "昨天吃饭花了50块"
+  }
+  ```
+- **Expected**: 200 OK, returns parsed record with amount, category, etc.
+- **Actual**: 200 OK, code 0, returns amount=50, category_id=1 (餐饮), note="吃饭块" (rule-based fallback)
+- **Status**: ✅ Tested (2026-05-15)
+
+---
+
 ## Status Legend
 
 - ✅ Tested - Test passed

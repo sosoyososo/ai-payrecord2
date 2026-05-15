@@ -74,5 +74,10 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addVariant }) {
+      addVariant("hover", "@media (hover: hover) { &:hover }")
+    },
+  ],
 }

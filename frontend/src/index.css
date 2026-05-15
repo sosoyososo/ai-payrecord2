@@ -63,6 +63,14 @@
   }
 }
 
+/* Disable focus-visible ring on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  :focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
 /* Page transitions */
 @keyframes slideIn {
   from {

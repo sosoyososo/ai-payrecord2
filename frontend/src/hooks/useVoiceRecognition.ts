@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Capacitor } from '@capacitor/core'
+import { SpeechRecognition as SpeechRecognitionPlugin } from '@capacitor-community/speech-recognition'
 
 // Types for the Web Speech API (not fully typed in TypeScript)
 interface SpeechRecognitionEvent extends Event {
@@ -128,11 +129,17 @@ export function useVoiceRecognition(onInterim?: (text: string) => void): UseVoic
 
   const startNative = useCallback(async () => {
     try {
-      const pluginName = '@capacitor-community/speech-recognition'
-      const { SpeechRecognition } = await import(/* @vite-ignore */ pluginName)
+      // Check and request permissions before starting
+      const perm = await SpeechRecognitionPlugin.checkPermissions()
+      if (perm.speechRecognition !== 'granted') {
+        const result = await SpeechRecognitionPlugin.requestPermissions()
+        if (result.speechRecognition !== 'granted') {
+          throw new Error('Speech recognition permission denied')
+        }
+      }
 
       if (Capacitor.getPlatform() === 'ios') {
-        const { available } = await SpeechRecognition.available()
+        const { available } = await SpeechRecognitionPlugin.available()
         if (!available) {
           throw new Error('Speech recognition not available')
         }
@@ -140,17 +147,17 @@ export function useVoiceRecognition(onInterim?: (text: string) => void): UseVoic
 
       finalTextRef.current = ''
 
-      await SpeechRecognition.start({
+      await SpeechRecognitionPlugin.start({
         language: SPEECH_LANGUAGE,
         maxResults: 1,
         partialResults: true,
       })
 
-      SpeechRecognition.addListener('partialResults', (data: { value: string[] }) => {
-        if (data.value && data.value.length > 0) {
-          finalTextRef.current = data.value[0]
+      SpeechRecognitionPlugin.addListener('partialResults', (data: { matches: string[] }) => {
+        if (data.matches && data.matches.length > 0) {
+          finalTextRef.current = data.matches[0]
           if (interimCallbackRef.current) {
-            interimCallbackRef.current(data.value[0])
+            interimCallbackRef.current(data.matches[0])
           }
         }
       })
@@ -173,10 +180,8 @@ export function useVoiceRecognition(onInterim?: (text: string) => void): UseVoic
   const stop = useCallback(async (): Promise<string> => {
     if (isNative) {
       try {
-        const pluginName = '@capacitor-community/speech-recognition'
-        const { SpeechRecognition } = await import(/* @vite-ignore */ pluginName)
-        await SpeechRecognition.stop()
-        SpeechRecognition.removeAllListeners()
+        await SpeechRecognitionPlugin.stop()
+        SpeechRecognitionPlugin.removeAllListeners()
         setIsListening(false)
         return finalTextRef.current
       } catch (e: any) {

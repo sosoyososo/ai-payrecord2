@@ -10,7 +10,7 @@ interface VoiceInputProps {
 }
 
 export function VoiceInput({ onTranscript, onInterimTranscript, disabled }: VoiceInputProps) {
-  const [correcting, setCorrecting] = useState(false)
+  const [correcting] = useState(false)
 
   const handleInterim = useCallback((text: string) => {
     onInterimTranscript?.(text)

@@ -123,7 +123,7 @@
   2. Enter text in voice input: "lunch 25 yuan"
   3. Press Enter
 - **Expected**: Amount and category auto-filled
-- **Status**: ⏳ 待测试
+- **Status**: ✅ Tested
 
 ---
 
@@ -501,3 +501,14 @@ npx playwright test --grep "login"
 - All tests run on local environment
 - Use Playwright for automation
 - Update status after each test run
+
+---
+
+## Voice Input UI Tests
+
+| ID | Test | Status |
+|----|------|--------|
+| TC-UI-VOICE-001 | Mic button visible on AddRecordPage (Web platform with SpeechRecognition support) | ✅ |
+| TC-UI-VOICE-002 | AI input field exists and mic button is adjacent | ✅ |
+| TC-UI-VOICE-003 | Existing NLP text input still works alongside mic button | ✅ |
+| TC-UI-VOICE-004 | Voice transcription -> correction -> parse end-to-end | ⏳ (requires manual test with physical microphone) |

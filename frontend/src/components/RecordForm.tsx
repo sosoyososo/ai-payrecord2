@@ -1,10 +1,12 @@
+import { Capacitor } from '@capacitor/core'
+import { DatePicker } from '@capacitor-community/date-picker'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { TagSelector } from '@/components/TagSelector'
 import { CategoryIcon } from '@/components/CategoryIcon'
 import type { Category, Tag } from '@/types'
-import { Check, Loader2 } from 'lucide-react'
+import { Check, Loader2, Calendar } from 'lucide-react'
 
 interface RecordFormProps {
   amount: string
@@ -34,6 +36,30 @@ interface RecordFormProps {
   }
 }
 
+const formatDisplayDate = (isoString: string): string => {
+  if (!isoString) return ''
+  const d = new Date(isoString)
+  if (isNaN(d.getTime())) return ''
+  const year = d.getFullYear()
+  const month = d.getMonth() + 1
+  const day = d.getDate()
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  return `${year}年${month}月${day}日 ${hours}:${minutes}`
+}
+
+const toDateTimeLocalValue = (isoString: string): string => {
+  if (!isoString) return ''
+  const d = new Date(isoString)
+  if (isNaN(d.getTime())) return ''
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 export function RecordForm({
   amount,
   onAmountChange,
@@ -53,6 +79,22 @@ export function RecordForm({
   submitText,
   translations,
 }: RecordFormProps) {
+  const isNative = Capacitor.isNativePlatform()
+
+  const handleDateClick = async () => {
+    if (!isNative) return
+    try {
+      const result = await DatePicker.present({
+        mode: 'dateAndTime',
+      })
+      if (result?.value) {
+        onDateChange(result.value)
+      }
+    } catch {
+      // user cancelled
+    }
+  }
+
   return (
     <div className="space-y-4">
       {/* Amount */}
@@ -80,12 +122,25 @@ export function RecordForm({
       <Card>
         <CardContent className="p-4">
           <div className="text-sm text-muted-foreground mb-1">{translations.date}</div>
-          <Input
-            type="datetime-local"
-            value={date}
-            onChange={(e) => onDateChange(e.target.value)}
-            required
-          />
+          {isNative ? (
+            <button
+              type="button"
+              onClick={handleDateClick}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-md border border-input bg-background text-sm hover:bg-accent transition-colors"
+            >
+              <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
+              <span className={date ? '' : 'text-muted-foreground'}>
+                {date ? formatDisplayDate(date) : translations.date}
+              </span>
+            </button>
+          ) : (
+            <Input
+              type="datetime-local"
+              value={toDateTimeLocalValue(date)}
+              onChange={(e) => onDateChange(e.target.value)}
+              required
+            />
+          )}
         </CardContent>
       </Card>
 

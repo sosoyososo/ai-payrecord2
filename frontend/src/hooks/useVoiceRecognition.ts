@@ -128,7 +128,8 @@ export function useVoiceRecognition(onInterim?: (text: string) => void): UseVoic
 
   const startNative = useCallback(async () => {
     try {
-      const { SpeechRecognition } = await import('@capacitor-community/speech-recognition')
+      const pluginName = '@capacitor-community/speech-recognition'
+      const { SpeechRecognition } = await import(/* @vite-ignore */ pluginName)
 
       if (Capacitor.getPlatform() === 'ios') {
         const { available } = await SpeechRecognition.available()
@@ -172,7 +173,8 @@ export function useVoiceRecognition(onInterim?: (text: string) => void): UseVoic
   const stop = useCallback(async (): Promise<string> => {
     if (isNative) {
       try {
-        const { SpeechRecognition } = await import('@capacitor-community/speech-recognition')
+        const pluginName = '@capacitor-community/speech-recognition'
+        const { SpeechRecognition } = await import(/* @vite-ignore */ pluginName)
         await SpeechRecognition.stop()
         SpeechRecognition.removeAllListeners()
         setIsListening(false)

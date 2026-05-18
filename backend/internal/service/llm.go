@@ -269,6 +269,15 @@ func (s *LLMService) GetCategories(userID uint) ([]model.Category, error) {
 	return categories, nil
 }
 
+// CorrectSpeech corrects homophone errors in ASR output using LLM.
+// Falls back to returning the original text if LLM is unavailable.
+func (s *LLMService) CorrectSpeech(rawText string) (string, error) {
+	if s.llmClient != nil && s.llmClient.IsConfigured() {
+		return s.llmClient.CorrectSpeech(rawText)
+	}
+	return rawText, nil
+}
+
 // ConfirmRecord creates a record after LLM parsing confirmation
 func (s *LLMService) ConfirmRecord(userID uint, req *LLMStructuredRecord) (*model.Record, error) {
 	recordService := NewRecordService()

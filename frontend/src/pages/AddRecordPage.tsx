@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { recordApi, categoryApi, ledgerApi, tagApi, llmApi } from '@/services/api'
@@ -7,6 +7,7 @@ import PageContainer from '@/components/PageContainer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { RecordForm } from '@/components/RecordForm'
+import { VoiceInput } from '@/components/VoiceInput'
 import type { Category, Ledger, Tag } from '@/types'
 import { Sparkles, Loader2 } from 'lucide-react'
 
@@ -61,6 +62,27 @@ export default function AddRecordPage() {
   const [suggestedCategories, setSuggestedCategories] = useState<LLMCategorySuggestion[]>([])
   const [newTags, setNewTags] = useState<string[]>([])
   const [creatingTag, setCreatingTag] = useState<string | null>(null)
+  const [correcting, setCorrecting] = useState(false)
+
+  const handleVoiceTranscript = useCallback(async (transcript: string) => {
+    setAiInput(transcript)
+    setCorrecting(true)
+    try {
+      const response = await llmApi.correctSpeech(transcript)
+      const corrected = response.data.data?.corrected_text
+      if (corrected && corrected !== transcript) {
+        setAiInput(corrected)
+      }
+    } catch (error) {
+      console.error('Speech correction failed, using raw text:', error)
+    } finally {
+      setCorrecting(false)
+    }
+  }, [])
+
+  const handleInterimTranscript = useCallback((text: string) => {
+    setAiInput(text)
+  }, [])
 
   useEffect(() => {
     loadData()
@@ -184,21 +206,28 @@ export default function AddRecordPage() {
             value={aiInput}
             onChange={handleAiInputChange}
             onKeyDown={(e) => e.key === 'Enter' && handleAiParse()}
-            className="pr-12"
+            className="pr-20"
+            style={correcting ? { opacity: 0.6 } : undefined}
           />
-          <Button
-            size="icon"
-            variant="ghost"
-            className="absolute right-1 top-1/2 -translate-y-1/2"
-            onClick={handleAiParse}
-            disabled={aiLoading}
-          >
-            {aiLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Sparkles className="h-4 w-4 text-primary" />
-            )}
-          </Button>
+          <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
+            <VoiceInput
+              onTranscript={handleVoiceTranscript}
+              onInterimTranscript={handleInterimTranscript}
+              disabled={aiLoading || correcting}
+            />
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleAiParse}
+              disabled={aiLoading || !aiInput.trim()}
+            >
+              {aiLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4 text-primary" />
+              )}
+            </Button>
+          </div>
         </div>
         {/* New Category Suggestion */}
         {newCategoryName && (

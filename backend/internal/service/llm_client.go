@@ -274,6 +274,35 @@ func (c *LLMClient) ParseWithLLM(userID uint, text string) (*LLMParsedRecord, er
 	return &result, nil
 }
 
+// CorrectSpeech uses LLM to correct homophone errors in ASR output.
+// Pure language task -- no user business data required.
+func (c *LLMClient) CorrectSpeech(rawText string) (string, error) {
+	if !c.IsConfigured() {
+		return rawText, nil // graceful degradation: return original text
+	}
+
+	systemPrompt := `你是一个语音识别纠错助手。用户的输入来自语音识别（ASR），可能包含同音字错误、口音导致的错误识别。
+请纠正这些错误，输出纠正后的文本。只返回纠正后的文本，不要添加任何解释。
+如果文本已经正确，原样返回。`
+
+	messages := []chatMessage{
+		{Role: "system", Content: systemPrompt},
+		{Role: "user", Content: rawText},
+	}
+
+	response, err := c.CallChatAPI(messages)
+	if err != nil {
+		return rawText, nil // graceful degradation: return original text on error
+	}
+
+	corrected := strings.TrimSpace(response)
+	if corrected == "" {
+		return rawText, nil
+	}
+
+	return corrected, nil
+}
+
 // extractJSON tries to find and extract JSON from a string
 func extractJSON(s string) string {
 	// Find the first { and last }

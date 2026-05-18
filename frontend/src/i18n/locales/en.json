@@ -71,7 +71,9 @@
     "notePlaceholder": "Add note...",
     "save": "Save Record",
     "expenseAmount": "Expense Amount",
-    "voiceInputPlaceholder": "Voice input: lunch cost 25 yuan"
+    "voiceInputPlaceholder": "Voice input: lunch cost 25 yuan",
+    "listening": "Listening...",
+    "correcting": "Correcting..."
   },
   "editRecord": {
     "title": "Edit Record",

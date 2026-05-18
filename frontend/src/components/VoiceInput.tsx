@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, forwardRef, useImperativeHandle } from 'react'
 import { useVoiceRecognition } from '@/hooks/useVoiceRecognition'
 import { Button } from '@/components/ui/button'
 import { Mic, Loader2, AlertCircle } from 'lucide-react'
@@ -9,7 +9,13 @@ interface VoiceInputProps {
   disabled?: boolean
 }
 
-export function VoiceInput({ onTranscript, onInterimTranscript, disabled }: VoiceInputProps) {
+export interface VoiceInputHandle {
+  stop: () => Promise<string>
+  isListening: boolean
+}
+
+export const VoiceInput = forwardRef<VoiceInputHandle, VoiceInputProps>(
+  function VoiceInput({ onTranscript, onInterimTranscript, disabled }, ref) {
   const [correcting] = useState(false)
 
   const handleInterim = useCallback((text: string) => {
@@ -17,6 +23,8 @@ export function VoiceInput({ onTranscript, onInterimTranscript, disabled }: Voic
   }, [onInterimTranscript])
 
   const { isSupported, isListening, error, start, stop } = useVoiceRecognition(handleInterim)
+
+  useImperativeHandle(ref, () => ({ stop, isListening }), [stop, isListening])
 
   const handleClick = useCallback(async () => {
     if (isListening) {
@@ -81,4 +89,4 @@ export function VoiceInput({ onTranscript, onInterimTranscript, disabled }: Voic
       )}
     </Button>
   )
-}
+})

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { recordApi, categoryApi, ledgerApi, tagApi, llmApi } from '@/services/api'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { RecordForm } from '@/components/RecordForm'
 import { VoiceInput } from '@/components/VoiceInput'
+import type { VoiceInputHandle } from '@/components/VoiceInput'
 import type { Category, Ledger, Tag } from '@/types'
 import { Sparkles, Loader2 } from 'lucide-react'
 
@@ -16,26 +17,6 @@ interface LLMCategorySuggestion {
   icon: string
   color: string
   confidence: number
-}
-
-// Helper to convert ISO8601 datetime to datetime-local format (YYYY-MM-DDTHH:mm)
-// Parses date parts directly from the ISO string to avoid timezone shift from Date/toISOString
-const convertToDateTimeLocal = (isoString: string): string => {
-  if (!isoString) return ''
-  const match = isoString.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/)
-  if (!match) {
-    const date = new Date(isoString)
-    if (isNaN(date.getTime())) return ''
-    return date.toISOString().slice(0, 16)
-  }
-  // If no specific time was extracted (midnight), use current time instead
-  if (match[2] === '00:00') {
-    const now = new Date()
-    const hh = String(now.getHours()).padStart(2, '0')
-    const mm = String(now.getMinutes()).padStart(2, '0')
-    return `${match[1]}T${hh}:${mm}`
-  }
-  return `${match[1]}T${match[2]}`
 }
 
 export default function AddRecordPage() {
@@ -51,7 +32,7 @@ export default function AddRecordPage() {
   // Form state
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState<number | null>(null)
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 16))
+  const [date, setDate] = useState(new Date().toISOString())
   const [note, setNote] = useState('')
   const [tagIds, setTagIds] = useState<number[]>([])
 
@@ -63,6 +44,7 @@ export default function AddRecordPage() {
   const [newTags, setNewTags] = useState<string[]>([])
   const [creatingTag, setCreatingTag] = useState<string | null>(null)
   const [correcting, setCorrecting] = useState(false)
+  const voiceInputRef = useRef<VoiceInputHandle>(null)
 
   const handleVoiceTranscript = useCallback(async (transcript: string) => {
     setAiInput(transcript)
@@ -108,16 +90,18 @@ export default function AddRecordPage() {
 
   const handleAiParse = async () => {
     if (!aiInput.trim()) return
+
+    if (voiceInputRef.current?.isListening) {
+      await voiceInputRef.current.stop()
+    }
+
     setAiLoading(true)
     try {
       const response = await llmApi.parse(aiInput)
       const data = response.data.data
 
       if (data.amount) setAmount(data.amount.toString())
-      if (data.date) {
-        const converted = convertToDateTimeLocal(data.date)
-        if (converted) setDate(converted)
-      }
+      if (data.date) setDate(data.date)
       if (data.note) setNote(data.note)
 
       if (data.category_id && data.category_id > 0) {
@@ -211,6 +195,7 @@ export default function AddRecordPage() {
           />
           <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
             <VoiceInput
+              ref={voiceInputRef}
               onTranscript={handleVoiceTranscript}
               onInterimTranscript={handleInterimTranscript}
               disabled={aiLoading || correcting}
